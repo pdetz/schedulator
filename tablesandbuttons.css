@@ -1,0 +1,94 @@
+                                                                                             .schedule table {
+    padding: 6px;
+}
+
+.schedule tr:first-child {
+    background:#000;
+    color:#ddd;
+}
+
+.schedule th, td {
+    font-size: 0.875rem;
+    border: 1.5px solid #ddd;
+    width:8.5rem;
+    text-align:center;
+    padding: 0;
+}
+
+.grade.schedule td {
+    width: 7rem;
+    padding: 0;
+    margin:0;
+}
+
+.grade.schedule th:first-child, td:first-child {
+    text-align:left;
+    padding-left: 2px;
+    width: 9rem;
+}
+
+.specials.schedule td:first-child {
+    text-align: center;
+    width:8.5rem;
+    padding: 0;
+}
+
+.schedule button {
+    margin: 0;
+    padding: 1px;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: .2em;
+}
+
+.selected button {
+    background: #000;
+    color: #fff;
+}
+
+.topbar_button {
+    font-size: 1.2em;
+    line-height: 1em;
+    padding: 2px;
+    margin: 1px;
+    border: none;
+    border-radius: .3em;
+    background: none;
+}
+
+.topbar_button.specials {
+    width: 2em;
+}
+
+.topbar_button.grade {
+    width: 4em;
+}
+
+div.specials {
+    font-size: 1.2em;
+    padding-bottom: 1rem;
+}
+
+.menu, .print {
+    float:right;
+}
+
+.topbar_button svg {
+    background: none;
+    fill: #fff;
+    height: 1.2em;
+}
+
+.print svg:hover {
+    fill: #0df;
+}
+
+.menu svg:hover {
+    fill: #0fd;
+}
+
+.ulbold {
+    text-decoration: underline;
+    font-weight: bold;
+}
