@@ -61,8 +61,11 @@ body{
 
 .topbar {
     position: sticky;
+    z-index: 5;
     top: 0;
+    margin: auto;
     width: 100%;
+    max-width: 46rem;
     padding: 4px 0 8px 0;
     background: #000;
     /* border: 1px solid blue; */

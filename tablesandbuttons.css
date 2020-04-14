@@ -1,5 +1,6 @@
-                                                                                             .schedule table {
-    padding: 6px;
+.schedule.specials table {
+    padding-bottom: 6px;
+    margin-top:0;
 }
 
 .schedule tr:first-child {
@@ -8,6 +9,7 @@
 }
 
 .schedule th, td {
+    position: relative;
     font-size: 0.875rem;
     border: 1.5px solid #ddd;
     width:8.5rem;
@@ -34,12 +36,16 @@
 }
 
 .schedule button {
+    position: relative;
+    display:inline-block;
+    z-index: 0;
     margin: 0;
     padding: 1px;
     width: 100%;
     height: 100%;
     border: none;
     border-radius: .2em;
+    transition: background-color .4s;
 }
 
 .selected button {
@@ -55,6 +61,7 @@
     border: none;
     border-radius: .3em;
     background: none;
+    transition: background-color .4s;
 }
 
 .topbar_button.specials {
