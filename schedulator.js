@@ -8,14 +8,14 @@ $(document).ready(function(){
     blocks[4] = new Block("1:30", "2:15", "4");
     blocks[5] = new Block("2:30", "3:15", "5");
 
-    let grades = new Array(0);
+    let grades = new Array(8);
     grades[0] = new Grade("No Class", "NA", ["#ddd", "#fff", "#999", "#000"], blocks[0], 1, "0");
     grades[1] = new Grade("Pre-Kindergarten", "Pre-K", ["#e5c", "#c1c", "#000", "#000"], blocks[0], 2, "1");
-    grades[2] = new Grade("Kindergarten", "K", ["#f00", "#b00", "#000", "#000"], blocks[0], 7, "2");
-    grades[3] = new Grade("1st Grade", "1st", ["#f80", "#b40", "#000", "#000"], blocks[1], 7, "3");
+    grades[2] = new Grade("Kindergarten", "K", ["#f00", "#b00", "#000", "#000"], blocks[0], 6, "2");
+    grades[3] = new Grade("1st Grade", "1st", ["#f80", "#b40", "#000", "#000"], blocks[1], 6, "3");
     grades[4] = new Grade("2nd Grade", "2nd", ["#ff0", "#ba0", "#000", "#000"], blocks[2], 7, "4");
-    grades[5] = new Grade("3rd Grade", "3rd", ["#7b0", "#380", "#000", "#000"], blocks[3], 5, "5");
-    grades[6] = new Grade("4th Grade", "4th", ["#0af", "#07b", "#000", "#000"], blocks[4], 5, "6");
+    grades[5] = new Grade("3rd Grade", "3rd", ["#7b0", "#380", "#000", "#000"], blocks[3], 6, "5");
+    grades[6] = new Grade("4th Grade", "4th", ["#0af", "#07b", "#000", "#000"], blocks[4], 6, "6");
     grades[7] = new Grade("5th Grade", "5th", ["#a0c", "#708", "#000", "#000"], blocks[5], 5, "7");
 
     let specials = new Array(9);
@@ -39,6 +39,9 @@ $(document).ready(function(){
     schedule.loadTables();
     schedule.loadButtons();
 
+    $("#menu").click(function(){
+        JSON.stringify(schedule);
+    });
 
 });
 
