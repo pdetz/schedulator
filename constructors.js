@@ -17,7 +17,7 @@ function Block(start, end, n) {
     this.end = end;
     this.n = n;
     this.display = function(){
-        return start + " -- " + end;
+        return start + " – " + end;
     }
 }
 
@@ -25,17 +25,17 @@ function Block(start, end, n) {
 function Grade(name, abbr, color, block, t, n) {
     this.name = name;
     this.abbr = abbr;
-    this.css = cssProperties(color);
-    this.isVisible = true;
-    this.cssClass = "grade";
     this.defaultBlock = block;
     this.n = n;
+    this.css = cssProperties(color);
 
     this.teachers = new Array(t); // an array of Teachers
     for (let i = 0; i < t; i++){
         this.teachers[i] = new Teacher("Teacher " + String.fromCharCode("A".charCodeAt(0) + i), this);
     }
 
+    this.isVisible = true;
+    this.cssClass = "grade";
     this.table = this.scheduleTable();
     this.button = topbarButton(this); 
 }
@@ -54,10 +54,10 @@ function Special(name, abbr, specialist, color, n) {
     this.abbr = abbr;
     this.specialist = specialist;
     this.css = cssProperties(color);
-    this.isVisible = true;
-    this.cssClass = "specials";
     this.n = n;
 
+    this.isVisible = true;
+    this.cssClass = "specials";
     this.table = ""; // this table is created in Schedule.prototype.loadTables
     this.button = topbarButton(this);
 }
