@@ -1,11 +1,11 @@
 // Load empty tables and toggle buttons into the DOM
 Schedule.prototype.loadTables = function() {
     this.specials.forEach(function(special) {
-        if (special.n != "0") {
+        if (special.n != 0) {
             special.table = special.scheduleTable(this.blocks);
-            $("#right").append(special.table);
+            $("#right").append(special.scheduleTable);
             $("#rightbar").append(special.button);
-        }       
+        }
     }, this);
 
     this.grades.forEach(function(grade) {
@@ -44,6 +44,7 @@ Special.prototype.scheduleTable = function(blocks) {
     $(table).children().append(
         `<tr><td>${DAYS[0]}</td><td>${DAYS[1]}</td><td>${DAYS[2]}</td><td>${DAYS[3]}</td><td>${DAYS[4]}</td></tr>`
     );
+    console.log(blocks[3].start);
     blocks.forEach( function(block) {
         $(table).find("tbody").append("<tr>");
         DAYS.forEach (function(day, d){
