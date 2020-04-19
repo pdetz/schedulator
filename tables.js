@@ -1,7 +1,7 @@
 // Load empty tables and toggle buttons into the DOM
 Schedule.prototype.loadTables = function() {
     this.specials.forEach(function(special) {
-        if (special.n != 0) {
+        if (special.n != "0") {
             special.table = special.scheduleTable(this.blocks);
             $("#right").append(special.scheduleTable);
             $("#rightbar").append(special.button);
