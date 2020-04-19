@@ -2,10 +2,10 @@
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-var cssProperties = function(color){
-    return [{"background": color[0], "color": color[2]},
-            {"background": color[1], "color": color[3]},
-            {"background": color[3], "color": color[0]}];
+var cssProperties = function(css){
+    return [{"background": css[0], "color": css[2]},
+            {"background": css[1], "color": css[3]},
+            {"background": css[3], "color": css[0]}];
 }
 
 $.fn.c = function() {
@@ -22,12 +22,12 @@ function Block(start, end, n) {
 }
 
 // Constructor function for GRADES object
-function Grade(name, abbr, color, block, t, n) {
+function Grade(name, abbr, css, block, t, n) {
     this.name = name;
     this.abbr = abbr;
     this.defaultBlock = block;
     this.n = n;
-    this.css = cssProperties(color);
+    this.css = css;//cssProperties(css);
 
     this.teachers = new Array(t); // an array of Teachers
     for (let i = 0; i < t; i++){
@@ -49,11 +49,11 @@ function Teacher(name, grade) {
 }
 
 // Constructor function for SPECIAL object
-function Special(name, abbr, specialist, color, n) {
+function Special(name, abbr, specialist, css, n) {
     this.name = name;
     this.abbr = abbr;
     this.specialist = specialist;
-    this.css = cssProperties(color);
+    this.css = css;//cssProperties(css);
     this.n = n;
 
     this.isVisible = true;
@@ -96,22 +96,54 @@ Class.prototype.tdGrade = function() {
 };
 
 Class.prototype.hasSpecial = function(){
-    return this.special.n != "0";
+    return this.special.n != 0;
 }
 
 Class.prototype.hasGrade = function(){
-    return this.teacher.grade.n != "0";
+    return this.teacher.grade.n != 0;
 }
 
 // Constructor function for SCHEDULE object
-function Schedule(blocks, grades, specials) {
-    this.blocks = blocks; // an array of Block objects
-    this.grades = grades; // an array of Grade objects
-    this.specials = specials; // an array of Special objects
+function Schedule(file) {
+    this.blocks = []; // an array of Block objects
+    this.grades = []; // an array of Grade objects
+    this.specials = []; // an array of Special objects
     this.classes = []; // an array of Class objects
 
     this.selectedClass = [];
     
     this.dropdown = $(document.createElement("DIV"));
 
+    // Copy blocks from file to Schedule
+    file.blocks.forEach(function(block,i){
+        let newBlock = new Block(block.start,block.end,block.n);
+        this.blocks.push(newBlock);
+    }, this);
+
+    // Copy grades from file to Schedule
+    file.grades.forEach(function(grade,n){
+        let t = grade.teachers.length;
+        let css = [];
+        for (let i = 0; i < grade.css.length; i++){
+            let color = Object.assign(grade.css[i]);
+        }
+        let newGrade = new Grade(grade.name,grade.abbr,grade.css,this.blocks[grade.defaultBlock],t,n);
+        console.log(grade.css);
+        for (let i = 0; i < t; i++){
+            newGrade.teachers[i].name = grade.teachers[i];
+        }
+        this.grades.push(newGrade);
+    }, this);
+
+    // Copy specials from file to Schedule
+    file.specials.forEach(function(special,n){
+        let newSpecial = new Special(special.name, special.abbr, special.specialist, special.css, n);
+        this.specials.push(newSpecial);
+    }, this);
+
+    // Copy classes from file to Schedule
+    file.classes.forEach(function(c){
+        let newClass = new Class(this.blocks[c[0]], c[1], this.grades[c[2]].teachers[c[3]], this.specials[c[4]]);
+        this.classes.push(newClass);
+    }, this);
 }
