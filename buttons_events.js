@@ -219,15 +219,12 @@ updateClasses = function(schedule, c, s){
     tds.each(function(){
     
         let td = $(this);
-        console.log(td);
-        console.log(td.children());
 
         let list = td.children().not("#dropdown");
 
         if (list.length > 1){
             list.each(function(){
                 let button = $(this);
-                console.log(button);
                 if (button.c().special == schedule.specials[0] || button.c().teacher.grade == schedule.grades[0]){
                     button.remove();
                 }
@@ -243,9 +240,6 @@ updateClasses = function(schedule, c, s){
             }
         }
     });
-
-    //console.log(tds.length);
-    //console.log(tds.children());
 }
 
 $.fn.updateButton = function(){
@@ -263,7 +257,6 @@ $.fn.addEmptySpecial = function(schedule){
         let special = schedule.specials[parseInt(data[0])];
         let day = parseInt(data[1]);
         let block = schedule.blocks[parseInt(data[2])];
-
         let c = new Class(block, day, schedule.grades[0].teachers[0], special);
         schedule.classes.push(c);
         c.buttons = c.createSpecialButton()
@@ -279,7 +272,6 @@ $.fn.addEmptyGrade = function(schedule){
         let grade = schedule.grades[parseInt(data[0])];
         let day = parseInt(data[1]);
         let teacher = grade.teachers[parseInt(data[2])];
-
         let c = new Class(grade.defaultBlock, day, teacher, schedule.specials[0]);
         schedule.classes.push(c);
         c.buttons = c.createGradeButton().updateButton();
