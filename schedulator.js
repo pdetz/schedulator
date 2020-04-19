@@ -1,37 +1,10 @@
 $(document).ready(function(){
 
-    let blocks = new Array(6);
-    blocks[0] = new Block("9:00", "9:45", 0);
-    blocks[1] = new Block("9:50", "10:35", 1);
-    blocks[2] = new Block("10:55", "11:40", 2);
-    blocks[3] = new Block("12:50", "1:30", 3);
-    blocks[4] = new Block("1:55", "2:35", 4);
-    blocks[5] = new Block("2:40", "3:20", 5);
+    let loadedFile = {"blocks":[{"start":"9:00","end":"9:45","n":0},{"start":"9:50","end":"10:35","n":1},{"start":"10:55","end":"11:40","n":2},{"start":"12:50","end":"1:30","n":3},{"start":"1:55","end":"2:35","n":4},{"start":"2:40","end":"3:20","n":5}],"grades":[{"name":"No Class","abbr":"NA","defaultBlock":0,"css":[{"background":"#ddd","color":"#999"},{"background":"#fff","color":"#000"},{"background":"#000","color":"#ddd"}],"teachers":["Teacher A"]},{"name":"Pre-Kindergarten","abbr":"Pre-K","defaultBlock":0,"css":[{"background":"#e5c","color":"#000"},{"background":"#c1c","color":"#000"},{"background":"#000","color":"#e5c"}],"teachers":["Teacher A","Teacher B"]},{"name":"Kindergarten","abbr":"K","defaultBlock":3,"css":[{"background":"#f00","color":"#000"},{"background":"#b00","color":"#000"},{"background":"#000","color":"#f00"}],"teachers":["Teacher A","Teacher B","Teacher C","Teacher D","Teacher E","Teacher F"]},{"name":"1st Grade","abbr":"1st","defaultBlock":4,"css":[{"background":"#f80","color":"#000"},{"background":"#b40","color":"#000"},{"background":"#000","color":"#f80"}],"teachers":["Teacher A","Teacher B","Teacher C","Teacher D","Teacher E","Teacher F"]},{"name":"2nd Grade","abbr":"2nd","defaultBlock":5,"css":[{"background":"#ff0","color":"#000"},{"background":"#ba0","color":"#000"},{"background":"#000","color":"#ff0"}],"teachers":["Teacher A","Teacher B","Teacher C","Teacher D","Teacher E","Teacher F","Teacher G"]},{"name":"3rd Grade","abbr":"3rd","defaultBlock":0,"css":[{"background":"#7b0","color":"#000"},{"background":"#380","color":"#000"},{"background":"#000","color":"#7b0"}],"teachers":["Teacher A","Teacher B","Teacher C","Teacher D","Teacher E","Teacher F"]},{"name":"4th Grade","abbr":"4th","defaultBlock":1,"css":[{"background":"#0af","color":"#000"},{"background":"#07b","color":"#000"},{"background":"#000","color":"#0af"}],"teachers":["Teacher A","Teacher B","Teacher C","Teacher D","Teacher E","Teacher F"]},{"name":"5th Grade","abbr":"5th","defaultBlock":2,"css":[{"background":"#a0c","color":"#000"},{"background":"#708","color":"#000"},{"background":"#000","color":"#a0c"}],"teachers":["Teacher A","Teacher B","Teacher C","Teacher D","Teacher E"]}],"specials":[{"name":"No Special","abbr":"NS","specialist":"N/A","css":[{"background":"#ddd","color":"#999"},{"background":"#fff","color":"#000"},{"background":"#000","color":"#ddd"}]},{"name":"Art","abbr":"A","specialist":"Stone","css":[{"background":"#f66","color":"#000"},{"background":"#c33","color":"#000"},{"background":"#000","color":"#f66"}]},{"name":"Art *","abbr":"A *","specialist":"PT Art","css":[{"background":"#f66","color":"#000"},{"background":"#c33","color":"#000"},{"background":"#000","color":"#f66"}]},{"name":"Music","abbr":"M","specialist":"Russell","css":[{"background":"#4ad","color":"#000"},{"background":"#18a","color":"#000"},{"background":"#000","color":"#4ad"}]},{"name":"Music *","abbr":"M *","specialist":"PT Music","css":[{"background":"#4ad","color":"#000"},{"background":"#18a","color":"#000"},{"background":"#000","color":"#4ad"}]},{"name":"PE","abbr":"P","specialist":"Detzner","css":[{"background":"#a8e","color":"#000"},{"background":"#75b","color":"#000"},{"background":"#000","color":"#a8e"}]},{"name":"PE *","abbr":"P *","specialist":"Harding","css":[{"background":"#a8e","color":"#000"},{"background":"#75b","color":"#000"},{"background":"#000","color":"#a8e"}]},{"name":"STEM","abbr":"S","specialist":"Bagish","css":[{"background":"#6d9","color":"#000"},{"background":"#3a6","color":"#000"},{"background":"#000","color":"#6d9"}]},{"name":"STEM *","abbr":"S *","specialist":"Haskins","css":[{"background":"#6d9","color":"#000"},{"background":"#3a6","color":"#000"},{"background":"#000","color":"#6d9"}]}],"classes":[[0,0,1,0,1],[0,1,1,0,3],[0,2,1,0,5],[0,3,1,0,7],[0,0,1,1,3],[0,1,1,1,5],[0,2,1,1,7],[0,4,1,1,1],[3,0,2,0,1],[3,1,2,0,3],[3,2,2,0,5],[3,3,2,0,7],[3,0,2,1,3],[3,1,2,1,5],[3,2,2,1,7],[3,4,2,1,1],[3,0,2,2,5],[3,1,2,2,7],[3,3,2,2,1],[3,4,2,2,3],[3,0,2,3,7],[3,2,2,3,1],[3,3,2,3,3],[3,4,2,3,5],[3,1,2,4,1],[3,2,2,4,3],[3,3,2,4,5],[3,4,2,4,7],[3,0,2,5,2],[3,1,2,5,4],[3,2,2,5,6],[3,3,2,5,8],[4,0,3,0,1],[4,1,3,0,3],[4,2,3,0,5],[4,3,3,0,7],[4,0,3,1,3],[4,1,3,1,5],[4,2,3,1,7],[4,4,3,1,1],[4,0,3,2,5],[4,1,3,2,7],[4,3,3,2,1],[4,4,3,2,3],[4,0,3,3,7],[4,2,3,3,1],[4,3,3,3,3],[4,4,3,3,5],[4,1,3,4,1],[4,2,3,4,3],[4,3,3,4,5],[4,4,3,4,7],[4,0,3,5,2],[4,1,3,5,4],[4,2,3,5,6],[4,3,3,5,8],[5,0,4,0,1],[5,1,4,0,3],[5,2,4,0,5],[5,3,4,0,7],[5,0,4,1,3],[5,1,4,1,5],[5,2,4,1,7],[5,4,4,1,1],[5,0,4,2,5],[5,1,4,2,7],[5,3,4,2,1],[5,4,4,2,3],[5,0,4,3,7],[5,2,4,3,1],[5,3,4,3,3],[5,4,4,3,5],[5,1,4,4,1],[5,2,4,4,3],[5,3,4,4,5],[5,4,4,4,7],[5,0,4,5,2],[5,1,4,5,4],[5,2,4,5,6],[5,3,4,5,8],[5,0,4,6,4],[5,1,4,6,6],[5,2,4,6,8],[5,4,4,6,2],[0,0,5,0,1],[0,1,5,0,3],[0,2,5,0,5],[0,3,5,0,7],[0,0,5,1,3],[0,1,5,1,5],[0,2,5,1,7],[0,4,5,1,1],[0,0,5,2,5],[0,1,5,2,7],[0,3,5,2,1],[0,4,5,2,3],[0,0,5,3,7],[0,2,5,3,1],[0,3,5,3,3],[0,4,5,3,5],[0,1,5,4,1],[0,2,5,4,3],[0,3,5,4,5],[0,4,5,4,7],[0,0,5,5,2],[0,1,5,5,4],[0,2,5,5,6],[0,3,5,5,8],[1,0,6,0,1],[1,1,6,0,3],[1,2,6,0,5],[1,3,6,0,7],[1,0,6,1,3],[1,1,6,1,5],[1,2,6,1,7],[1,4,6,1,1],[1,0,6,2,5],[1,1,6,2,7],[1,3,6,2,1],[1,4,6,2,3],[1,0,6,3,7],[1,2,6,3,1],[1,3,6,3,3],[1,4,6,3,5],[1,1,6,4,1],[1,2,6,4,3],[1,3,6,4,5],[1,4,6,4,7],[1,0,6,5,2],[1,1,6,5,4],[1,2,6,5,6],[1,3,6,5,8],[2,0,7,0,1],[2,1,7,0,3],[2,2,7,0,5],[2,3,7,0,7],[2,0,7,1,3],[2,1,7,1,5],[2,2,7,1,7],[2,4,7,1,1],[2,0,7,2,5],[2,1,7,2,7],[2,3,7,2,1],[2,4,7,2,3],[2,0,7,3,7],[2,2,7,3,1],[2,3,7,3,3],[2,4,7,3,5],[2,1,7,4,1],[2,2,7,4,3],[2,3,7,4,5],[2,4,7,4,7]]};
 
-    let grades = new Array(0);
-    grades[0] = new Grade("No Class", "NA", ["#ddd", "#fff", "#999", "#000"], blocks[0], 1, 0);
-    grades[1] = new Grade("Pre-Kindergarten", "Pre-K", ["#e5c", "#c1c", "#000", "#000"], blocks[0], 2, 1);
-    grades[2] = new Grade("Kindergarten", "K", ["#f00", "#b00", "#000", "#000"], blocks[3], 6, 2);
-    grades[3] = new Grade("1st Grade", "1st", ["#f80", "#b40", "#000", "#000"], blocks[4], 6, 3);
-    grades[4] = new Grade("2nd Grade", "2nd", ["#ff0", "#ba0", "#000", "#000"], blocks[5], 7, 4);
-    grades[5] = new Grade("3rd Grade", "3rd", ["#7b0", "#380", "#000", "#000"], blocks[0], 6, 5);
-    grades[6] = new Grade("4th Grade", "4th", ["#0af", "#07b", "#000", "#000"], blocks[1], 6, 6);
-    grades[7] = new Grade("5th Grade", "5th", ["#a0c", "#708", "#000", "#000"], blocks[2], 5, 7);
-
-    let specials = new Array(9);
-    specials[0] = new Special("No Special", "NS", "N/A", ["#ddd", "#fff", "#999", "#000"], 0);
-    specials[1] = new Special("Art", "A", "Stone", ["#f66", "#c33", "#000", "#000"], 1);
-    specials[2] = new Special("Art *", "A *", "PT Art", ["#f66", "#c33", "#000", "#000"], 2);
-    specials[3] = new Special("Music", "M", "Russell", ["#4ad", "#18a", "#000", "#000"], 3);
-    specials[4] = new Special("Music *", "M *", "PT Music", ["#4ad", "#18a", "#000", "#000"], 4);
-    specials[5] = new Special("PE", "P", "Detzner", ["#a8e", "#75b", "#000", "#000"], 5);
-    specials[6] = new Special("PE *", "P *", "Harding", ["#a8e", "#75b", "#000", "#000"], 6);
-    specials[7] = new Special("STEM", "S", "Bagish", ["#6d9", "#3a6", "#000", "#000"], 7);
-    specials[8] = new Special("STEM *", "S *", "Haskins", ["#6d9", "#3a6", "#000", "#000"], 8);
-    
     // Load data into Schedule object
-    let schedule = new Schedule(blocks, grades, specials);
-    schedule.tempInitializer(this.specials);
+    let schedule = new Schedule(loadedFile);
+    //schedule.tempInitializer(this.specials);
 
     // Load toggle buttons and schedule tables into the DOM
     // Schedule tables are blank
@@ -39,13 +12,11 @@ $(document).ready(function(){
     schedule.loadTables();
     schedule.loadButtons();
 
+    console.log(schedule.grades[2].css);
+
     $("#menu").click(function(){
-        schedule.streamline();
-        //console.log(JSON.stringify(schedule));
-
-        saveText( JSON.stringify(schedule), "schedule.json" );
-
-        //schedule.rebuild();
+    
+        saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );
     });
 
 });
@@ -57,50 +28,54 @@ function saveText(text, filename){
     a.click()
 }
 
-/*
+
 function SavedFile() {
-    this.blocks = []; // an array of Block arrays
+    this.blocks = []; // an array of Block objects
     this.grades = []; // an array of Grade arrays
     this.specials = []; // an array of Special arrays
     this.classes = []; // an array of Class arrays
 }
-*/
+
 
 Schedule.prototype.formatFile = function(){
 
+    let file = new SavedFile();
+
+    this.blocks.forEach(function(block){
+        file.blocks.push(block);
+    });
+
     this.grades.forEach(function(grade){
-        grade.teachers.forEach(function(teacher, i) {
-            teacher = teacher.name;
+        let newGrade = {
+            "name": grade.name,
+            "abbr": grade.abbr,
+            "defaultBlock": grade.defaultBlock.n,
+            "css": grade.css,
+            "teachers": []
+        };
+        grade.teachers.forEach(function(teacher) {
+            newGrade.teachers.push(teacher.name);
         });
+        file.grades.push(newGrade);
     });
 
     this.specials.forEach(function(special){
-        delete special.isVisible; // = true;
-        delete special.cssClass; // = "specials";
-        delete special.table; // = ""; // this table is created in Schedule.prototype.loadTables
-        delete special.button; // = topbarButton(this);
+        let newSpecial = {
+            "name": special.name,
+            "abbr": special.abbr,
+            "specialist": special.specialist,
+            "css": special.css,
+        };
+        file.specials.push(newSpecial);
     });
 
-    this.c = [];
-
     this.classes.forEach(function(c){
-        this.c.push( [c.special.n, c.block.n, c.teacher.grade.n, c.teacher.n]);
+        if (c.hasGrade() && c.hasSpecial()){
+            file.classes.push( [c.block.n, c.day, c.teacher.grade.n, c.teacher.n(), c.special.n]);
+        }
     }, this);
 
-    delete this.classes;
-
-    this.grades.forEach(function(grade){
-        delete grade.isVisible;
-        delete grade.cssClass;
-        delete grade.table;
-        delete grade.button;
-        grade.block = grade.defaultBlock.n;
-        delete grade.defaultBlock;
-        grade.teachers.forEach(function(teacher, i) {
-            delete teacher.n;
-            delete teacher.grade;
-        });
-    });    
+    return file;
 
 }
 
