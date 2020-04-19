@@ -3,7 +3,7 @@ Schedule.prototype.loadTables = function() {
     this.specials.forEach(function(special) {
         if (special.n != "0") {
             special.table = special.scheduleTable(this.blocks);
-            $("#right").append(special.scheduleTable);
+            $("#right").append(special.table);
             $("#rightbar").append(special.button);
         }
     }, this);
