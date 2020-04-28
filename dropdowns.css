@@ -1,5 +1,5 @@
 .dropdown {
-    display:inline-block;
+    display:block;
     position:absolute;
     z-index:1;
     border:2px solid #fff;
@@ -11,5 +11,18 @@
 }
 
 .dropdown > .dropdown_button {
-    border: 1px solid #fff;
+    border-top: 1px solid #fff;
+    padding: 3px 0;
+}
+
+.flip {
+    transform: perspective(1000px) rotateY(90deg);
+    
+    transition: .5s 
+}
+
+.flip2{
+transform: perspective(1000px) rotateY(180deg);
+
+transition: .2s 
 }
