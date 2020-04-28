@@ -77,11 +77,19 @@ div.specials {
     padding-bottom: 1rem;
 }
 
-.menu, .print {
+.menu{
     float:right;
+    font-size: 1.2em;
+    line-height: 1em;
+    padding: 2px;
+    margin: 1px;
+    border: none;
+    border-radius: .3em;
+    background: none;
+    transition: background-color .4s;
 }
 
-.topbar_button svg {
+.menu svg {
     background: none;
     fill: #fff;
     height: 1.2em;
@@ -98,4 +106,8 @@ div.specials {
 .ulbold {
     text-decoration: underline;
     font-weight: bold;
+}
+
+.count {
+    display: inline;
 }
