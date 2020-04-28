@@ -128,7 +128,6 @@ function Schedule(file) {
             let color = Object.assign(grade.css[i]);
         }
         let newGrade = new Grade(grade.name,grade.abbr,grade.css,this.blocks[grade.defaultBlock],t,n);
-        console.log(grade.css);
         for (let i = 0; i < t; i++){
             newGrade.teachers[i].name = grade.teachers[i];
         }
