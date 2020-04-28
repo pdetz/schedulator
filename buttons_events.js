@@ -4,6 +4,9 @@ Schedule.prototype.loadButtons = function(){
         c.buttons = c.createGradeButton().updateButton()
                      .add(c.createSpecialButton().updateButton());
     }, this);
+    schedule.specials.forEach(function(special){
+        special.specialistClassCount(schedule);
+    });
 
     $(".grade td:empty").addEmptyGrade(schedule);
     $(".specials td:empty").addEmptySpecial(schedule);
@@ -39,7 +42,6 @@ Schedule.prototype.initializeDropdown = function(){
     let schedule = this;
     let dropdown = this.dropdown;
 
-    schedule.classes[0].buttons.eq(0).after(this.dropdown);
     dropdown.attr("class", "dropdown").attr("id", "dropdown").hide();
 
     dropdown.hover(function(){
@@ -48,6 +50,7 @@ Schedule.prototype.initializeDropdown = function(){
         dropdown.hide();
     });
 
+    // Add buttons for each special to the dropdown menu
     for (i = 0; i < schedule.specials.length; i++){
         let button = $(document.createElement("BUTTON"));
         let special = schedule.specials[(i+1) % schedule.specials.length];
@@ -66,18 +69,28 @@ Schedule.prototype.initializeDropdown = function(){
     dropdown.on("click", ".dropdown_button", (function(e){
         let button = $(this);
         let s = schedule.selectedClass.pop();
+
+        // Deletes buttons and removes a class from the array if the user clicks "No Special"
         if (button.data("special") == schedule.specials[0]){
             s.buttons.remove();
-            $("#menu").append(dropdown);
-
+            $("#body").append(dropdown);
             let index = schedule.classes.indexOf(s);
             schedule.classes.splice(index,1);
             $(".grade td:empty").addEmptyGrade(schedule);
             $(".specials td:empty").addEmptySpecial(schedule);
         }
         else{
-            s.special = button.data("special");
-            updateClasses(schedule, s, s);
+            // If we are changing an empty block to a specials block
+            // Delete the button, and create new buttons for specials and grade level schedules
+            if (s.special == schedule.specials[0]){
+                s.buttons.remove();
+                s.special = button.data("special");
+                s.buttons = s.createGradeButton().add(s.createSpecialButton());
+            }
+            else {
+                s.special = button.data("special");
+            }
+            updateClasses(schedule, [s]);
         }
         dropdown.hide();
         $("#left").off();
@@ -114,40 +127,43 @@ $.fn.selectOnClick = function(schedule,e) {
     // add the correct  click handlers to the other buttons
 
     $("#left").on("click", "button.schedule", function(e){
-        $(this).switchByGrade(schedule, e);
+        $(this).swapClasses(schedule, e, "teacher");
     });
 
     $("#right").on("click", "button.schedule", function(e){
-        $(this).switchBySpecial(schedule, e);
+        $(this).swapClasses(schedule, e, "special");
     });
 
     return this;
 }
 
-$.fn.switchByGrade = function(schedule, e) {
+$.fn.swapClasses = function(schedule, e, swapProp) {
     e.stopImmediatePropagation();
     $("#left").off("click");
     $("#right").off("click");
 
-    let c = this.c();
+    let c = [this.c()];
     let s = schedule.selectedClass.pop();
 
-    if (c != s){
+    if (c[0] != s){
 
-        let block = c.block;
-        c.block = s.block;
+        c.push(s);
+
+        let block = c[0].block;
+        c[0].block = s.block;
         s.block = block;
     
-        let day = c.day;
-        c.day = s.day;
+        let day = c[0].day;
+        c[0].day = s.day;
         s.day = day;
     
-        let teacher = c.teacher;
-        c.teacher = s.teacher;
-        s.teacher = teacher;
+        let swap = c[0][swapProp];
+        c[0][swapProp] = s[swapProp];
+        s[swapProp] = swap;
+
     }
 
-    updateClasses(schedule, c, s);
+    updateClasses(schedule, c);
     schedule.dropdown.hide();
 
     $("body").on("click", "button.schedule", function(e){
@@ -155,82 +171,42 @@ $.fn.switchByGrade = function(schedule, e) {
     });
 }
 
-$.fn.switchBySpecial = function(schedule, e) {
-    e.stopImmediatePropagation();
-    $("#left").off("click");
-    $("#right").off("click");
-
-    let c = this.c();
-    let s = schedule.selectedClass.pop();
-
-    if (c != s){
-
-        let block = c.block;
-        c.block = s.block;
-        s.block = block;
-    
-        let special = c.special;
-        c.special = s.special;
-        s.special = special;
-
-        let day = c.day;
-        c.day = s.day;
-        s.day = day;
-    }
-
-    updateClasses(schedule, c, s);
-    schedule.dropdown.hide();
-
-    $("body").on("click", "button.schedule", function(e){
-        $(this).selectOnClick(schedule,e);
-    });
-}
-
-Class.prototype.updateClass = function(){
-    this.buttons.each(function(){
-        $(this).updateButton();
-    });
-}
-
-updateClasses = function(schedule, c, s){
+updateClasses = function(schedule, classes){
 
     let tds = $();
-    c.buttons.each(function(){
-        tds = tds.add($(this).parent());
-    });
-    s.buttons.each(function(){
-        tds = tds.add($(this).parent());
+
+    // Add to the list of tds that need to be checked for empties
+    // Also, update buttons to their new locations
+    classes.forEach( function(c){
+        c.buttons.each(function(){
+            tds = tds.add($(this).parent());
+        });
+        c.buttons.each(function(){
+            $(this).updateButton();
+        });
+        c.buttons.each(function(){
+            tds = tds.add($(this).parent());
+        });
     });
 
-    c.buttons.each(function(){
-        $(this).updateButton();
-    });
-    s.buttons.each(function(){
-        $(this).updateButton();
-    });
-
-    c.buttons.each(function(){
-        tds = tds.add($(this).parent());
-    });
-    s.buttons.each(function(){
-        tds = tds.add($(this).parent());
-    });
-
+    // Check the tds for empties
     tds.each(function(){
-    
         let td = $(this);
-
+        // List of all the class buttons inside a td
         let list = td.children().not("#dropdown");
 
+        // If there is more than 1 button in a td:
         if (list.length > 1){
             list.each(function(){
                 let button = $(this);
+                // Then check each button to see if it's an empty, if it is remove it
                 if (button.c().special == schedule.specials[0] || button.c().teacher.grade == schedule.grades[0]){
                     button.remove();
                 }
             });
         }
 
+        // If there are no buttons in a td, put the appropriate empty button in it
         if (list.length == 0){
             if (td.attr("id").startsWith("s")){
                 td.addEmptySpecial(schedule);
@@ -238,6 +214,12 @@ updateClasses = function(schedule, c, s){
             else{
                 td.addEmptyGrade(schedule);
             }
+        }
+
+        // Update the count of the corresponding table
+        if (td.attr("id").startsWith("s")){
+            let data = $(this).classDataFromtd();
+            schedule.specials[parseInt(data[0])].specialistClassCount(schedule);
         }
     });
 }
@@ -247,13 +229,13 @@ $.fn.updateButton = function(){
         .off("mouseenter")
         .off("mouseleave")
         .hide()
-        .fadeIn(800)
+        .fadeIn(400)
     return this;
 }
 
 $.fn.addEmptySpecial = function(schedule){
     $(this).each( function(){
-        let data = classDataFromtd($(this).attr("id").slice(1));
+        let data = $(this).classDataFromtd();
         let special = schedule.specials[parseInt(data[0])];
         let day = parseInt(data[1]);
         let block = schedule.blocks[parseInt(data[2])];
@@ -268,7 +250,7 @@ $.fn.addEmptySpecial = function(schedule){
 
 $.fn.addEmptyGrade = function(schedule){
     $(this).each( function(){
-        let data = classDataFromtd($(this).attr("id").slice(1));
+        let data = $(this).classDataFromtd();
         let grade = schedule.grades[parseInt(data[0])];
         let day = parseInt(data[1]);
         let teacher = grade.teachers[parseInt(data[2])];
@@ -307,6 +289,6 @@ $.fn.emptyDisplay = function(){
     return this;
 }
 
-var classDataFromtd = function(id){
-    return id.split(/[dtb]/);
+$.fn.classDataFromtd = function(){
+    return $(this).attr("id").slice(1).split(/[dtb]/);
 }
