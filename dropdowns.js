@@ -6,17 +6,20 @@ Schedule.prototype.loadBlocksDD = function(){
             .attr("id", "blocksDD").hide();
 
     // Add buttons for each block to the dropdown menu
-    for (i = 0; i < schedule.blocks.length; i++){
+    for (let i = 0; i < schedule.blocks.length; i++){
         let block = schedule.blocks[i];
         let button = dropdownButton(block, "block", schedule.specials[0].css);
         blocksDD.append(button);
     }
     blocksDD.append("<hr>")
             .append("<div id='altblocks'></div>");
-    for (i = 0; i < schedule.altBlocks.length; i++){
+    for (let i = 0; i < schedule.altBlocks.length; i++){
         let block = schedule.altBlocks[i];
+        //console.log(block);
         let button = dropdownButton(block, "block", schedule.specials[0].css);
-        $("#altblocks").append(button);
+        console.log(button);
+        blocksDD.append(button);
+        console.log(block);
     }
 
     blocksDD.append("<hr>")
