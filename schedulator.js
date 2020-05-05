@@ -22,6 +22,7 @@ $(document).ready(function(){
 
     $("#menu").click(function(){
         saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );
+        
         /*
         $("#right").addClass("flip");
         $("#right").children().delay(500) //.slideUp(10)
