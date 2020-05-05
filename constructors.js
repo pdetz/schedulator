@@ -21,6 +21,8 @@ function Block(start, end, n) {
     }
 }
 
+Block.prototype = {get name(){return this.start + " – " + this.end;}}
+
 // Constructor function for GRADES object
 function Grade(name, abbr, css, block, t, n) {
     this.name = name;
@@ -106,18 +108,25 @@ Class.prototype.hasGrade = function(){
 // Constructor function for SCHEDULE object
 function Schedule(file) {
     this.blocks = []; // an array of Block objects
+    this.altBlocks = [];
     this.grades = []; // an array of Grade objects
     this.specials = []; // an array of Special objects
     this.classes = []; // an array of Class objects
 
     this.selectedClass = [];
     
-    this.dropdown = $(document.createElement("DIV"));
+    this.specialsDD = $(document.createElement("DIV"));
+    this.blocksDD = $(document.createElement("DIV"));
 
     // Copy blocks from file to Schedule
     file.blocks.forEach(function(block,i){
         let newBlock = new Block(block.start,block.end,block.n);
         this.blocks.push(newBlock);
+    }, this);
+
+    file.altBlocks.forEach(function(block,i){
+        let newBlock = new Block(block.start,block.end,block.n);
+        this.altBlocks.push(newBlock);
     }, this);
 
     // Copy grades from file to Schedule

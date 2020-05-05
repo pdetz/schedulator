@@ -32,44 +32,75 @@ Schedule.prototype.loadTables = function() {
         button.blur();
     });
     
-    $("#leftbar, #rightbar").on("mouseenter", "button.topbar_button", function(){
-        let button = $(this);
-        let gOrS = button.c();
-        let cssOn = gOrS.css;
-        if (gOrS.isVisible) {
-            button.css(cssOn[1]);
-        }
-        else {
-            button.css(cssOff[1]);
-        }
-    });
-    
-    $("#leftbar, #rightbar").on("mouseleave", "button.topbar_button", function(){
-        let button = $(this);
-        let gOrS = button.c();
-        console.log(button);
-        let cssOn = gOrS.css;
-        if (gOrS.isVisible) {
-            button.css(cssOn[0]);
-        }
-        else {
-            button.css(cssOff[0]);
-        }
+    let hoverEvents = ["mouseleave", "mouseenter"];
+    hoverEvents.forEach(function(e, i){
+        $("#leftbar, #rightbar").on(e, "button.topbar_button", function(){
+            let button = $(this);
+            let gOrS = button.c();
+            let cssOn = gOrS.css;
+            if (gOrS.isVisible) {
+                button.css(cssOn[i]);
+            }
+            else {
+                button.css(cssOff[i]);
+            }
+        });
     });
 
+    // Keyup event listener to update Teachers' names
+    $("#left").on("keyup", "input.teacher_name", function(e){
+        let input = $(this);
+        let teacher = input.data("teacher");
+        teacher.name = input.val();
+        input.parent().siblings().children(".schedule").each(function(){
+            let c = $(this).c();
+            console.log(c);
+            if (c.hasSpecial()) {
+                $(c.buttons[1]).specialsDisplay();
+            }
+        });
+        if (e.which == 27 || e.which == 13){
+            input.blur();
+        }
+    });
+/*
+    // Button to edit grade level stuff
+    $("#left").on("mouseover", "th", function(){
+        let th = $(this);
+        let grade = th.parents("div").data("grade");
+        th.css(grade.css[0]);
+        console.log(grade.css[0]);
+    });
+    $("#left").on("mouseleave", "th", function(){
+        let th = $(this);
+        th.css({background:'#000', color:'#fff'});
+    });
 
+    $("#left").on("click", "th", function(e){
+        let th = $(this);
+        let grade = th.parents("div").data("grade");
+        grade.table.find("button").each( function(){
+            if ($(this).c().hasSpecial()) {
+                $(this).removeClass("schedule").css({background:'#aaa'});
+            }
+        });
+    });
+    */
 };
 
-// Returns an HTML string that shows a table of that grade level's Specials schedule
+// Returns an $() object that shows a table of that grade level's Specials schedule
 Grade.prototype.scheduleTable = function() {
     let table = $(document.createElement("div"));
     table.append(document.createElement("TABLE"));
     table.children().attr("class", "grade schedule");
+    table.data("grade", this);
     table.children().append(
         `<tbody><tr><th>${this.name}</th><td>${DAYS[0]}</td><td>${DAYS[1]}</td><td>${DAYS[2]}</td><td>${DAYS[3]}</td><td>${DAYS[4]}</td></tr></tbody>`
     );
     this.teachers.forEach( function(teacher, i){
-        table.find("tbody").append("<tr><td>" + teacher.name + "</td></tr>");
+        table.find("tbody").append("<tr><td>" + "</td></tr>");
+        table.find("td:last").append('<input type=\'text\' class=\'teacher_name\' value="' + teacher.name + '"></input>');
+        table.find("input:last").data("teacher", teacher);
         DAYS.forEach (function(day, d){
             table.find("tr:last").append("<td id=\""
                 + "g" + this.n + "d" + d + "t" + teacher.n() + "\"></td>");
@@ -79,11 +110,11 @@ Grade.prototype.scheduleTable = function() {
     return table;
 };
 
-// Returns an HTML string that shows a table of each specialist's schedule
+// Returns an $() objecy that shows a table of each specialist's schedule
 Special.prototype.scheduleTable = function(blocks) {
     let table = $(document.createElement("div"));
     table.append(this.specialist);
-    table.append("<div id='s" + this.n + "count' class = 'count'>Count</div>");
+    table.append("<span id='s" + this.n + "count' class = 'count'>Count</span>");
     table.append(document.createElement("TABLE"));
     table.find("table").attr("class", "specials schedule")
          .append(
@@ -113,10 +144,9 @@ var topbarButton = function(gOrS) {
 }
 
 Special.prototype.specialistClassCount = function(schedule){
-
     let count = 0;
     schedule.classes.forEach(function(c){
-        if (c.special == this && c.teacher.grade != schedule.grades[0]) {count++;}
+        if (c.special == this && c.hasGrade()) {count++;}
     }, this);
 
     $("#s" + this.n + "count").html(" (" + count + ")");

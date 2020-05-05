@@ -1,7 +1,4 @@
-.schedule.specials table {
-    padding-bottom: 6px;
-    margin-top:0;
-}
+
 
 .schedule tr:first-child {
     background:#000;
@@ -110,4 +107,10 @@ div.specials {
 
 .count {
     display: inline;
+}
+
+.teacher_name {
+    background:none;
+    border:none;
+    width: 100%;
 }
