@@ -19,6 +19,7 @@ $(document).ready(function(){
             schedule.resetButtons();
         }
     });
+    
 
     $("#menu").click(function(){
         saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );

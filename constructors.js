@@ -21,6 +21,7 @@ function Block(start, end, n) {
     }
 }
 
+
 Block.prototype = {get name(){return this.start + " – " + this.end;}}
 
 // Constructor function for GRADES object

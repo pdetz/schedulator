@@ -20,6 +20,7 @@ Schedule.prototype.loadButtons = function(){
         });
     })
 
+    
     $("#body").on("click", "button.schedule", function(e){
         e.stopImmediatePropagation();
 

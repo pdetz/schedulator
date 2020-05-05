@@ -21,6 +21,7 @@ Schedule.prototype.loadBlocksDD = function(){
         blocksDD.append(button);
         console.log(block);
     }
+    
 
     blocksDD.append("<hr>")
             .append("<input style='width:3em' id='nbStart'></input> – ")
