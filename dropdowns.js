@@ -17,9 +17,7 @@ Schedule.prototype.loadBlocksDD = function(){
         let block = schedule.altBlocks[i];
         //console.log(block);
         let button = dropdownButton(block, "block", schedule.specials[0].css);
-        console.log(button);
         blocksDD.append(button);
-        console.log(block);
     }
     
 
@@ -37,13 +35,11 @@ Schedule.prototype.loadBlocksDD = function(){
         let newBlock = new Block(start, end, n);
         schedule.altBlocks.push(newBlock);
         $("#altblocks").append(dropdownButton(newBlock, "block", schedule.specials[0].css));
-        console.log(newBlock);
     });
 
     blocksDD.on("click", ".dropdown_button", function(e){
         let button = $(this);
         let s = schedule.selectedClass[0];
-        console.log(s);
         s.block = button.data("block");
         schedule.updateClasses();
         blocksDD.slideUp();

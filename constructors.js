@@ -39,7 +39,7 @@ function Grade(name, abbr, css, block, t, n) {
 
     this.isVisible = true;
     this.cssClass = "grade";
-    this.table = this.scheduleTable();
+    this.table = "";
     this.button = topbarButton(this); 
 }
 

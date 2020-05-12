@@ -6,6 +6,7 @@ Schedule.prototype.loadTables = function() {
         $("#rightbar").append(this.specials[i].button);
     }
     for (let i = 1; i < this.grades.length; i++){
+        this.grades[i].table = this.grades[i].scheduleTable();
         $("#left").append(this.grades[i].table);
         $("#leftbar").append(this.grades[i].button); 
     }
@@ -54,7 +55,6 @@ Schedule.prototype.loadTables = function() {
         teacher.name = input.val();
         input.parent().siblings().children(".schedule").each(function(){
             let c = $(this).c();
-            console.log(c);
             if (c.hasSpecial()) {
                 $(c.buttons[1]).specialsDisplay();
             }
@@ -97,7 +97,7 @@ Grade.prototype.scheduleTable = function() {
     table.children().append(
         `<tbody><tr><th>${this.name}</th><td>${DAYS[0]}</td><td>${DAYS[1]}</td><td>${DAYS[2]}</td><td>${DAYS[3]}</td><td>${DAYS[4]}</td></tr></tbody>`
     );
-    this.teachers.forEach( function(teacher, i){
+    this.teachers.forEach( function(teacher){
         table.find("tbody").append("<tr><td>" + "</td></tr>");
         table.find("td:last").append('<input type=\'text\' class=\'teacher_name\' value="' + teacher.name + '"></input>');
         table.find("input:last").data("teacher", teacher);
