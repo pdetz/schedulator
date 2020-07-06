@@ -21,7 +21,7 @@ Schedule.prototype.loadSettingsPanel = function(){
              .append('<td><input type=\'text\' class=\'teacher_name\' value="' + special.name + '"></input></td>' +
                      '<td><input type=\'text\' class=\'teacher_name\' value="' + special.specialist + '"></input></td>' +
                      '<td><input type=\'text\' class=\'teacher_name\' value="' + special.abbr + '"></input></td>' +
-                     '<td><input type=\'text\' class=\'teacher_name\' value="' + schedule.palette[special.color[0]] + '"></input></td>')
+                     "<td>" + schedule.palette[special.color[0]] + "</td>")
              .append("</tr>");
 
     }
