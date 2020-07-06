@@ -8,7 +8,7 @@ Schedule.prototype.loadBlocksDD = function(){
     // Add buttons for each block to the dropdown menu
     for (let i = 0; i < schedule.blocks.length; i++){
         let block = schedule.blocks[i];
-        let button = dropdownButton(block, "block", schedule.specials[0].css);
+        let button = dropdownButton(block, "block");
         blocksDD.append(button);
     }
     blocksDD.append("<hr>")
@@ -16,11 +16,10 @@ Schedule.prototype.loadBlocksDD = function(){
     for (let i = 0; i < schedule.altBlocks.length; i++){
         let block = schedule.altBlocks[i];
         //console.log(block);
-        let button = dropdownButton(block, "block", schedule.specials[0].css);
+        let button = dropdownButton(block, "block");
         blocksDD.append(button);
     }
     
-
     blocksDD.append("<hr>")
             .append("<input style='width:3em' id='nbStart'></input> – ")
             .append("<input style='width:3em' id=\"nbEnd\"></input>")
@@ -34,7 +33,7 @@ Schedule.prototype.loadBlocksDD = function(){
         let n = $("#nbN").val();
         let newBlock = new Block(start, end, n);
         schedule.altBlocks.push(newBlock);
-        $("#altblocks").append(dropdownButton(newBlock, "block", schedule.specials[0].css));
+        $("#altblocks").append(dropdownButton(newBlock, "block"));
     });
 
     blocksDD.on("click", ".dropdown_button", function(e){
@@ -44,6 +43,8 @@ Schedule.prototype.loadBlocksDD = function(){
         schedule.updateClasses();
         blocksDD.slideUp();
         schedule.resetButtons();
+
+        //console.log(schedule.blocks.indexOf(s.block));
     });
 
     $("#left").on("contextmenu", "button.schedule", function(e){
@@ -71,7 +72,7 @@ Schedule.prototype.loadSpecialsDD = function(){
     // Add buttons for each special to the dropdown menu
     for (i = 0; i < schedule.specials.length; i++){
         let special = schedule.specials[(i+1) % schedule.specials.length];
-        let button = dropdownButton(special, "special", special.css);
+        let button = dropdownButton(special, "special");
         specialsDD.append(button);
     }
 
@@ -99,7 +100,7 @@ Schedule.prototype.loadSpecialsDD = function(){
             if (!s.hasSpecial()){
                 s.buttons.remove();
                 s.special = button.data("special");
-                s.buttons = s.createGradeButton().add(s.createSpecialButton());
+                s.buttons = s.createScheduleButton($.fn.gradeDisplay, $.fn.specialsDisplay);
             }
             else {
                 s.special = button.data("special");
@@ -124,16 +125,10 @@ $.fn.dropdownMenu = function(menu){
     });
 }
 
-function dropdownButton(obj, objType, css) {
+function dropdownButton(obj, objType) {
     let button = $(document.createElement("BUTTON"));
     button.data(objType, obj)
-          .attr("class", "dropdown_button")
-          .append(obj.name)
-          .css(css[0])
-          .hover(function(){
-              button.css(css[1]);
-          }, function(){
-              button.css(css[0]);
-          });
+          .attr("class", "dropdown_button " + obj.colorClass)
+          .append(obj.name);
     return button;
 }

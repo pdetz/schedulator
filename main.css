@@ -47,15 +47,21 @@ body{
 }
 
 .column.left {
+    position:relative;
     padding-left: 0;
-    padding-right: 1em;
 }
 
 .displayArea {
-    width: 100%;
-    /* border: 1px solid #0f0; */
+    max-width: 46rem;
     direction: ltr;
+    margin-left: 2rem;
+    margin-right: 0.5rem;
     text-align: center;
+}
+
+.column.left > .displayArea {
+    margin-right: 2rem;
+    margin-left: 0.5rem;
 }
 
 .topbar {
@@ -64,22 +70,15 @@ body{
     top: 0;
     margin: auto;
     width: 100%;
-    max-width: 46rem;
     padding: 4px 0 8px 0;
     background: #000;
-    /* border: 1px solid blue; */
     text-align: center;
 }
 
-.panel {
+.frame {
     padding: 1rem;
-    margin: auto;
     background: #ddd;
     min-height: 3em;
     color: #000;
     max-width: 46rem;
-}
-
-.left > .panel {
-    float: right;
 }

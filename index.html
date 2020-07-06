@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head id="head">
     <meta charset="UTF-8">
     <title>Schedulator 2020</title>
     <link rel="stylesheet" href="main.css">
@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="print.css">
     <script src="jquery3.min.js"></script>
     <script src="constructors.js"></script>
+    <script src="panels.js"></script>
     <script src="tables.js"></script>
     <script src="dropdowns.js"></script>
     <script src="buttons_events.js"></script>
@@ -20,7 +21,7 @@
         <div class="displayArea">
             <div id="leftbar" class="topbar">
             </div>
-            <div id="left" class="panel">
+            <div id="left" class="frame">
             </div>
         </div>
     </div>
@@ -29,9 +30,9 @@
             <div id="rightbar" class="topbar">
                 <button id="menu" class="menu">
                     <svg viewBox="1 1 128 128">
-                        <rect x="8" y="18" width="112" height="16" rx="4"></rect>
-                        <rect x="8" y="56" width="112" height="16" rx="4"></rect>
-                        <rect x="8" y="94" width="112" height="16" rx="4"></rect>
+                        <circle cx="64" cy="64" r="14" fill="#ff4"></circle>
+                        <circle cx="16" cy="64" r="14" fill="#f44"></circle>
+                        <circle cx="112" cy="64" r="14" fill="#48f"></circle>
                     </svg>
                 </button>
                 <button id="print" class="menu print">
@@ -48,7 +49,7 @@
                     </svg>
                 </button>
             </div>
-            <div id="right" class="panel">
+            <div id="right" class="frame">
             </div>
         </div>
     </div>

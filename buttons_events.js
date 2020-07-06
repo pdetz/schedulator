@@ -1,26 +1,22 @@
 Schedule.prototype.loadButtons = function(){
     let schedule = this;
     schedule.classes.forEach( function(c){
-        c.buttons = c.createGradeButton().updateButton()
-                     .add(c.createSpecialButton().updateButton());
+        c.buttons = c.createScheduleButton($.fn.gradeDisplay, $.fn.specialsDisplay);
     });
     schedule.specials.forEach(function(special){
         special.specialistClassCount(schedule);
     });
     $("td:empty").addEmptyClass(schedule);
-
-    // hiliting handlers
-    let hoverEvents = ["mouseleave", "mouseenter"];
-    hoverEvents.forEach(function(e, i){
-        $("#body").on(e, "button.schedule", function(){
-            let c = $(this).c();
-            if (c != schedule.selectedClass[0]){
-                c.buttons.getCSS(i);
-            }
-        });
-    })
-
     
+    $("#body").on("mouseenter", "button.schedule", function(e){
+        let c = $(this).c();
+        c.buttons.addClass("hvr");
+    });
+    $("#body").on("mouseleave", "button.schedule", function(e){
+        let c = $(this).c();
+        c.buttons.removeClass("hvr");
+    });
+
     $("#body").on("click", "button.schedule", function(e){
         e.stopImmediatePropagation();
 
@@ -28,7 +24,9 @@ Schedule.prototype.loadButtons = function(){
         let c = clicked.c();
         schedule.selectedClass.push(c);
     
-        c.buttons.getCSS(2);
+        // set the selected class
+
+        c.buttons.addClass("selected");
     
         if (c.hasGrade()){
             clicked.after(schedule.specialsDD);
@@ -152,16 +150,13 @@ $.fn.addEmptyClass = function(schedule){
         if (td.attr("id").startsWith("s")){
             c.special = schedule.specials[parseInt(data[0])];
             c.block = schedule.blocks[parseInt(data[2])];
-            c.buttons = c.createSpecialButton()
-                         .data("display", $.fn.emptyDisplay)
-                         .addClass("empty")
-                         .updateButton();
+            c.buttons = c.createScheduleButton($.fn.emptyDisplay);
         }
         else {
             let grade = schedule.grades[parseInt(data[0])];
             c.block = grade.defaultBlock;
             c.teacher = grade.teachers[parseInt(data[2])];
-            c.buttons = c.createGradeButton().addClass("empty").updateButton(); 
+            c.buttons = c.createScheduleButton($.fn.gradeDisplay); 
         }
         schedule.classes.push(c);
     });
@@ -169,41 +164,31 @@ $.fn.addEmptyClass = function(schedule){
 
 $.fn.gradeDisplay = function(){
     let c = this.c();
-    this.css(c.special.css[0])
-        .data("css", c.special.css)
-        .html(c.special.name + "<br>" + c.block.name);
+    this.html(c.special.name + "<br>" + c.block.name)
+        .attr("class", "schedule " + c.special.colorClass);
     c.tdGrade().append(this);
     return this;
 }
 
 $.fn.specialsDisplay = function(){
     let c = this.c();
-    this.css(c.teacher.grade.css[0])
-        .data("css", c.teacher.grade.css)
-        .html("<span class='ulbold'>" + c.teacher.grade.abbr + "</span> " +
-              c.teacher.name + "<br>" + c.block.name);
+    this.html("<span class='ulbold'>" + c.teacher.grade.abbr + "</span> " +
+              c.teacher.name + "<br>" + c.block.name)
+              .attr("class", "schedule " + c.teacher.grade.colorClass);
     c.tdSpecial().append(this);
     return this;
 }
 
 $.fn.emptyDisplay = function(){
     let c = this.c();
-    this.css(c.teacher.grade.css[0])
-        .data("css", c.teacher.grade.css)
-        .html(DAYS[c.day] + "<br>" + c.block.name);
+    this.html(DAYS[c.day] + "<br>" + c.block.name)
+        .attr("class", "schedule " + c.teacher.grade.colorClass);
     c.tdSpecial().append(this);
     return this;
 }
 
 $.fn.classDataFromtd = function(){
     return $(this).attr("id").slice(1).split(/[dtb]/);
-}
-
-$.fn.getCSS = function(n){
-    $(this).each(function(){
-        $(this).css($(this).data("css")[n]);
-    });
-    return this;
 }
 
 Class.prototype.id = function(){

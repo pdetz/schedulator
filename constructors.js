@@ -2,35 +2,33 @@
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-var cssProperties = function(css){
-    return [{"background": css[0], "color": css[2]},
-            {"background": css[1], "color": css[3]},
-            {"background": css[3], "color": css[0]}];
-}
-
 $.fn.c = function() {
     return this.data("c");
+}
+
+function createStylesheet(id) {
+    var stylesheet = document.createElement('style');
+    stylesheet.type = 'text/css';
+    stylesheet.id = id;
+    document.head.appendChild(stylesheet);
+    return stylesheet;
 }
 
 function Block(start, end, n) {
     this.start = start;
     this.end = end;
     this.n = n;
-    this.display = function(){
-        return start + " – " + end;
-    }
 }
-
 
 Block.prototype = {get name(){return this.start + " – " + this.end;}}
 
 // Constructor function for GRADES object
-function Grade(name, abbr, css, block, t, n) {
+function Grade(name, abbr, color, block, t, n) {
     this.name = name;
     this.abbr = abbr;
     this.defaultBlock = block;
     this.n = n;
-    this.css = css;//cssProperties(css);
+    this.color = color;
 
     this.teachers = new Array(t); // an array of Teachers
     for (let i = 0; i < t; i++){
@@ -38,9 +36,13 @@ function Grade(name, abbr, css, block, t, n) {
     }
 
     this.isVisible = true;
-    this.cssClass = "grade";
+    this.topbarClass = "grade";
+    this.colorClass = "grade" + n.toString();
+    
     this.table = "";
-    this.button = topbarButton(this); 
+    this.button = topbarButton(this);
+
+    this.stylesheet = createStylesheet(this.colorClass);
 }
 
 function Teacher(name, grade) {
@@ -52,17 +54,20 @@ function Teacher(name, grade) {
 }
 
 // Constructor function for SPECIAL object
-function Special(name, abbr, specialist, css, n) {
+function Special(name, abbr, specialist, color, n) {
     this.name = name;
     this.abbr = abbr;
     this.specialist = specialist;
-    this.css = css;//cssProperties(css);
+    this.color = color;
     this.n = n;
 
     this.isVisible = true;
-    this.cssClass = "specials";
+    this.topbarClass = "specials";
+    this.colorClass = "specials" + n.toString();
     this.table = ""; // this table is created in Schedule.prototype.loadTables
     this.button = topbarButton(this);
+
+    this.stylesheet = createStylesheet(this.colorClass);
 }
 
 function Class(block, day, teacher, special){
@@ -72,22 +77,16 @@ function Class(block, day, teacher, special){
     this.special = special;
 }
 
-Class.prototype.createSpecialButton = function(){
-    let button = $(document.createElement("BUTTON"));
-    button.attr("class", "specials schedule")
-          .data({"c": this,
-                 "display": $.fn.specialsDisplay,
-                 "css": this.teacher.grade.css});
-    return button;
-};
-
-Class.prototype.createGradeButton = function(){
-    let button = $(document.createElement("BUTTON"));
-    button.attr("class", "grade schedule")
-          .data({"c": this,
-                 "display": $.fn.gradeDisplay,
-                 "css": this.special.css});
-    return button;
+Class.prototype.createScheduleButton = function(displayFunctions){
+    let buttons = $();
+    for (let i = 0; i < arguments.length; i++){
+        let button = $(document.createElement("BUTTON"));
+        button.data({"c": this,
+                     "display": arguments[i]});
+        arguments[i].call(button);
+        buttons = buttons.add(button);
+    }
+    return buttons;
 };
 
 Class.prototype.tdSpecial = function() {
@@ -113,46 +112,69 @@ function Schedule(file) {
     this.grades = []; // an array of Grade objects
     this.specials = []; // an array of Special objects
     this.classes = []; // an array of Class objects
+    this.palette = file.palette;
 
     this.selectedClass = [];
     
     this.specialsDD = $(document.createElement("DIV"));
     this.blocksDD = $(document.createElement("DIV"));
+    this.gradeSchedules = $(document.createElement("DIV"));
+    this.specialSchedules = $(document.createElement("DIV"));
+    this.settingsPanel = $(document.createElement("DIV"));
 
     // Copy blocks from file to Schedule
+    let alt = false;
     file.blocks.forEach(function(block,i){
-        let newBlock = new Block(block.start,block.end,block.n);
-        this.blocks.push(newBlock);
-    }, this);
-
-    file.altBlocks.forEach(function(block,i){
-        let newBlock = new Block(block.start,block.end,block.n);
-        this.altBlocks.push(newBlock);
+        if (block == "") {
+            alt = true;
+        }
+        else if (alt) {
+            let newBlock = new Block(block.start,block.end,block.n);
+            this.altBlocks.push(newBlock);
+        }
+        else {
+            let newBlock = new Block(block.start,block.end,block.n);
+            this.blocks.push(newBlock);
+        }
     }, this);
 
     // Copy grades from file to Schedule
     file.grades.forEach(function(grade,n){
         let t = grade.teachers.length;
-        let css = [];
-        for (let i = 0; i < grade.css.length; i++){
-            let color = Object.assign(grade.css[i]);
-        }
-        let newGrade = new Grade(grade.name,grade.abbr,grade.css,this.blocks[grade.defaultBlock],t,n);
+        let newGrade = new Grade(grade.name,grade.abbr,grade.color,this.blocks[grade.defaultBlock],t,n);
         for (let i = 0; i < t; i++){
             newGrade.teachers[i].name = grade.teachers[i];
         }
+        newGrade.stylesheet.innerHTML = this.stylesheetRules(newGrade);
+        
         this.grades.push(newGrade);
     }, this);
 
     // Copy specials from file to Schedule
     file.specials.forEach(function(special,n){
-        let newSpecial = new Special(special.name, special.abbr, special.specialist, special.css, n);
+        let newSpecial = new Special(special.name, special.abbr, special.specialist, special.color, n);
+        newSpecial.stylesheet.innerHTML = this.stylesheetRules(newSpecial);
         this.specials.push(newSpecial);
     }, this);
 
     // Copy classes from file to Schedule
     file.classes.forEach(function(c){
-        let newClass = new Class(this.blocks[c[0]], c[1], this.grades[c[2]].teachers[c[3]], this.specials[c[4]]);
+        let block = "";
+        if (c[0] > this.blocks.length){
+            c[0] -= this.blocks.length + 1;
+            block = this.altBlocks[c[0]];
+        }
+        else {
+            block = this.blocks[c[0]];
+        }
+        let newClass = new Class(block, c[1], this.grades[c[2]].teachers[c[3]], this.specials[c[4]]);
         this.classes.push(newClass);
     }, this);
+}
+
+Schedule.prototype.stylesheetRules = function(gOrS){
+    return "." + gOrS.colorClass + "{background:" + this.palette[gOrS.color[0]] + ";color:" + this.palette[gOrS.color[1]] + ";}" +
+            " ." + gOrS.colorClass + ".hvr{filter: brightness(70%);}" + 
+            " ." + gOrS.colorClass + ":hover{filter: brightness(70%);}" + 
+            " ." + gOrS.colorClass + ".selected{background:#000;color:" + this.palette[gOrS.color[0]] + ";}";
 }
