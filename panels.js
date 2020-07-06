@@ -13,7 +13,11 @@ Schedule.prototype.loadSettingsPanel = function(){
 
     table.append("<tbody><tr><td>Special Name</td><td>Specialist</td><td>Abbreviation</td><td>Color</td></tr></tbody>");
 
-// Add an input box for the 
+// Add an input box for the special.specialist and special.abbr lines
+// Add css information for tables with class "settings"
+// You might need or want to add specific styling information for specific tds or trs within that table
+// Bigger font, more spacing between table rows, etc. 
+// Just make it look good
 
     for (let i = 1; i < schedule.specials.length; i++){
         let special = schedule.specials[i];
@@ -25,7 +29,8 @@ Schedule.prototype.loadSettingsPanel = function(){
              .append("</tr>");
 
     }
-    
+
+
     settings.append(table);
 
     let settingsButton = $(document.createElement("button"));
