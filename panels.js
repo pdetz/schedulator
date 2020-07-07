@@ -19,8 +19,8 @@ Schedule.prototype.loadSettingsPanel = function(){
         let special = schedule.specials[i];
         table.find("tbody").append("<tr>")
              .append('<td><input type=\'text\' class=\'teacher_name\' value="' + special.name + '"></input></td>' +
-                     "<td>" + special.specialist + "</td>" +
-                     "<td>" + special.abbr + "</td>" +
+                     '<td><input type=\'text\' class=\'teacher_name\' value="' + special.specialist + '"></input></td>' +
+                     '<td><input type=\'text\' class=\'teacher_name\' value="' + special.abbr + '"></input></td>' +
                      "<td>" + schedule.palette[special.color[0]] + "</td>")
              .append("</tr>");
 
