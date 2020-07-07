@@ -20,8 +20,8 @@ Schedule.prototype.loadSettingsPanel = function(){
         table.find("tbody").append("<tr>")
              .append('<td><input type=\'text\' class=\'teacher_name\' value="' + special.name + '"></input></td>' +
                      '<td><input type=\'text\' class=\'teacher_name\' value="' + special.specialist + '"></input></td>' +
-                     '<td><input type=\'text\' class=\'teacher_name\' value="' + special.abbr + '"></input></td>' +
-                     "<td>" + schedule.palette[special.color[0]] + "</td>")
+                     '<td><input type=\'text\' class=\'teacher_name\' value="' + special.abbr + '"></input></td>' + 
+                     '<td><button class=' + special.colorClass + '>' + schedule.palette[special.color[0]] + '</button></td>')
              .append("</tr>");
 
     }
