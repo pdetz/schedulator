@@ -47,40 +47,17 @@ $(document).ready(function(){
         }
     });
     
-    $("#menu").data("open", false);
 
     $("#menu").click(function(e){
 
-        /*
-        e.stopImmediatePropagation();
-        this.blur();
+        $("#rightbar > .topbar_button").toggleClass("to_left");
 
-        if ($("#menu").data("open")){
-            $("#menu").data("open", false);
-            $("#rightbar button.topbar_button").css("float", "");
-        }
-        else {
-            $("#menu").data("open", true);
-            $("#rightbar button.topbar_button").css("float", "left");
-        }
-*/
+        //saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );
 
-        saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );
-        
-        /*
-        $("#right").addClass("flip");
-        $("#right").children().delay(500) //.slideUp(10)
-            .queue(function(){
-                $("#right").addClass("flip2");
-                $("#right").children().slideDown(10);
-            })
-        //$("#right").removeClass("flip");
-        */
     });
 
     $("#print").click(function(){
-        //window.print();
-        console.log(document.styleSheets);
+        window.print();
     });
 
 });

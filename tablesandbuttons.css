@@ -12,6 +12,10 @@
     padding: 0;
 }
 
+.settings.schedule th, td {
+    font-size: 1rem;
+}
+
 .grade.schedule td {
     width: 7rem;
     padding: 0;
@@ -55,8 +59,12 @@
     margin: 1px;
     border: none;
     border-radius: .3em;
-    background: none;
-    transition: filter .4s;
+    transition: .4s;
+}
+
+.topbar_button.to_left {
+    transform: translateX(-800px);
+    filter: brightness(0);
 }
 
 .topbar_button.specials {

@@ -72,7 +72,7 @@ Grade.prototype.scheduleTable = function() {
 // Returns an $() objecy that shows a table of each specialist's schedule
 Special.prototype.scheduleTable = function(blocks) {
     let table = $(document.createElement("div"));
-    table.append(this.specialist);
+    table.append("<span class = 'specialist'>" + this.specialist + "</span>");
     table.append("<span id='s" + this.n + "count' class = 'count'>Count</span>");
     table.append(document.createElement("TABLE"));
     table.find("table").attr("class", "specials schedule")
