@@ -118,6 +118,7 @@ function Schedule(file) {
     
     this.specialsDD = $(document.createElement("DIV"));
     this.blocksDD = $(document.createElement("DIV"));
+    this.paletteDD = $(document.createElement("DIV"));
     this.gradeSchedules = $(document.createElement("DIV"));
     this.specialSchedules = $(document.createElement("DIV"));
     this.settingsPanel = $(document.createElement("DIV"));

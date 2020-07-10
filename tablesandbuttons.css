@@ -54,8 +54,8 @@
 
 .topbar_button {
     font-size: 1.2em;
-    line-height: 1em;
-    padding: 2px;
+    min-height: 1.2em;
+    padding: 0px 0;
     margin: 1px;
     border: none;
     border-radius: .3em;
@@ -119,4 +119,13 @@ div.specials {
 
 .menu svg:hover {
     filter: saturate(1) brightness(1);
+}
+
+.palette {
+    border:2px solid #eee;
+}
+
+.palette:hover {
+    border: 2px solid #fff;
+    filter: brightness(70%);
 }

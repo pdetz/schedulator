@@ -37,6 +37,7 @@ $(document).ready(function(){
     schedule.loadButtons();
     schedule.loadSpecialsDD();
     schedule.loadBlocksDD();
+    schedule.loadPaletteDD();
     schedule.loadSettingsPanel();
 
 

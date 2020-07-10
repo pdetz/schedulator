@@ -1,3 +1,37 @@
+Schedule.prototype.loadPaletteDD = function(){
+    let schedule = this;
+    let palette = schedule.palette;
+    let paletteDD = this.paletteDD;
+
+    paletteDD.attr("class", "dropdown")
+             .attr("id", "paletteDD").hide();
+
+    for (let c = 0; c < palette.length; c++){
+        let color = palette[c];
+
+        let button = $(document.createElement("BUTTON"));
+        button.data("color", c)
+              .attr("class", "topbar_button specials palette")
+              .css("background-color", color);
+        
+
+        paletteDD.append(button);
+    }
+    
+    paletteDD.on("click", ".palette", function(e){
+        e.stopImmediatePropagation();
+        let button = $(this);
+
+        console.log(button.data("color"));
+
+        let special = paletteDD.siblings().data("special");
+        special.color[0] = button.data("color");
+        special.stylesheet.innerHTML = schedule.stylesheetRules(special);
+        console.log(paletteDD.siblings());
+    });
+
+}
+
 Schedule.prototype.loadBlocksDD = function(){
     let schedule = this;
     let blocksDD = this.blocksDD;
@@ -109,6 +143,8 @@ Schedule.prototype.loadSpecialsDD = function(){
         }
         schedule.resetButtons();
   }));
+
+  $("#right").append(specialsDD);
 }
 
 $.fn.dropdownMenu = function(menu){

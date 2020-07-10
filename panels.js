@@ -38,6 +38,18 @@ Schedule.prototype.loadSettingsPanel = function(){
                         "update": $.fn.changeSpecialist
         });
         tr.append($(document.createElement("td")).append(specialist));
+
+        let abbr = $(document.createElement("input")).val(special.abbr)
+                    .attr("class", "teacher_name")
+                    .data({"special": special,
+                            "update": $.fn.changeAbbr
+                    });
+        tr.append($(document.createElement("td")).append(abbr));
+        
+        let color = $(document.createElement("button"))
+                    .attr("class", "topbar_button open_palette specials " + special.colorClass)
+                    .data({"special": special});
+        tr.append($(document.createElement("td")).append(color));
         
         /*
         tr.append()
@@ -53,6 +65,15 @@ Schedule.prototype.loadSettingsPanel = function(){
         $(this).data("update").call($(this));
     });
 
+    $(tbody).on("click", ".open_palette", function(e){
+        e.stopImmediatePropagation();
+        let button = $(this);
+
+        button.after(schedule.paletteDD);
+        schedule.paletteDD.slideDown(200);
+        button.dropdownMenu(schedule.paletteDD);
+        button.blur();
+    });
 
     settings.append(table);
 
@@ -78,21 +99,25 @@ Schedule.prototype.loadSettingsPanel = function(){
 }
 
 $.fn.changeSpecialName = function() {
-    let input = $(this);
+    let input = this;
     let special = input.data("special");
     special.name = input.val();
     $(".schedule." + special.colorClass).each(function(){
         $(this).gradeDisplay();
-        console.log(this);
     });
-    console.log($(".dropdown_button." + special.colorClass));
     $(".dropdown_button." + special.colorClass).html(special.name);
 }
 
 $.fn.changeSpecialist = function() {
-    let input = $(this);
+    let input = this;
     let special = input.data("special");
     special.specialist = input.val();
     $(special.table).children(".specialist").html(special.specialist);
-    console.log("changeSpecialist");
+}
+
+$.fn.changeAbbr = function() {
+    let input = this;
+    let special = input.data("special");
+    special.abbr = input.val();
+    $("#rightbar").children("." + special.colorClass).html(special.abbr);
 }
