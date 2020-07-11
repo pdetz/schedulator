@@ -3,15 +3,15 @@ Schedule.prototype.loadPaletteDD = function(){
     let palette = schedule.palette;
     let paletteDD = this.paletteDD;
 
-    paletteDD.attr("class", "dropdown")
+    paletteDD.attr("class", "palette")
              .attr("id", "paletteDD").hide();
 
-    for (let c = 0; c < palette.length; c++){
+    for (let c = 4; c < palette.length; c++){
         let color = palette[c];
 
         let button = $(document.createElement("BUTTON"));
         button.data("color", c)
-              .attr("class", "topbar_button specials palette")
+              .attr("class", "specials palette")
               .css("background-color", color);
         
 
@@ -24,12 +24,11 @@ Schedule.prototype.loadPaletteDD = function(){
 
         console.log(button.data("color"));
 
-        let special = paletteDD.siblings().data("special");
+        let special = paletteDD.parent().prev().children().data("special");
         special.color[0] = button.data("color");
         special.stylesheet.innerHTML = schedule.stylesheetRules(special);
         console.log(paletteDD.siblings());
     });
-
 }
 
 Schedule.prototype.loadBlocksDD = function(){

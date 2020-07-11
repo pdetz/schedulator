@@ -11,7 +11,7 @@ Schedule.prototype.loadSettingsPanel = function(){
     let table = $(document.createElement("table"));
     table.attr("class", "settings schedule");
 
-    table.append("<tbody><tr><td>Special Name</td><td>Specialist</td><td>Abbreviation</td><td>Color</td></tr></tbody>");
+    table.append("<tbody><tr><td>Special Name</td><td>Specialist</td><td>Abbr</td><td>Color</td></tr></tbody>");
 
 // Add an input box for the special.specialist and special.abbr lines. Don't worry about schedule.palette[special.color[0]]
 // Add css styling for tables with class "settings"
@@ -26,21 +26,21 @@ Schedule.prototype.loadSettingsPanel = function(){
         let special = schedule.specials[i];
         let tr = $(document.createElement('tr'));
         let name = $(document.createElement("input")).val(special.name)
-                    .attr("class", "teacher_name")
+                    .attr("class", "settings")
                     .data({"special": special,
                             "update": $.fn.changeSpecialName
                     });
         tr.append($(document.createElement("td")).append(name));
         
         let specialist = $(document.createElement("input")).val(special.specialist)
-                .attr("class", "teacher_name")
+                .attr("class", "settings")
                 .data({"special": special,
                         "update": $.fn.changeSpecialist
         });
         tr.append($(document.createElement("td")).append(specialist));
 
         let abbr = $(document.createElement("input")).val(special.abbr)
-                    .attr("class", "teacher_name")
+                    .attr("class", "settings")
                     .data({"special": special,
                             "update": $.fn.changeAbbr
                     });
@@ -49,7 +49,7 @@ Schedule.prototype.loadSettingsPanel = function(){
         let color = $(document.createElement("button"))
                     .attr("class", "topbar_button open_palette specials " + special.colorClass)
                     .data({"special": special});
-        tr.append($(document.createElement("td")).append(color));
+        tr.append($(document.createElement("td")).append(color)).append($(document.createElement("td")));
         
         /*
         tr.append()
@@ -69,9 +69,8 @@ Schedule.prototype.loadSettingsPanel = function(){
         e.stopImmediatePropagation();
         let button = $(this);
 
-        button.after(schedule.paletteDD);
+        button.parent().next().append(schedule.paletteDD);
         schedule.paletteDD.slideDown(200);
-        button.dropdownMenu(schedule.paletteDD);
         button.blur();
     });
 

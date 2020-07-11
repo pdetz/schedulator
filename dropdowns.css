@@ -28,6 +28,26 @@
 
 .flip2{
 transform: perspective(1000px) rotateY(180deg);
-
 transition: .2s 
+}
+
+
+button.palette {
+    border:1px solid #ddd;
+    min-height: 1.1rem;
+    width: 1.1rem;
+    border-radius: .1rem;
+    margin: 0;
+    padding: 0;
+}
+
+button.palette:hover {
+    border: 2px solid #000;
+}
+
+div.palette{
+    display:block;
+    text-align:center;
+    width: 100%;
+    line-height: 1rem;
 }

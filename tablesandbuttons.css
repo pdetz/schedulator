@@ -7,13 +7,8 @@
     position: relative;
     font-size: 0.875rem;
     border: 1.5px solid #ddd;
-    width:8.5rem;
     text-align:center;
     padding: 0;
-}
-
-.settings.schedule th, td {
-    font-size: 1rem;
 }
 
 .grade.schedule td {
@@ -28,7 +23,7 @@
     width: 9rem;
 }
 
-.specials.schedule td:first-child {
+.specials.schedule td {
     text-align: center;
     width:8.5rem;
     padding: 0;
@@ -121,11 +116,51 @@ div.specials {
     filter: saturate(1) brightness(1);
 }
 
-.palette {
-    border:2px solid #eee;
+.settings td {
+    text-align:left;
+    font-size: 1.2rem;
+    width: 12rem;
 }
 
-.palette:hover {
-    border: 2px solid #fff;
-    filter: brightness(70%);
+.settings tr {
+    min-height: 3rem;
+}
+
+.settings tr:first-child td{
+    padding: 2px;
+}
+
+.settings td:nth-child(1) {
+    width: 10rem;
+}
+
+.settings td:nth-child(3) {
+    width: 4rem;
+    text-align: center;
+}
+
+.settings td:nth-child(4) {
+    width: 4rem;
+    text-align: center;
+}
+
+.settings td:nth-child(5) {
+    width: 10rem;
+}
+
+.settings input {
+    font-size: 1.2rem;
+    width: 100%;
+    margin: 10px 2px;
+}
+
+.settings td:nth-child(3) input {
+    font-size: 1.2rem;
+    width: 96%;
+    text-align: center;
+}
+
+.settings input {
+    font-size: 1.2rem;
+    width: 96%;
 }
