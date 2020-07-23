@@ -14,7 +14,6 @@ Schedule.prototype.loadPaletteDD = function(){
               .attr("class", "specials palette")
               .css("background-color", color);
         
-
         paletteDD.append(button);
     }
     
@@ -22,12 +21,9 @@ Schedule.prototype.loadPaletteDD = function(){
         e.stopImmediatePropagation();
         let button = $(this);
 
-        console.log(button.data("color"));
-
-        let special = paletteDD.parent().prev().children().data("special");
+        let special = paletteDD.data("special");
         special.color[0] = button.data("color");
         special.stylesheet.innerHTML = schedule.stylesheetRules(special);
-        console.log(paletteDD.siblings());
     });
 }
 

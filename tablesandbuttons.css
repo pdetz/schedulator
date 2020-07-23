@@ -119,7 +119,6 @@ div.specials {
 .settings td {
     text-align:left;
     font-size: 1.2rem;
-    width: 12rem;
 }
 
 .settings tr {
@@ -131,7 +130,11 @@ div.specials {
 }
 
 .settings td:nth-child(1) {
-    width: 10rem;
+    width: 9rem;
+}
+
+.settings td:nth-child(2) {
+    width: 9rem;
 }
 
 .settings td:nth-child(3) {

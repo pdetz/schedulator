@@ -154,6 +154,7 @@ function Schedule(file) {
     // Copy specials from file to Schedule
     file.specials.forEach(function(special,n){
         let newSpecial = new Special(special.name, special.abbr, special.specialist, special.color, n);
+        
         newSpecial.stylesheet.innerHTML = this.stylesheetRules(newSpecial);
         this.specials.push(newSpecial);
     }, this);

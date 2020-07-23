@@ -69,7 +69,7 @@ Grade.prototype.scheduleTable = function() {
     return table;
 };
 
-// Returns an $() objecy that shows a table of each specialist's schedule
+// Returns an $() object that shows a table of each specialist's schedule
 Special.prototype.scheduleTable = function(blocks) {
     let table = $(document.createElement("div"));
     table.append("<span class = 'specialist'>" + this.specialist + "</span>");
