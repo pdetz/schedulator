@@ -1,0 +1,65 @@
+.open_menu {
+    height: 2em;
+    width: 2em;
+    background: none;
+    margin: 0;
+}
+
+.open_menu svg {
+    height: 2em;
+    width: 2em;
+    filter: saturate(0) brightness(1000);
+}
+
+.open_menu svg:hover {
+    filter: saturate(1) brightness(1);
+}
+
+#menu {
+    width: 10em;
+    margin-top: 4px;
+    background: #000;
+    border: 2px solid #fff;
+    padding: 2px;
+    width: 12rem;
+    position: absolute;
+    right: 0;
+}
+
+button.menu {
+    display: block;
+    width: 100%;
+    height: 1.6em;
+    color: #fff;
+    text-align: left;
+    font-size: 1em;
+}
+
+button.menu:hover {
+    background: #fff;
+    color: #000;
+}
+
+.menu svg {
+    height: 1.2em;
+}
+
+.print svg {
+    fill: #0df;
+}
+
+.edit svg {
+    fill: #fb0;
+}
+
+.download svg {
+    fill: #0f0;
+}
+
+.upload svg {
+    fill: #a6f;
+}
+
+.menu svg:hover {
+    fill: #000;
+}

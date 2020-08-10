@@ -7,13 +7,21 @@
     <link rel="stylesheet" href="tablesandbuttons.css">
     <link rel="stylesheet" href="dropdowns.css">
     <link rel="stylesheet" href="print.css">
+    <link rel="stylesheet" href="editor.css">
+    <link rel="stylesheet" href="menu.css">
     <script src="jquery3.min.js"></script>
-    <script src="constructors.js"></script>
-    <script src="panels.js"></script>
+    <script src="misc.js"></script>
+    <script src="schedule_save_load.js"></script>
+    <script src="specials.js"></script>
+    <script src="grade.js"></script>
+    <script src="classes.js"></script>
+    <script src="blocks.js"></script>
+    <script src="editor.js"></script>
     <script src="tables.js"></script>
     <script src="dropdowns.js"></script>
     <script src="buttons_events.js"></script>
-    <script src="schedulator.js"></script>   	
+    <script src="main_menu.js"></script>
+    <script src="schedulator.js"></script>
 </head>
 
 <body id="body">
@@ -28,26 +36,9 @@
     <div class="column">
         <div class="displayArea">
             <div id="rightbar" class="topbar">
-                <button id="menu" class="menu">
-                    <svg viewBox="1 1 128 128">
-                        <circle cx="64" cy="64" r="14" fill="#ff4"></circle>
-                        <circle cx="16" cy="64" r="14" fill="#f44"></circle>
-                        <circle cx="112" cy="64" r="14" fill="#48f"></circle>
-                    </svg>
-                </button>
-                <button id="print" class="menu print">
-                    <svg viewBox="-16 -16 540 540">
-                        <g>
-                            <path d="M511.932,158.925c-0.407-6.031-5.376-10.808-11.506-10.808h-82.982l0,0l0,0V11.581C417.443,5.176,412.252,0,405.862,0
-                                H106.146c-6.396,0-11.581,5.176-11.581,11.581v136.536l0,0H11.593h-0.012c-6.134,0-11.099,4.776-11.504,10.808H0V391.6
-                                c0,6.39,5.182,11.581,11.581,11.581l0,0h82.984v-96.914l0,0h31.561h259.751h31.554l0,0v96.914h82.988
-                                c6.396,0,11.581-5.191,11.581-11.581V158.925H511.932z M385.877,199.993H126.126V43.138c0-6.402,5.182-11.578,11.581-11.578l0,0
-                                h236.589c6.396,0,11.581,5.176,11.581,11.578V199.993L385.877,199.993z"/>
-                            <path d="M126.923,494.319c0,6.415,5.182,11.581,11.581,11.581h235.001c6.396,0,11.581-5.166,11.581-11.581V338.404H126.923V494.319
-                                z"/>
-                        </g>
-                    </svg>
-                </button>
+                <div id = "empty_square" class = "square l"></div>
+                <div id = "menu_bar" class = "c"></div>
+                <div id = "menu_holder" class = "square r"></div>
             </div>
             <div id="right" class="frame">
             </div>

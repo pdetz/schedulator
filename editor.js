@@ -1,10 +1,3 @@
-$.fn.showPanel = function(panel){
-    let frame = this;
-    frame.children().hide();
-    frame.append(panel);
-    panel.show();
-}
-
 Schedule.prototype.loadScheduleEditor = function(){
     let editor = this.editor;
     let schedule = this;

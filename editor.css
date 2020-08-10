@@ -1,0 +1,68 @@
+.edit td {
+    text-align:left;
+    font-size: 1.2rem;
+}
+
+.edit tr {
+    min-height: 3rem;
+}
+
+.edit tr:first-child td{
+    padding: 2px;
+}
+
+.edit td:nth-child(1) {
+    width: 9rem;
+}
+
+.edit td:nth-child(2) {
+    width: 9rem;
+}
+
+.edit td:nth-child(3) {
+    width: 4rem;
+    text-align: center;
+}
+
+.edit td:nth-child(4) {
+    width: 4rem;
+    text-align: center;
+}
+
+.edit td:nth-child(5) {
+    width: 10rem;
+}
+
+.edit input {
+    font-size: 1.2rem;
+    width: 100%;
+    margin: 10px 2px;
+}
+
+.edit td:nth-child(3) input {
+    font-size: 1.2rem;
+    width: 96%;
+    text-align: center;
+}
+
+.edit input {
+    font-size: 1.2rem;
+    width: 96%;
+}
+
+button.inv{
+    background: none;
+    border: none;
+}
+
+.delete svg {
+    fill: #999;
+}
+.delete:hover svg {
+    fill: #f00;
+}
+
+td.delete {
+    background-color: #fcc;
+    border-color: #fcc;
+}

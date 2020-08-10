@@ -1,4 +1,4 @@
-.schedule tr:first-child {
+.schedule tr:first-child td, th {
     background:#000;
     color:#ddd;
 }
@@ -6,7 +6,7 @@
 .schedule th, td {
     position: relative;
     font-size: 0.875rem;
-    border: 1.5px solid #ddd;
+    border: 1.5px solid transparent;
     text-align:center;
     padding: 0;
 }
@@ -50,7 +50,7 @@
 .topbar_button {
     font-size: 1.2em;
     min-height: 1.2em;
-    padding: 0px 0;
+    padding: 0;
     margin: 1px;
     border: none;
     border-radius: .3em;
@@ -76,15 +76,7 @@ div.specials {
 }
 
 .menu{
-    float:right;
-    font-size: 1.2em;
-    line-height: 1em;
-    padding: 2px;
-    margin: 1px;
-    border: none;
-    border-radius: .3em;
     background: none;
-    transition: filter .4s;
 }
 
 .ulbold {
@@ -100,70 +92,4 @@ div.specials {
     background:none;
     border:none;
     width: 100%;
-}
-
-.menu svg {
-    background: none;
-    filter: saturate(0) brightness(1000);
-    height: 1.2em;
-}
-
-.print svg:hover {
-    fill: #0df;
-}
-
-.menu svg:hover {
-    filter: saturate(1) brightness(1);
-}
-
-.settings td {
-    text-align:left;
-    font-size: 1.2rem;
-}
-
-.settings tr {
-    min-height: 3rem;
-}
-
-.settings tr:first-child td{
-    padding: 2px;
-}
-
-.settings td:nth-child(1) {
-    width: 9rem;
-}
-
-.settings td:nth-child(2) {
-    width: 9rem;
-}
-
-.settings td:nth-child(3) {
-    width: 4rem;
-    text-align: center;
-}
-
-.settings td:nth-child(4) {
-    width: 4rem;
-    text-align: center;
-}
-
-.settings td:nth-child(5) {
-    width: 10rem;
-}
-
-.settings input {
-    font-size: 1.2rem;
-    width: 100%;
-    margin: 10px 2px;
-}
-
-.settings td:nth-child(3) input {
-    font-size: 1.2rem;
-    width: 96%;
-    text-align: center;
-}
-
-.settings input {
-    font-size: 1.2rem;
-    width: 96%;
 }

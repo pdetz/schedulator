@@ -1,23 +1,20 @@
 Schedule.prototype.loadButtons = function(){
     let schedule = this;
     schedule.classes.forEach( function(c){
-        c.buttons = c.createScheduleButton($.fn.gradeDisplay, $.fn.specialsDisplay);
+        c.buttons.updateButton();
     });
     schedule.specials.forEach(function(special){
         special.specialistClassCount(schedule);
     });
     $("td:empty").addEmptyClass(schedule);
     
-    $("#body").on("mouseenter", "button.schedule", function(e){
-        let c = $(this).c();
-        c.buttons.addClass("hvr");
-    });
-    $("#body").on("mouseleave", "button.schedule", function(e){
-        let c = $(this).c();
-        c.buttons.removeClass("hvr");
-    });
+    $("#left, #right").highlightScheduleButtons(schedule);
 
-    $("#body").on("click", "button.schedule", function(e){
+    $("#body").selectClassListener(schedule);
+}
+
+$.fn.selectClassListener = function(schedule){
+    $(this).on("click.scheduleActive", "button.schedule", function(e){
         e.stopImmediatePropagation();
 
         let clicked = $(this);
@@ -53,14 +50,12 @@ Schedule.prototype.loadButtons = function(){
 }
 
 $.fn.swapClassesListener = function(schedule, swapProps) {
-    $(this).on("click", "button.schedule", function(e){
+    $(this).on("click.scheduleActive", "button.schedule", function(e){
         e.stopImmediatePropagation();
 
         let c = $(this).c();
         let s = schedule.selectedClass[0];
 
-        console.log("Switch with:" + '\n' + c.id());
-    
         if (c != s){
             schedule.selectedClass.push(c);
             if (c.hasGrade() && c.hasSpecial() || s.hasGrade() && s.hasSpecial()){
@@ -100,7 +95,7 @@ Schedule.prototype.updateClasses = function(){
                 
                 // Then check each button to see if it's an empty, if it is remove it
                 if (!c.hasSpecial() || !c.hasGrade()){
-                    schedule.removeClass(c);
+                    schedule.deleteClass(c);
                 }
             });
         }
@@ -115,35 +110,23 @@ Schedule.prototype.updateClasses = function(){
     });
 }
 
+// Detaches dropdowns
+// Takes off the schedule swapping event listener
 Schedule.prototype.resetButtons = function(){
     if (this.selectedClass.length == 1) {
         this.selectedClass.pop().buttons.updateButton();
     }
-    $("#left, #right").off("click");
+    $("#left, #right").off(".scheduleActive");
     this.specialsDD.off("mouseenter").off("mouseleave").hide();
     this.blocksDD.off("mouseenter").off("mouseleave").hide();
-}
-
-Schedule.prototype.removeClass = function(c){
-    let special = c.special;
-    c.buttons.remove();
-    let index = this.classes.indexOf(c);
-    this.classes.splice(index,1);
-    special.specialistClassCount(this);
-}
-
-$.fn.updateButton = function(){
-    $(this).each( function(){
-        $(this).data("display").call($(this))
-               .off("mouseenter").off("mouseleave")
-               .hide().fadeIn(400);
-    });
-    return this;
+    this.specialsDD.detach();
+    this.blocksDD.detach();
 }
 
 $.fn.addEmptyClass = function(schedule){
     $(this).each( function(){
         let td = $(this);
+        console.log(td.attr("id"));
         let data = td.classDataFromtd();
         let day = parseInt(data[1]);
         let c = new Class(schedule.blocks[0], day, schedule.grades[0].teachers[0], schedule.specials[0]);
@@ -158,43 +141,18 @@ $.fn.addEmptyClass = function(schedule){
             c.teacher = grade.teachers[parseInt(data[2])];
             c.buttons = c.createScheduleButton($.fn.gradeDisplay); 
         }
+        c.buttons.updateButton();
         schedule.classes.push(c);
     });
 }
 
-$.fn.gradeDisplay = function(){
-    let c = this.c();
-    this.html(c.special.name + "<br>" + c.block.name)
-        .attr("class", "schedule " + c.special.colorClass);
-    c.tdGrade().append(this);
-    return this;
+$.fn.highlightScheduleButtons = function(schedule){
+    $("#body").on("mouseenter", "button.schedule", function(e){
+        let c = $(this).c();
+        c.buttons.addClass("hvr");
+    });
+    $("#body").on("mouseleave", "button.schedule", function(e){
+        let c = $(this).c();
+        c.buttons.removeClass("hvr");
+    });    
 }
-
-$.fn.specialsDisplay = function(){
-    let c = this.c();
-    this.html("<span class='ulbold'>" + c.teacher.grade.abbr + "</span> " +
-              c.teacher.name + "<br>" + c.block.name)
-              .attr("class", "schedule " + c.teacher.grade.colorClass);
-    c.tdSpecial().append(this);
-    return this;
-}
-
-$.fn.emptyDisplay = function(){
-    let c = this.c();
-    this.html(DAYS[c.day] + "<br>" + c.block.name)
-        .attr("class", "schedule " + c.teacher.grade.colorClass);
-    c.tdSpecial().append(this);
-    return this;
-}
-
-$.fn.classDataFromtd = function(){
-    return $(this).attr("id").slice(1).split(/[dtb]/);
-}
-
-Class.prototype.id = function(){
-    return DAYS[this.day].toString() +  "\n" + 
-            this.block.name + "\n" +
-            this.teacher.name + ", " + this.teacher.grade.abbr +  "\n" + 
-            this.special.name;
-}
-

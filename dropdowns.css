@@ -10,7 +10,6 @@
     background: #fff;
 }
 
-
 .blocks.dropdown {
     width:100%;
 }
@@ -30,7 +29,6 @@
 transform: perspective(1000px) rotateY(180deg);
 transition: .2s 
 }
-
 
 button.palette {
     border:1px solid #ddd;

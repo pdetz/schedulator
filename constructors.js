@@ -1,6 +1,9 @@
 "use strict";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const DELETE_ICON = '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+const PENCIL = '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
+const PRINT = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M22 8H2v9h4v4h12v-4h4V8zm-6 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>';
 
 $.fn.c = function() {
     return this.data("c");
@@ -21,54 +24,6 @@ function Block(start, end, n) {
 }
 
 Block.prototype = {get name(){return this.start + " – " + this.end;}}
-
-// Constructor function for GRADES object
-function Grade(name, abbr, color, block, t, n) {
-    this.name = name;
-    this.abbr = abbr;
-    this.defaultBlock = block;
-    this.n = n;
-    this.color = color;
-
-    this.teachers = new Array(t); // an array of Teachers
-    for (let i = 0; i < t; i++){
-        this.teachers[i] = new Teacher("Teacher " + String.fromCharCode("A".charCodeAt(0) + i), this);
-    }
-
-    this.isVisible = true;
-    this.topbarClass = "grade";
-    this.colorClass = "grade" + n.toString();
-    
-    this.table = "";
-    this.button = topbarButton(this);
-
-    this.stylesheet = createStylesheet(this.colorClass);
-}
-
-function Teacher(name, grade) {
-    this.name = name;
-    this.grade = grade; 
-    this.n = function() {
-        return this.grade.teachers.indexOf(this);
-    }
-}
-
-// Constructor function for SPECIAL object
-function Special(name, abbr, specialist, color, n) {
-    this.name = name;
-    this.abbr = abbr;
-    this.specialist = specialist;
-    this.color = color;
-    this.n = n;
-
-    this.isVisible = true;
-    this.topbarClass = "specials";
-    this.colorClass = "specials" + n.toString();
-    this.table = ""; // this table is created in Schedule.prototype.loadTables
-    this.button = topbarButton(this);
-
-    this.stylesheet = createStylesheet(this.colorClass);
-}
 
 function Class(block, day, teacher, special){
     this.block = block;
@@ -119,9 +74,9 @@ function Schedule(file) {
     this.specialsDD = $(document.createElement("DIV"));
     this.blocksDD = $(document.createElement("DIV"));
     this.paletteDD = $(document.createElement("DIV"));
-    this.gradeSchedules = $(document.createElement("DIV"));
+    this.gradeSchedules = $(document.createElement("DIV")).attr("id", "grade_schedules");
     this.specialSchedules = $(document.createElement("DIV"));
-    this.settingsPanel = $(document.createElement("DIV"));
+    this.editor = $(document.createElement("DIV"));
 
     // Copy blocks from file to Schedule
     let alt = false;

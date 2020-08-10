@@ -18,6 +18,14 @@ table {
     margin:auto;
 }
 
+td {
+    border-color: transparent;
+    background: none;
+}
+
+svg {
+    margin: 0
+}
 .column::-webkit-scrollbar {
     background:#000;
     width: 2em;
@@ -82,4 +90,30 @@ body{
     min-height: 3em;
     color: #000;
     max-width: 46rem;
+}
+
+.square {
+    width: 2em;
+    max-width: 2em;
+    display: inline-block;
+    padding: 0;
+}
+
+.l {
+    position: absolute;
+    left: 0px
+}
+
+.r {
+    position: absolute;
+    right: 0px;
+}
+
+.c {
+    display: inline-block;
+}
+
+button {
+    border: none;
+    padding: 0
 }

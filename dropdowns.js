@@ -101,8 +101,7 @@ Schedule.prototype.loadSpecialsDD = function(){
     // Add buttons for each special to the dropdown menu
     for (i = 0; i < schedule.specials.length; i++){
         let special = schedule.specials[(i+1) % schedule.specials.length];
-        let button = dropdownButton(special, "special");
-        specialsDD.append(button);
+        specialsDD.append(special.dropdownButton);
     }
 
     // Click handler for each Specials button in the dropdown menu
@@ -113,7 +112,7 @@ Schedule.prototype.loadSpecialsDD = function(){
         // Deletes buttons and removes a class from the array if the user clicks "No Special"
         if (button.data("special") == schedule.specials[0]){
             let tds = s.buttons.parent();
-            schedule.removeClass(s);
+            schedule.deleteClass(s);
             tds.each(function(){
                 let td = $(this);
                 let list = td.children(".schedule");
