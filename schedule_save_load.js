@@ -20,7 +20,6 @@ function Schedule(file) {
     // Copy blocks from file to Schedule
     let alt = false;
     file.blocks.forEach(function(block,i){
-        //console.log(block);
         if (block == "") {
             alt = true;
         }
@@ -58,13 +57,11 @@ function Schedule(file) {
     file.classes.forEach(function(c){
         let block = "";
         if (c[0] > this.blocks.length){
-            c[0] -= this.blocks.length + 1;
-            block = this.altBlocks[c[0]];
+            block = this.altBlocks[c[0] - this.blocks.length - 1];
         }
         else {
             block = this.blocks[c[0]];
         }
-        console.log(c[0], block);
         let newClass = new Class(block, c[1], this.grades[c[2]].teachers[c[3]], this.specials[c[4]]);
         this.classes.push(newClass);
     }, this);

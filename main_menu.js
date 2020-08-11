@@ -1,12 +1,3 @@
-$.fn.addMenuButton = function(svg, label, cssClass, clickHandler){
-    let button = $(document.createElement("button"));
-    button.attr("class", cssClass)
-          .append(svg, label)
-          .data("onclick", clickHandler);
-    $(this).append(button);
-    return $(this);
-}
-
 function loadMenus(schedule, schedules){
 
     let fileInput = $('<input type="file" id="upload" accept=".json,.JSON" style="display:none"></input>');
@@ -14,19 +5,11 @@ function loadMenus(schedule, schedules){
 
     let menu = schedule.menu;
     menu.attr("class", "dropdown")
-        .attr("id", "menu").hide();
-
-  
-    menu.addMenuButton(PENCIL, " Edit Schedule", "edit menu", function(){
-            schedule.loadScheduleEditor();
-        })
+        .attr("id", "menu").hide()
+        .addMenuButton(PENCIL, " Edit Schedule", "edit menu", function(){schedule.loadScheduleEditor();})
         .addMenuButton(PRINT, " Print", "print menu", window.print)
-        .addMenuButton(DOWNLOAD, " Download", "download menu", function(){
-            saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );
-        })
-        .addMenuButton(UPLOAD, " Upload", "upload menu", function(){
-            $("#upload").click();
-        })
+        .addMenuButton(DOWNLOAD, " Download", "download menu", function(){saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );})
+        .addMenuButton(UPLOAD, " Upload", "upload menu", function(){$("#upload").click();})
         .append(fileInput)
         .append('<hr class = "menu">');
 
@@ -38,7 +21,6 @@ function loadMenus(schedule, schedules){
         });
     });
 
-        
     $("#menu_holder").append(openMenu, menu);
 
     openMenu.click( function(){
@@ -71,4 +53,13 @@ function loadMenus(schedule, schedules){
         reader.readAsText(file);
     });
 
+}
+
+$.fn.addMenuButton = function(svg, label, cssClass, clickHandler){
+    let button = $(document.createElement("button"));
+    button.attr("class", cssClass)
+          .append(svg, label)
+          .data("onclick", clickHandler);
+    $(this).append(button);
+    return $(this);
 }
