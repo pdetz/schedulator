@@ -3,7 +3,7 @@ function Class(block, day, teacher, special){
     this.day = day;
     this.teacher = teacher;
     this.special = special;
-    this.buttons = this.createScheduleButton($.fn.gradeDisplay, $.fn.specialsDisplay);
+    this.buttons = ""; // this.createScheduleButton($.fn.gradeDisplay, $.fn.specialsDisplay);
 }
 
 Schedule.prototype.deleteClass = function(c){
@@ -32,6 +32,7 @@ Class.prototype.createScheduleButton = function(displayFunctions){
         arguments[i].call(button);
         buttons = buttons.add(button);
     }
+    this.buttons = buttons;
     return buttons;
 };
 

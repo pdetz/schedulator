@@ -44,7 +44,6 @@ Schedule.prototype.loadBlocksDD = function(){
             .append("<div id='altblocks'></div>");
     for (let i = 0; i < schedule.altBlocks.length; i++){
         let block = schedule.altBlocks[i];
-        //console.log(block);
         let button = dropdownButton(block, "block");
         blocksDD.append(button);
     }
@@ -72,11 +71,9 @@ Schedule.prototype.loadBlocksDD = function(){
         schedule.updateClasses();
         blocksDD.slideUp();
         schedule.resetButtons();
-
-        //console.log(schedule.blocks.indexOf(s.block));
     });
 
-    $("#left").on("contextmenu", "button.schedule", function(e){
+    $("#grade_schedules").on("contextmenu", "button.schedule", function(e){
         e.preventDefault();
         let clicked = $(this);
         let c = clicked.c();

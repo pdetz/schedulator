@@ -62,13 +62,13 @@ body{
 .displayArea {
     max-width: 46rem;
     direction: ltr;
-    margin-left: 2rem;
+    margin-left: 1.5rem;
     margin-right: 0.5rem;
     text-align: center;
 }
 
 .column.left > .displayArea {
-    margin-right: 2rem;
+    margin-right: 1.5rem;
     margin-left: 0.5rem;
 }
 

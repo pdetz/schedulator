@@ -33,7 +33,7 @@ Schedule.prototype.deleteSpecial = function(special){
     special.editSpecialRow.remove();
     special.stylesheet.remove();
 
-    $(".schedule.grade td:empty").addEmptyClass(schedule);
+    //$(".schedule.grade td:empty").addEmptyClass(schedule);
 
     let index = schedule.specials.indexOf(special);
     schedule.specials.splice(index,1);
@@ -58,7 +58,6 @@ Special.prototype.scheduleTable = function(blocks) {
                 + "s" + this.n + "d" + d + "b" + block.n + "\"></td>");
         }, this);
     }, this);
-
     return table;
 };
 

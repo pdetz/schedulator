@@ -1,48 +1,44 @@
-Schedule.prototype.loadMenus = function(){
-    let schedule = this;
+$.fn.addMenuButton = function(svg, label, cssClass, clickHandler){
+    let button = $(document.createElement("button"));
+    button.attr("class", cssClass)
+          .append(svg, label)
+          .data("onclick", clickHandler);
+    $(this).append(button);
+    return $(this);
+}
 
-    let openMenu = $(document.createElement("button"));
-    openMenu.attr("class", "open_menu")
-    .append(MENU);
+function loadMenus(schedule, schedules){
 
-    let menu = $(document.createElement("div"));
+    let fileInput = $('<input type="file" id="upload" accept=".json,.JSON" style="display:none"></input>');
+    let openMenu = $("#open_menu");
+
+    let menu = schedule.menu;
     menu.attr("class", "dropdown")
         .attr("id", "menu").hide();
 
-    let editButton = $(document.createElement("button"));
-    editButton.attr("class", "edit menu")
-                .append(PENCIL)
-                .append(" Edit Schedule")
-                .data("onclick", function(){
-                    schedule.loadScheduleEditor();
-                });
+  
+    menu.addMenuButton(PENCIL, " Edit Schedule", "edit menu", function(){
+            schedule.loadScheduleEditor();
+        })
+        .addMenuButton(PRINT, " Print", "print menu", window.print)
+        .addMenuButton(DOWNLOAD, " Download", "download menu", function(){
+            saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );
+        })
+        .addMenuButton(UPLOAD, " Upload", "upload menu", function(){
+            $("#upload").click();
+        })
+        .append(fileInput)
+        .append('<hr class = "menu">');
 
-    let printButton = $(document.createElement("button"));
-    printButton.attr("class", "print menu")
-                .append(PRINT)
-                .append(" Print")
-                .data("onclick", window.print);
+    schedules.forEach(function(stored){
+        menu.addMenuButton(FILE, " " + stored.name, "file menu", function(){
+            deleteSchedule(schedule);
+            let newSchedule = new Schedule(stored.json);
+            load(newSchedule, schedules);
+        });
+    });
 
-    let downloadButton = $(document.createElement("button"));
-    downloadButton.attr("class", "download menu")
-                .append(DOWNLOAD)
-                .append(" Download")
-                .data("onclick", function(){
-                    saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );
-                });
-
-    let fileInput = '<input type="file" id="upload" accept=".json,.JSON" style="display:none"></input>';
-    let uploadButton = $(document.createElement("button"));
-    uploadButton.attr("class", "upload menu")
-                .append(UPLOAD)
-                .append(" Upload")
-                .data("onclick", function(){
-                    $("#upload").click();
-                });
-
-
-    menu.append(editButton, printButton, downloadButton, uploadButton, fileInput);
-
+        
     $("#menu_holder").append(openMenu, menu);
 
     openMenu.click( function(){
@@ -53,6 +49,7 @@ Schedule.prototype.loadMenus = function(){
             menu.slideDown();
         }
         menu.toggleClass("vis");
+        schedule.resetButtons();
         this.blur();
     });
 
@@ -61,6 +58,17 @@ Schedule.prototype.loadMenus = function(){
         menu.slideUp();
         menu.toggleClass("vis");
         $(this).data("onclick").call();
+    });
+
+    fileInput.change(function(){
+        let file = fileInput.get(0).files[0];
+        let reader = new FileReader();
+        reader.onload = function(){
+            let newSchedule = new Schedule(JSON.parse(reader.result));
+            deleteSchedule(schedule);
+            load(newSchedule);
+        };
+        reader.readAsText(file);
     });
 
 }

@@ -55,6 +55,7 @@
     border: none;
     border-radius: .3em;
     transition: .4s;
+    vertical-align: bottom;
 }
 
 .topbar_button.to_left {
@@ -73,10 +74,6 @@
 div.specials {
     font-size: 1.2em;
     padding-bottom: 1rem;
-}
-
-.menu{
-    background: none;
 }
 
 .ulbold {

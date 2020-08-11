@@ -13,12 +13,14 @@ function Schedule(file) {
     this.blocksDD = $(document.createElement("DIV"));
     this.paletteDD = $(document.createElement("DIV"));
     this.gradeSchedules = $(document.createElement("DIV")).attr("id", "grade_schedules");
-    this.specialSchedules = $(document.createElement("DIV"));
+    this.specialSchedules = $(document.createElement("DIV")).attr("id", "specials_schedules");
     this.editor = $(document.createElement("DIV"));
+    this.menu = $(document.createElement("div"));
 
     // Copy blocks from file to Schedule
     let alt = false;
     file.blocks.forEach(function(block,i){
+        //console.log(block);
         if (block == "") {
             alt = true;
         }
@@ -62,9 +64,22 @@ function Schedule(file) {
         else {
             block = this.blocks[c[0]];
         }
+        console.log(c[0], block);
         let newClass = new Class(block, c[1], this.grades[c[2]].teachers[c[3]], this.specials[c[4]]);
         this.classes.push(newClass);
     }, this);
+}
+
+function deleteSchedule(schedule){
+    schedule.specialsDD.remove();
+    schedule.blocksDD.remove();
+    schedule.paletteDD.remove();
+    schedule.gradeSchedules.remove();
+    schedule.specialSchedules.remove();
+    schedule.menu.remove();
+    $(".topbar_button").remove();
+
+    $("*").off("click");
 }
 
 Schedule.prototype.formatFile = function(){
@@ -111,7 +126,6 @@ Schedule.prototype.formatFile = function(){
     this.classes.forEach(function(c){
         if (c.hasGrade() && c.hasSpecial()){
             let blockNumber = file.blocks.indexOf(c.block);
-            console.log(file.blocks.indexOf(c.block));
             file.classes.push( [blockNumber, c.day, c.teacher.grade.n, c.teacher.n(), c.special.n]);
         }
     }, this);

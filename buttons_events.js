@@ -1,14 +1,16 @@
 Schedule.prototype.loadButtons = function(){
     let schedule = this;
     schedule.classes.forEach( function(c){
+        c.createScheduleButton($.fn.gradeDisplay, $.fn.specialsDisplay);
         c.buttons.updateButton();
     });
     schedule.specials.forEach(function(special){
         special.specialistClassCount(schedule);
     });
+    
     $("td:empty").addEmptyClass(schedule);
     
-    $("#left, #right").highlightScheduleButtons(schedule);
+    $("#grade_schedules, #specials_schedules").highlightScheduleButtons(schedule);
 
     $("#body").selectClassListener(schedule);
 }
@@ -16,6 +18,7 @@ Schedule.prototype.loadButtons = function(){
 $.fn.selectClassListener = function(schedule){
     $(this).on("click.scheduleActive", "button.schedule", function(e){
         e.stopImmediatePropagation();
+        schedule.blocksDD.detach();
 
         let clicked = $(this);
         let c = clicked.c();
@@ -37,14 +40,14 @@ $.fn.selectClassListener = function(schedule){
         let switchInGrade = ["teacher", "block", "day"];
         let switchInSpecial = ["special", "block", "day"];
         if (!c.hasGrade()){
-            $("#left, #right").swapClassesListener(schedule, switchInSpecial);
+            $("#grade_schedules, #specials_schedules").swapClassesListener(schedule, switchInSpecial);
         }
         else if (!c.hasSpecial()){
-            $("#left, #right").swapClassesListener(schedule, switchInGrade);
+            $("#grade_schedules, #specials_schedules").swapClassesListener(schedule, switchInGrade);
         }
         else {
-            $("#left").swapClassesListener(schedule, switchInGrade);
-            $("#right").swapClassesListener(schedule, switchInSpecial);
+            $("#grade_schedules").swapClassesListener(schedule, switchInGrade);
+            $("#specials_schedules").swapClassesListener(schedule, switchInSpecial);
         }
     });
 }
@@ -116,7 +119,7 @@ Schedule.prototype.resetButtons = function(){
     if (this.selectedClass.length == 1) {
         this.selectedClass.pop().buttons.updateButton();
     }
-    $("#left, #right").off(".scheduleActive");
+    $("#grade_schedules, #specials_schedules").off(".scheduleActive");
     this.specialsDD.off("mouseenter").off("mouseleave").hide();
     this.blocksDD.off("mouseenter").off("mouseleave").hide();
     this.specialsDD.detach();
@@ -126,20 +129,19 @@ Schedule.prototype.resetButtons = function(){
 $.fn.addEmptyClass = function(schedule){
     $(this).each( function(){
         let td = $(this);
-        console.log(td.attr("id"));
         let data = td.classDataFromtd();
         let day = parseInt(data[1]);
         let c = new Class(schedule.blocks[0], day, schedule.grades[0].teachers[0], schedule.specials[0]);
         if (td.attr("id").startsWith("s")){
             c.special = schedule.specials[parseInt(data[0])];
             c.block = schedule.blocks[parseInt(data[2])];
-            c.buttons = c.createScheduleButton($.fn.emptyDisplay);
+            c.createScheduleButton($.fn.emptyDisplay);
         }
         else {
             let grade = schedule.grades[parseInt(data[0])];
             c.block = grade.defaultBlock;
             c.teacher = grade.teachers[parseInt(data[2])];
-            c.buttons = c.createScheduleButton($.fn.gradeDisplay); 
+            c.createScheduleButton($.fn.gradeDisplay); 
         }
         c.buttons.updateButton();
         schedule.classes.push(c);
@@ -147,11 +149,11 @@ $.fn.addEmptyClass = function(schedule){
 }
 
 $.fn.highlightScheduleButtons = function(schedule){
-    $("#body").on("mouseenter", "button.schedule", function(e){
+    $(this).on("mouseenter", "button.schedule", function(e){
         let c = $(this).c();
         c.buttons.addClass("hvr");
     });
-    $("#body").on("mouseleave", "button.schedule", function(e){
+    $(this).on("mouseleave", "button.schedule", function(e){
         let c = $(this).c();
         c.buttons.removeClass("hvr");
     });    

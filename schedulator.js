@@ -1,20 +1,32 @@
 $(document).ready(function(){
 
+    let schedules = [];
+    schedules.push(new Stored_Schedule("Online Schedule", ONLINE_SCHEDULE));
+    schedules.push(new Stored_Schedule("Original Schedule", ORIGINAL_SCHEDULE));
 
     // Load data into Schedule object
-    let schedule = new Schedule(LOADED_FILE);
-
-    schedule.loadTables();
-    schedule.loadButtons();
-    schedule.loadSpecialsDD();
-    schedule.loadBlocksDD();
-    schedule.loadPaletteDD();
-    schedule.loadMenus();
+    let schedule = new Schedule(schedules[0].json);
+    load(schedule, schedules);
 
     $("#body").keyup(function(e){
         if (e.which == 27){
             $("input").blur();
             schedule.resetButtons();
+            $("#menu").removeClass("vis").hide();
         }
     });
 });
+
+function Stored_Schedule(name, json){
+    this.name = name;
+    this.json = json;
+}
+
+function load(schedule, schedules){
+    schedule.loadTables();
+    schedule.loadButtons();
+    schedule.loadSpecialsDD();
+    schedule.loadBlocksDD();
+    schedule.loadPaletteDD();
+    loadMenus(schedule, schedules);
+}

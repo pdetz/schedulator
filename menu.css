@@ -1,17 +1,17 @@
-.open_menu {
-    height: 2em;
+#open_menu {
+    height: 1.8em;
     width: 2em;
     background: none;
     margin: 0;
 }
 
-.open_menu svg {
-    height: 2em;
-    width: 2em;
+#open_menu svg {
+    height: 1.8em;
+    width: 1.8em;
     filter: saturate(0) brightness(1000);
 }
 
-.open_menu svg:hover {
+#open_menu svg:hover {
     filter: saturate(1) brightness(1);
 }
 
@@ -19,7 +19,7 @@
     width: 10em;
     margin-top: 4px;
     background: #000;
-    border: 2px solid #fff;
+    border: 2px solid #red;
     padding: 2px;
     width: 12rem;
     position: absolute;
@@ -33,6 +33,7 @@ button.menu {
     color: #fff;
     text-align: left;
     font-size: 1em;
+    background: none;
 }
 
 button.menu:hover {
@@ -42,6 +43,8 @@ button.menu:hover {
 
 .menu svg {
     height: 1.2em;
+    vertical-align: bottom;
+    fill: #fff;
 }
 
 .print svg {
@@ -60,6 +63,6 @@ button.menu:hover {
     fill: #a6f;
 }
 
-.menu svg:hover {
+button.menu:hover svg {
     fill: #000;
 }
