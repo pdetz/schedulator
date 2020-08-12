@@ -12,7 +12,7 @@ function Special(name, abbr, specialist, color, n) {
     this.table = ""; // this table is created in Schedule.prototype.loadTables
     this.button = topbarButton(this);
     this.dropdownButton = dropdownButton(this, "special");
-    this.editSpecialRow = $(document.createElement('tr')).data("special", this);
+    this.editRow = $(document.createElement('tr')).data("special", this);
 
     this.stylesheet = createStylesheet(this.colorClass);
 }
@@ -30,15 +30,13 @@ Schedule.prototype.deleteSpecial = function(special){
     special.table.remove();
     special.button.remove();
     special.dropdownButton.remove();
-    special.editSpecialRow.remove();
+    special.editRow.remove();
     special.stylesheet.remove();
 
-    //$(".schedule.grade td:empty").addEmptyClass(schedule);
+    $("#grade_schedules td:empty").addEmptyClass(schedule);
 
     let index = schedule.specials.indexOf(special);
     schedule.specials.splice(index,1);
-
-    special = "";
 }
 
 // Returns an $() object that shows a table of each specialist's schedule
@@ -73,7 +71,7 @@ Special.prototype.specialistClassCount = function(schedule){
 
 Special.prototype.editSpecialRow = function(schedule){
     let special = this;
-    let tr = special.editSpecialRow;
+    let tr = special.editRow;
     let name = $(document.createElement("input")).val(special.name)
                 .attr("class", "edit")
                 .data({"special": special,

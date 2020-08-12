@@ -5,7 +5,7 @@ Schedule.prototype.loadScheduleEditor = function(){
     editor.append(schedule.editSpecialsTable());
 
     schedule.editGradeLevelTables();
-    $("right").showPanel(editor);
+    $("#right").showPanel(editor);
 }
 
 Schedule.prototype.editGradeLevelTables = function(){
@@ -36,6 +36,7 @@ Schedule.prototype.editSpecialsTable = function(){
             tbody.append(newSpecial.editSpecialRow(schedule));
         }
         else {
+            console.log(schedule.specials[i]);
             tbody.append(schedule.specials[i].editSpecialRow(schedule));
         }
     }

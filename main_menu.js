@@ -48,7 +48,7 @@ function loadMenus(schedule, schedules){
         reader.onload = function(){
             let newSchedule = new Schedule(JSON.parse(reader.result));
             deleteSchedule(schedule);
-            load(newSchedule);
+            load(newSchedule, schedules);
         };
         reader.readAsText(file);
     });
