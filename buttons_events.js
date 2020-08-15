@@ -124,6 +124,7 @@ Schedule.prototype.resetButtons = function(){
     this.blocksDD.off("mouseenter").off("mouseleave").hide();
     this.specialsDD.detach();
     this.blocksDD.detach();
+    this.paletteDD.detach();
 }
 
 $.fn.addEmptyClass = function(schedule){

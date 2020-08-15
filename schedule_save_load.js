@@ -36,20 +36,20 @@ function Schedule(file) {
     // Copy grades from file to Schedule
     file.grades.forEach(function(grade,n){
         let t = grade.teachers.length;
-        let newGrade = new Grade(grade.name,grade.abbr,grade.color,this.blocks[grade.defaultBlock],t,n);
+        let newGrade = new Grade(grade.name,grade.abbr,grade.color,this.blocks[grade.defaultBlock],t,n,this.palette);
         for (let i = 0; i < t; i++){
             newGrade.teachers[i].name = grade.teachers[i];
         }
-        newGrade.stylesheet.innerHTML = this.stylesheetRules(newGrade);
+        //newGrade.stylesheet.innerHTML = stylesheetRules(newGrade, this.palette);
         
         this.grades.push(newGrade);
     }, this);
 
     // Copy specials from file to Schedule
     file.specials.forEach(function(special,n){
-        let newSpecial = new Special(special.name, special.abbr, special.specialist, special.color, n);
+        let newSpecial = new Special(special.name, special.abbr, special.specialist, special.color, n, this.palette);
         
-        newSpecial.stylesheet.innerHTML = this.stylesheetRules(newSpecial);
+        //newSpecial.stylesheet.innerHTML = stylesheetRules(newSpecial, this.palette);
         this.specials.push(newSpecial);
     }, this);
 
@@ -75,7 +75,6 @@ function deleteSchedule(schedule){
     schedule.specialSchedules.remove();
     schedule.menu.remove();
     $(".topbar_button").remove();
-
     $("*").off("click");
 }
 
@@ -142,11 +141,4 @@ function SavedFile() {
     this.specials = []; // an array of Special arrays
     this.classes = []; // an array of Class arrays
     this.palette = [];
-}
-
-Schedule.prototype.stylesheetRules = function(gOrS){
-    return "." + gOrS.colorClass + "{background:" + this.palette[gOrS.color[0]] + ";color:" + this.palette[gOrS.color[1]] + ";}" +
-            " ." + gOrS.colorClass + ".hvr{filter: brightness(70%);}" + 
-            " ." + gOrS.colorClass + ":hover{filter: brightness(70%);}" + 
-            " ." + gOrS.colorClass + ".selected{background:#000;color:" + this.palette[gOrS.color[0]] + ";}";
 }

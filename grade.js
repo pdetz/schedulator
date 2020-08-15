@@ -1,5 +1,5 @@
 // Constructor function for GRADES object
-function Grade(name, abbr, color, block, t, n) {
+function Grade(name, abbr, color, block, t, n, palette) {
     this.name = name;
     this.abbr = abbr;
     this.defaultBlock = block;
@@ -19,6 +19,7 @@ function Grade(name, abbr, color, block, t, n) {
     this.button = topbarButton(this);
 
     this.stylesheet = createStylesheet(this.colorClass);
+    writeCSSRules(this, palette);
 }
 
 // Removes a Grade object and associated DOM elements

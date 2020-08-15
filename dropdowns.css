@@ -31,11 +31,11 @@ transition: .2s
 }
 
 button.palette {
-    border:1px solid #ddd;
-    min-height: 1.1rem;
-    width: 1.1rem;
-    border-radius: .1rem;
-    margin: 0;
+    border:2px solid transparent;
+    min-height: calc(1.1rem - 2px);
+    width: calc(1.1rem - 2px);
+    border-radius: .2rem;
+    margin: 1px;
     padding: 0;
 }
 

@@ -1,5 +1,5 @@
 #open_menu {
-    height: 1.8em;
+    height: 2em;
     width: 2em;
     background: none;
     margin: 0;
@@ -7,8 +7,9 @@
 
 #open_menu svg {
     height: 1.8em;
-    width: 1.8em;
+    width: 2em;
     filter: saturate(0) brightness(1000);
+    margin-top:2px;
 }
 
 #open_menu svg:hover {
@@ -17,7 +18,7 @@
 
 #menu {
     width: 10em;
-    margin-top: 4px;
+    margin-top: 5px;
     background: #000;
     border: 2px solid #red;
     padding: 2px;
@@ -51,7 +52,7 @@ button.menu:hover {
     fill: #0df;
 }
 
-.edit svg {
+.editor svg {
     fill: #fb0;
 }
 

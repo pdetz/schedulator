@@ -6,7 +6,7 @@ function loadMenus(schedule, schedules){
     let menu = schedule.menu;
     menu.attr("class", "dropdown")
         .attr("id", "menu").hide()
-        .addMenuButton(PENCIL, " Edit Schedule", "edit menu", function(){schedule.loadScheduleEditor();})
+        .addMenuButton(PENCIL, " Edit Schedule", "editor menu", function(){schedule.loadScheduleEditor();})
         .addMenuButton(PRINT, " Print", "print menu", window.print)
         .addMenuButton(DOWNLOAD, " Download", "download menu", function(){saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );})
         .addMenuButton(UPLOAD, " Upload", "upload menu", function(){$("#upload").click();})
@@ -63,3 +63,27 @@ $.fn.addMenuButton = function(svg, label, cssClass, clickHandler){
     $(this).append(button);
     return $(this);
 }
+
+Schedule.prototype.loadScheduleEditor = function(){
+    let editor = this.editor;
+    let schedule = this;
+
+    editor.append(schedule.editSpecialsTable());
+    //editor.append(schedule.editBlocks);
+
+    schedule.editGradeLevelTables();
+    $("#right").showPanel(editor);
+
+    let button = $("#menu").children().first();
+
+    button.data("onclick", function(){
+        if (editor.is(":visible")){
+            $("#right").showPanel(schedule.specialSchedules);
+            $(".edit_grade").remove();
+        }
+        else {
+            schedule.editGradeLevelTables();
+            $("#right").showPanel(editor);
+        }
+    });
+};

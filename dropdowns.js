@@ -23,7 +23,7 @@ Schedule.prototype.loadPaletteDD = function(){
 
         let special = paletteDD.data("special");
         special.color[0] = button.data("color");
-        special.stylesheet.innerHTML = schedule.stylesheetRules(special);
+        writeCSSRules(special, schedule.palette);
     });
 }
 
