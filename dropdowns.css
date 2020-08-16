@@ -17,6 +17,7 @@
 .dropdown > .dropdown_button {
     margin: 1px 0;
     padding: 3px 0;
+    min-height: calc(1em + 6px);
 }
 
 .flip {

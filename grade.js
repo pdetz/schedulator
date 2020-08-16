@@ -73,13 +73,44 @@ Grade.prototype.scheduleTable = function() {
         `<tbody><tr><th>${this.name}</th><td>${DAYS[0]}</td><td>${DAYS[1]}</td><td>${DAYS[2]}</td><td>${DAYS[3]}</td><td>${DAYS[4]}</td></tr></tbody>`
     );
     this.teachers.forEach( function(teacher){
-        table.find("tbody").append("<tr id='trt" + teacher.n().toString() + "g" + this.n.toString() + "'><td>" + "</td></tr>");
-        table.find("td:last").append('<input type=\'text\' class=\'teacher_name\' value="' + teacher.name + '"></input>');
-        table.find("input:last").data("teacher", teacher);
-        DAYS.forEach (function(day, d){
-            table.find("tr:last").append("<td id=\""
-                + "g" + this.n + "d" + d + "t" + teacher.n() + "\"></td>");
-        }, this);
-    }, this);
+        table.find("tbody").append(teacher.teacherRow());
+    });
     return table;
 };
+
+Teacher.prototype.teacherRow = function(){
+    let teacher = this;
+    let grade = teacher.grade;
+    let input = $(document.createElement("input"))
+                    .attr("type", "text")
+                    .attr("class", "teacher_name")
+                    .val(teacher.name)
+                    .data("teacher", teacher);
+    let tr = $(document.createElement("tr"))
+                .attr("id", "trt" + teacher.n().toString() + "g" + grade.n.toString())
+                .append( $(document.createElement("td"))
+                        .append(input));
+    DAYS.forEach (function(day, d){
+        tr.append( $(document.createElement("td"))
+                    .attr("id", "g" + grade.n + "d" + d + "t" + teacher.n()));
+    });
+    teacher.tr = tr;
+    return tr;
+}
+
+Schedule.prototype.deleteTeacher = function(teacher){
+    let schedule = this;
+    let teachers = teacher.grade.teachers;
+    teacher.tr.find("button.schedule").each(function(){
+        schedule.deleteClass($(this).c());
+    });
+    schedule.resetButtons();
+
+    teacher.tr.remove();
+
+    let index = teacher.n();
+    teachers.splice(index, 1);
+    for (let i = index; i < teachers.length; i++){
+        teachers[i].tr.parent().renumberTable("t", i+1, i);
+    }
+}

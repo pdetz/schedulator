@@ -133,6 +133,7 @@ $.fn.addEmptyClass = function(schedule){
         let data = td.classDataFromtd();
         let day = parseInt(data[1]);
         let c = new Class(schedule.blocks[0], day, schedule.grades[0].teachers[0], schedule.specials[0]);
+
         if (td.attr("id").startsWith("s")){
             c.special = schedule.specials[parseInt(data[0])];
             c.block = schedule.blocks[parseInt(data[2])];

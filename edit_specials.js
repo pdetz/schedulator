@@ -22,7 +22,7 @@ Schedule.prototype.editSpecialsTable = function(){
         }
     }
     
-    let addSpecialButton = $(document.createElement("button")).append("Add").attr("class", "grade topbar_button");
+    let addSpecialButton = $(document.createElement("button")).append("Add").attr("class", "add grade topbar_button");
     tbody.append(   $(document.createElement("tr"))
                     .append(    $(document.createElement("td"))
                                 .append(addSpecialButton)));
@@ -74,7 +74,7 @@ $.fn.changeSpecialName = function(schedule) {
     $(".schedule." + special.colorClass).each(function(){
         $(this).gradeDisplay();
     });
-    schedule.specialsDD.children(".dropdown_button." + special.colorClass).html(special.name);
+    special.dropdownButton.html(special.name);
 }
 
 // Updates the Specialist's name on their individual table
@@ -85,12 +85,12 @@ $.fn.changeSpecialist = function() {
     $(special.table).children(".specialist").html(special.specialist);
 }
 
-//U Updates the abbreviation used in the toggle button up top
+// Updates the abbreviation used in the toggle button up top
 $.fn.changeAbbr = function() {
     let input = this;
     let special = input.data("special");
     special.abbr = input.val();
-    $("#menu_bar").children("." + special.colorClass).html(special.abbr);
+    special.button.html(special.abbr);
 }
 
 // Adds a special to the schedule document
@@ -104,7 +104,7 @@ Schedule.prototype.addSpecial = function(){
     let addedSpecial = schedule.specials[n - 1];
     
     // Adds the topbar toggle button
-    addedSpecial.button.append(addedSpecial.abbr);
+    addedSpecial.button.html(addedSpecial.abbr);
     $("#menu_bar").append(addedSpecial.button);
     
     // Adds the specials selector dropdown button
@@ -131,6 +131,17 @@ Schedule.prototype.addSpecial = function(){
         $("#new_special").next().remove();
         $("#new_special").after(newSpecial.editSpecialRow(schedule));
     });
+}
 
-    console.log(schedule.specials)
+Special.prototype.deleteButton = function(){
+    let button = $(document.createElement("button")).attr("class", "inv delete")
+                .append(DELETE_ICON);
+
+    button.hover(function(){
+        button.closest("tr").children().addClass("delete");
+    }, function(){
+        button.closest("tr").children().removeClass("delete");
+    });
+
+    return button;
 }

@@ -28,5 +28,6 @@ function load(schedule, schedules){
     schedule.loadSpecialsDD();
     schedule.loadBlocksDD();
     schedule.loadPaletteDD();
+    schedule.loadScheduleEditor();
     loadMenus(schedule, schedules);
 }

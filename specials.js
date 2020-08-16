@@ -78,19 +78,6 @@ Special.prototype.editSpecialRow = function(schedule){
     return tr;
 }
 
-Special.prototype.deleteButton = function(){
-    let button = $(document.createElement("button")).attr("class", "inv delete")
-                .append(DELETE_ICON);
-
-    button.hover(function(){
-        button.closest("tr").children().addClass("delete");
-    }, function(){
-        button.closest("tr").children().removeClass("delete");
-    });
-
-    return button;
-}
-
 // Removes a SPECIAL object and associated DOM elements
 Schedule.prototype.deleteSpecial = function(special){
     let schedule = this;
@@ -107,9 +94,8 @@ Schedule.prototype.deleteSpecial = function(special){
     special.editRow.remove();
     special.stylesheet.remove();
 
-    $("#grade_schedules td:empty").addEmptyClass(schedule);
-
-    let index = schedule.specials.indexOf(special);
+    //let index = schedule.specials.indexOf(special);
+    let index = special.n;
     schedule.specials.splice(index,1);
     for (let i = index; i < schedule.specials.length; i++){
         schedule.specials[i].renumber(i, schedule);

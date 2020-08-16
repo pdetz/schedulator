@@ -6,7 +6,17 @@ function loadMenus(schedule, schedules){
     let menu = schedule.menu;
     menu.attr("class", "dropdown")
         .attr("id", "menu").hide()
-        .addMenuButton(PENCIL, " Edit Schedule", "editor menu", function(){schedule.loadScheduleEditor();})
+        .addMenuButton(PENCIL, " Edit Schedule", "editor menu", function(){     
+            if (schedule.editor.is(":visible")){
+                $("#right").showPanel(schedule.specialSchedules);
+                $(".edit_grade").remove();
+                $("*").off(".edit_grade");
+            }
+            else {
+                schedule.editGradeLevelTables();
+                $("#right").showPanel(schedule.editor);
+            }
+        })
         .addMenuButton(PRINT, " Print", "print menu", window.print)
         .addMenuButton(DOWNLOAD, " Download", "download menu", function(){saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );})
         .addMenuButton(UPLOAD, " Upload", "upload menu", function(){$("#upload").click();})
@@ -73,17 +83,4 @@ Schedule.prototype.loadScheduleEditor = function(){
 
     schedule.editGradeLevelTables();
     $("#right").showPanel(editor);
-
-    let button = $("#menu").children().first();
-
-    button.data("onclick", function(){
-        if (editor.is(":visible")){
-            $("#right").showPanel(schedule.specialSchedules);
-            $(".edit_grade").remove();
-        }
-        else {
-            schedule.editGradeLevelTables();
-            $("#right").showPanel(editor);
-        }
-    });
 };

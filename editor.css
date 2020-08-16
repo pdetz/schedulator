@@ -81,3 +81,20 @@ td.delete {
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
+
+ .grade.schedule td.edit_grade{
+      width: 1.2rem;
+  }
+
+  button.schedule.delete {
+      background: #fcc;
+  }
+
+  button.add:hover {
+      background: #28f;
+      color: #fff;
+  }
+
+  button.edit_grade {
+      font-size: 1.2rem;
+  }

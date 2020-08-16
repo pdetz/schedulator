@@ -8,10 +8,15 @@ function Class(block, day, teacher, special){
 
 Schedule.prototype.deleteClass = function(c){
     let special = c.special;
+    let schedule = this;
+
     c.buttons.remove();
     let index = this.classes.indexOf(c);
     this.classes.splice(index,1);
-    special.specialistClassCount(this);
+    special.specialistClassCount(schedule);
+    
+    schedule.gradeSchedules.find("td:empty").addEmptyClass(schedule);
+    schedule.specialSchedules.find("td:empty").addEmptyClass(schedule);
 }
 
 $.fn.updateButton = function(){
@@ -38,12 +43,12 @@ Class.prototype.createScheduleButton = function(displayFunctions){
 
 // Returns the $() table cell where the class's Special button is placed
 Class.prototype.tdSpecial = function() {
-    return $("#s" + this.special.n + "d" + this.day + "b" + this.block.n);
+    return $(this.special.table.find("#s" + this.special.n + "d" + this.day + "b" + this.block.n));
 };
 
 // Returns the $() table cell where the class's Grade button is placed
 Class.prototype.tdGrade = function() {
-    return $("#g" + this.teacher.grade.n + "d" + this.day + "t" + this.teacher.n());
+    return $(this.teacher.grade.table.find("#g" + this.teacher.grade.n + "d" + this.day + "t" + this.teacher.n()));
 };
 
 Class.prototype.hasSpecial = function(){
