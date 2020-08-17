@@ -102,9 +102,6 @@ Schedule.prototype.deleteSpecial = function(special){
         schedule.specials[i].table.renumberTable("s", i+1, i);
     }
     schedule.newSpecial.renumber(schedule.specials.length, schedule);
-
-    
-console.log(schedule.specials);
 }
 
 // Renumber the Special and all associated buttons to keep it consistent with its index in the array

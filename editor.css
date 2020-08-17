@@ -94,18 +94,18 @@ td.delete {
   }
 
   .add svg{
-      fill: #000;
+      fill: #999;
       width: 24px;
   }
 
-.add:hover svg{
-    fill: #fff;
-}   
-
-  button.add:hover {
-      background: #28f;
-      color: #fff;
+  td.add {
+      background: #8cf;
+      border-color: #8cf;
   }
+
+.add:hover svg{
+    fill: #28f;
+}   
 
   button.edit_grade {
       font-size: 1.2rem;

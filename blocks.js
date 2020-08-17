@@ -4,8 +4,6 @@ function Block(start, end, n) {
     this.n = n;
     this.colorClass = "block";
     this.ddButton = dropdownButton(this, "block");
-
-    console.log(this);
 }
 
 Block.prototype = {get name(){

@@ -19,6 +19,14 @@ Schedule.prototype.editBlocks = function(){
         e.stopImmediatePropagation();
         $(this).parent().removeClass("delete");
     });
+    tbody.on("mouseenter", "button.add", function(e){
+        e.stopImmediatePropagation();
+        $(this).closest("tr").children().addClass("add");
+    });
+    tbody.on("mouseleave", "button.add", function(e){
+        e.stopImmediatePropagation();
+        $(this).closest("tr").children().removeClass("add");
+    });
     tbody.on("click", "button.delete", function(e){
         e.stopImmediatePropagation();
         let altBlock = $(this).parent().data("block");
@@ -57,7 +65,7 @@ Block.prototype.blockRow = function(altBlocks) {
     let block = this;
     let tr = $(document.createElement("tr"));
 
-    tr.append("<td id='block" + block.n + "'>" + (block.n + 1).toString() + "</td>")
+    tr.append("<td>" + (block.n + 1).toString() + "</td>")
       .append( $(document.createElement("td"))
                .appendBlockInputs(block));
     let altTD = $(document.createElement("td")).attr("class", "alts");
@@ -67,14 +75,13 @@ Block.prototype.blockRow = function(altBlocks) {
         }
     });
     tr.append(altTD);
-    tr.append($(document.createElement("td")));
-    /*
+    tr.append($(document.createElement("td"))
         .append($(document.createElement("button"))
                     .attr("class", "add inv")
                     .data("block", block)
                     .append(PLUS)
     ));
-*/
+
     block.editRow = tr;
     return tr;
 }

@@ -63,7 +63,6 @@ Schedule.prototype.editSpecialsTable = function(){
 Schedule.prototype.openPalette = function(button, objType){
 
     let schedule = this;
-console.log(button);
     schedule.paletteDD.data(objType, button.data(objType));
     let tr = button.closest("tr");
 

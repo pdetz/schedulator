@@ -139,6 +139,5 @@ function dropdownButton(obj, objType) {
     button.data(objType, obj)
           .attr("class", "dropdown_button " + obj.colorClass)
           .append(obj.name);
-    //console.log(objType, obj, obj.colorClass);
     return button;
 }
