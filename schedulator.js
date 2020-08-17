@@ -1,8 +1,10 @@
 $(document).ready(function(){
 
     let schedules = [];
-    schedules.push(new Stored_Schedule("Online Schedule", ONLINE_SCHEDULE));
-    schedules.push(new Stored_Schedule("Original Schedule", ORIGINAL_SCHEDULE));
+    schedules.push(new Stored_Schedule("Empty Schedule", EMPTY_SCHEDULE));
+    schedules.push(new Stored_Schedule("Sample Schedule", SAMPLE_SCHEDULE));
+    schedules.push(new Stored_Schedule("SSES Schedule", ONLINE_SCHEDULE));
+    //schedules.push(new Stored_Schedule("Original Schedule", ORIGINAL_SCHEDULE));
 
     // Load data into Schedule object
     let schedule = new Schedule(schedules[0].json);

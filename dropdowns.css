@@ -10,19 +10,15 @@
     background: #fff;
 }
 
-.blocks.dropdown {
-    width:100%;
-}
-
 .dropdown > .dropdown_button {
     margin: 1px 0;
     padding: 3px 0;
     min-height: calc(1em + 6px);
+    width: 100%;
 }
 
 .flip {
     transform: perspective(1000px) rotateY(90deg);
-    
     transition: .5s 
 }
 
@@ -49,4 +45,26 @@ div.palette{
     text-align:center;
     width: 100%;
     line-height: 1rem;
+}
+
+button.block:hover {
+    background: #8cf;
+}
+
+button.arrow {
+    font-size: 1em;
+    padding: 2px;
+    border-radius: 0.3rem;
+    width: 100%;
+}
+
+button.arrow svg {
+    display: inline-block;
+    float: right;
+    height: 1em;
+    margin-right: .4rem;
+}
+
+button.arrow div {
+    display: inline-block;
 }

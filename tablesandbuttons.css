@@ -29,7 +29,7 @@
     padding: 0;
 }
 
-.schedule button {
+button.schedule {
     position: relative;
     display:inline-block;
     z-index: 0;

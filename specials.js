@@ -73,7 +73,7 @@ Special.prototype.editSpecialRow = function(schedule){
     tr.append($(document.createElement("td")).append(color)).append($(document.createElement("td")));
 
     if (special.n < schedule.specials.length){
-        tr.append($(document.createElement("td")).append(special.deleteButton()));
+        tr.append($(document.createElement("td")).append(deleteButton()));
     }
     return tr;
 }

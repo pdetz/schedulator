@@ -51,14 +51,16 @@
 }
 
 button.inv{
+    display: inline;
     background: none;
-    border: none;
+    line-height: 1.2rem;
 }
 
 .delete svg {
     fill: #999;
     width: 24px;
 }
+
 .delete:hover svg {
     fill: #f00;
 }
@@ -67,6 +69,7 @@ td.delete {
     background-color: #fcc;
     border-color: #fcc;
 }
+
 
 /* The Modal (background) */
 .modal {
@@ -82,13 +85,22 @@ td.delete {
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
   }
 
- .grade.schedule td.edit_grade{
+.grade.schedule td.edit_grade{
       width: 1.2rem;
-  }
+ }
 
   button.schedule.delete {
       background: #fcc;
   }
+
+  .add svg{
+      fill: #000;
+      width: 24px;
+  }
+
+.add:hover svg{
+    fill: #fff;
+}   
 
   button.add:hover {
       background: #28f;
@@ -98,3 +110,80 @@ td.delete {
   button.edit_grade {
       font-size: 1.2rem;
   }
+
+  hr.black {
+    border:1px solid #000;
+  }
+
+.blocks td {
+    text-align:left;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.blocks tr {
+    min-height: 3rem;
+}
+
+.blocks tr:first-child td{
+    padding: 2px;
+}
+
+.blocks td:nth-child(1) {
+    width: 3.2rem;
+    padding: 10px 0;
+}
+
+.blocks td:nth-child(2) {
+    width: 11rem;
+}
+
+.blocks td:nth-child(3) {
+    width: 25rem;
+}
+
+.blocks td:nth-child(4) {
+    width: 2rem;
+}
+
+div.blocks {
+    display: inline-block;
+    border-radius: .3rem;
+    margin: 4px;
+    padding: 4px 8px;
+    background: #efefef;
+}
+
+div.blocks button {
+    margin-bottom: .1rem;
+    margin-left: 4px;
+}
+
+input.blocks {
+    width: 3.7rem;
+    font-size: 1.2rem;
+}
+
+div.blocks.delete {
+    background: #fcc;
+}
+
+button.add.altBlock {
+    font-size: 1.2rem;
+}
+
+.edit.grade.schedule td:nth-child(1) {
+    width: 12rem;
+}
+
+.edit.grade.schedule td:nth-child(2) {
+    width: 6rem;
+}
+
+.edit.grade.schedule td:nth-child(3) {
+    width: 10rem;
+}
+
+.edit.grade.schedule td:nth-child(24) {
+    width: 2rem;
+}

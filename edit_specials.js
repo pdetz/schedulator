@@ -14,7 +14,7 @@ Schedule.prototype.editSpecialsTable = function(){
 
     for (let i = 1; i <= n; i++){
         if (i == n){
-            tbody.append("<tr id='new_special'><td colspan='4'><hr style='border:1px solid #000'></td></tr>");
+            tbody.append("<tr id='new_special'><td colspan='4'><hr class = 'black'></td></tr>");
             tbody.append(newSpecial.editSpecialRow(schedule));
         }
         else {
@@ -31,8 +31,21 @@ Schedule.prototype.editSpecialsTable = function(){
         $(this).data("update").call($(this), schedule);
     });
 
-    tbody.on("click", ".open_palette", {schedule: schedule}, openPalette);
+    tbody.on("click", ".open_palette", function(e){
+        e.stopImmediatePropagation();
+        schedule.openPalette($(this), "special");
+    });
+ 
 
+
+    tbody.on("mouseenter", "button.delete", function(e){
+        e.stopImmediatePropagation();
+        $(this).closest("tr").children().addClass("delete");
+    });
+    tbody.on("mouseleave", "button.delete", function(e){
+        e.stopImmediatePropagation();
+        $(this).closest("tr").children().removeClass("delete");
+    });
     tbody.on("click", ".delete", function(e){
         e.stopImmediatePropagation();
         let special = $(this).closest("tr").data("special");
@@ -47,11 +60,11 @@ Schedule.prototype.editSpecialsTable = function(){
 }
 
 // Opens/toggles the palette in the correct area in the editing space
-function openPalette(e){
-    e.stopImmediatePropagation();
-    let schedule = e.data.schedule;
-    let button = $(this);
-    schedule.paletteDD.data("special", button.data("special"));
+Schedule.prototype.openPalette = function(button, objType){
+
+    let schedule = this;
+console.log(button);
+    schedule.paletteDD.data(objType, button.data(objType));
     let tr = button.closest("tr");
 
     if (tr.has(schedule.paletteDD).length){
@@ -62,6 +75,17 @@ function openPalette(e){
         button.parent().next().append(schedule.paletteDD);
         schedule.paletteDD.slideDown(200);
     }
+
+    schedule.paletteDD.off("click");
+        
+    schedule.paletteDD.on("click", ".palette", function(e){
+        e.stopImmediatePropagation();
+        let button = $(this);
+
+        let gOrS = schedule.paletteDD.data(objType);
+        gOrS.color[0] = button.data("color");
+        writeCSSRules(gOrS, schedule.palette);
+    });
     button.blur();
 }
 
@@ -131,17 +155,4 @@ Schedule.prototype.addSpecial = function(){
         $("#new_special").next().remove();
         $("#new_special").after(newSpecial.editSpecialRow(schedule));
     });
-}
-
-Special.prototype.deleteButton = function(){
-    let button = $(document.createElement("button")).attr("class", "inv delete")
-                .append(DELETE_ICON);
-
-    button.hover(function(){
-        button.closest("tr").children().addClass("delete");
-    }, function(){
-        button.closest("tr").children().removeClass("delete");
-    });
-
-    return button;
 }

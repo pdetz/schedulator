@@ -86,13 +86,23 @@ Schedule.prototype.formatFile = function(){
     });
 
     this.blocks.forEach(function(block){
-        file.blocks.push(block);
+        let formattedBlock = {
+            "start": block.start,
+            "end": block.end,
+            "n": block.n,
+        };
+        file.blocks.push(formattedBlock);
     });
 
     file.blocks.push("");
 
-    this.altBlocks.forEach(function(block){
-        file.blocks.push(block);
+    this.altBlocks.forEach(function(block, b){
+        let formattedBlock = {
+            "start": block.start,
+            "end": block.end,
+            "n": block.n
+        };
+        file.blocks.push(formattedBlock);
     });
 
     this.grades.forEach(function(grade){
@@ -121,7 +131,11 @@ Schedule.prototype.formatFile = function(){
 
     this.classes.forEach(function(c){
         if (c.hasGrade() && c.hasSpecial()){
-            let blockNumber = file.blocks.indexOf(c.block);
+            let blockNumber = this.blocks.indexOf(c.block);
+            if (blockNumber == -1) {
+                blockNumber = this.blocks.length + this.altBlocks.indexOf(c.block) + 1;
+            }
+            //let blockNumber = file.blocks.indexOf(c.block);
             file.classes.push( [blockNumber, c.day, c.teacher.grade.n, c.teacher.n(), c.special.n]);
         }
     }, this);

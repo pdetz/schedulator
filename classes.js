@@ -63,7 +63,8 @@ Class.prototype.hasGrade = function(){
 // and appends that button into the Grade-table
 $.fn.gradeDisplay = function(){
     let c = this.c();
-    this.html(c.special.name + "<br>" + c.block.name)
+    this.html(c.special.name)
+        .append(c.block.name)
         .attr("class", "schedule " + c.special.colorClass);
     c.tdGrade().append(this);
     return this;
@@ -73,9 +74,9 @@ $.fn.gradeDisplay = function(){
 // and appends that button into the Specials-table
 $.fn.specialsDisplay = function(){
     let c = this.c();
-    this.html("<span class='ulbold'>" + c.teacher.grade.abbr + "</span> " +
-              c.teacher.name + "<br>" + c.block.name)
-              .attr("class", "schedule " + c.teacher.grade.colorClass);
+    this.html("<span class='ulbold'>" + c.teacher.grade.abbr + "</span> " + c.teacher.name)
+        .append(c.block.name)
+        .attr("class", "schedule " + c.teacher.grade.colorClass);
     c.tdSpecial().append(this);
     return this;
 }
@@ -84,7 +85,8 @@ $.fn.specialsDisplay = function(){
 // and appends that button into the Specials-table
 $.fn.emptyDisplay = function(){
     let c = this.c();
-    this.html(DAYS[c.day] + "<br>" + c.block.name)
+    this.html(DAYS[c.day])
+        .append(c.block.name)
         .attr("class", "schedule " + c.teacher.grade.colorClass);
     c.tdSpecial().append(this);
     return this;

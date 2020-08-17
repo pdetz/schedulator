@@ -114,3 +114,51 @@ Schedule.prototype.deleteTeacher = function(teacher){
         teachers[i].tr.parent().renumberTable("t", i+1, i);
     }
 }
+
+Grade.prototype.editGradeRow = function(schedule){
+    let grade = this;
+    grade.editRow = $(document.createElement('tr')).data("grade", grade);
+    let tr = grade.editRow;
+
+    tr.append($(document.createElement("td")).append(grade.name));
+    tr.append($(document.createElement("td")).append(grade.abbr));
+    tr.append($(document.createElement("td"))
+                .append(grade.defaultBlockButton()));
+
+    /*
+    let name = $(document.createElement("input")).val(special.name)
+                .attr("class", "edit")
+                .data({"grade": grade, "update": $.fn.changeGradeName});
+    tr.append($(document.createElement("td")).append(name));
+    
+    let specialist = $(document.createElement("input")).val(special.specialist)
+            .attr("class", "edit")
+            .data({"special": special, "update": $.fn.changeSpecialist});
+    tr.append($(document.createElement("td")).append(specialist));
+
+    let abbr = $(document.createElement("input")).val(special.abbr)
+                .attr("class", "edit")
+                .data({"special": special, "update": $.fn.changeAbbr});
+    tr.append($(document.createElement("td")).append(abbr));
+    */
+    let color = $(document.createElement("button"))
+                .attr("class", "topbar_button open_palette specials " + grade.colorClass)
+                .data({"grade": grade});
+    tr.append($(document.createElement("td")).append(color)).append($(document.createElement("td")));
+/*
+    if (special.n < schedule.specials.length){
+        tr.append($(document.createElement("td")).append(deleteButton()));
+    }
+    */
+    return tr;
+}
+
+Grade.prototype.defaultBlockButton = function(){
+    let grade = this;
+    let button = $(document.createElement("button"))
+                    .attr("class", "arrow block")
+                    .append(grade.defaultBlock.name).append(DOWN)
+                    .data("grade", grade);
+    grade.defaultBlockButton = button;
+    return button;
+}

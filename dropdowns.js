@@ -1,7 +1,7 @@
 Schedule.prototype.loadPaletteDD = function(){
     let schedule = this;
     let palette = schedule.palette;
-    let paletteDD = this.paletteDD;
+    let paletteDD = schedule.paletteDD;
 
     paletteDD.attr("class", "palette")
              .attr("id", "paletteDD").hide();
@@ -16,38 +16,28 @@ Schedule.prototype.loadPaletteDD = function(){
         
         paletteDD.append(button);
     }
-    
-    paletteDD.on("click", ".palette", function(e){
-        e.stopImmediatePropagation();
-        let button = $(this);
-
-        let special = paletteDD.data("special");
-        special.color[0] = button.data("color");
-        writeCSSRules(special, schedule.palette);
-    });
 }
 
 Schedule.prototype.loadBlocksDD = function(){
     let schedule = this;
     let blocksDD = this.blocksDD;
 
-    blocksDD.attr("class", "dropdown blocks")
+    blocksDD.attr("class", "dropdown blocksDD")
             .attr("id", "blocksDD").hide();
 
     // Add buttons for each block to the dropdown menu
     for (let i = 0; i < schedule.blocks.length; i++){
         let block = schedule.blocks[i];
-        let button = dropdownButton(block, "block");
-        blocksDD.append(button);
+        blocksDD.append(block.ddButton);
     }
     blocksDD.append("<hr>")
             .append("<div id='altblocks'></div>");
     for (let i = 0; i < schedule.altBlocks.length; i++){
         let block = schedule.altBlocks[i];
-        let button = dropdownButton(block, "block");
-        blocksDD.append(button);
+        //block.ddButton = dropdownButton(block, "block");
+        blocksDD.append(block.ddButton);
     }
-    
+    /*
     blocksDD.append("<hr>")
             .append("<input style='width:3em' id='nbStart'></input> – ")
             .append("<input style='width:3em' id=\"nbEnd\"></input>")
@@ -63,21 +53,13 @@ Schedule.prototype.loadBlocksDD = function(){
         schedule.altBlocks.push(newBlock);
         $("#altblocks").append(dropdownButton(newBlock, "block"));
     });
+*/
 
-    blocksDD.on("click", ".dropdown_button", function(e){
-        let button = $(this);
-        let s = schedule.selectedClass[0];
-        s.block = button.data("block");
-        schedule.updateClasses();
-        blocksDD.slideUp();
-        schedule.resetButtons();
-    });
 
-    $("#grade_schedules").on("contextmenu", "button.schedule", function(e){
+    schedule.gradeSchedules.on("contextmenu", "button.schedule", function(e){
         e.preventDefault();
         let clicked = $(this);
         let c = clicked.c();
-
         if (c.hasSpecial()){
             schedule.resetButtons();
             schedule.selectedClass.push(c);
@@ -157,5 +139,6 @@ function dropdownButton(obj, objType) {
     button.data(objType, obj)
           .attr("class", "dropdown_button " + obj.colorClass)
           .append(obj.name);
+    //console.log(objType, obj, obj.colorClass);
     return button;
 }

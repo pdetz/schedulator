@@ -6,15 +6,18 @@ function loadMenus(schedule, schedules){
     let menu = schedule.menu;
     menu.attr("class", "dropdown")
         .attr("id", "menu").hide()
-        .addMenuButton(PENCIL, " Edit Schedule", "editor menu", function(){     
+        .addMenuButton(PENCIL, " View/Edit Schedule", "editor menu switch", function(){
             if (schedule.editor.is(":visible")){
                 $("#right").showPanel(schedule.specialSchedules);
                 $(".edit_grade").remove();
                 $("*").off(".edit_grade");
+                $("#grade_schedules").off(".block_grade");
+                $("button.editor.menu.switch").html(BUILD).append(" Build Schedule");
             }
             else {
                 schedule.editGradeLevelTables();
                 $("#right").showPanel(schedule.editor);
+                $("button.editor.menu.switch").html(PENCIL).append(" View/Edit Schedule");
             }
         })
         .addMenuButton(PRINT, " Print", "print menu", window.print)
@@ -36,9 +39,15 @@ function loadMenus(schedule, schedules){
     openMenu.click( function(){
         if (menu.hasClass("vis")) {
             menu.slideUp();
+            $("#grade_schedules").off(".block_grade");
         }
         else {
             menu.slideDown();
+            // Block class switching functionality
+            $("#grade_schedules").on("click.block_grade", ".schedule", function(e){
+                e.stopImmediatePropagation();
+                $(this).blur()
+            });
         }
         menu.toggleClass("vis");
         schedule.resetButtons();
@@ -78,8 +87,11 @@ Schedule.prototype.loadScheduleEditor = function(){
     let editor = this.editor;
     let schedule = this;
 
-    editor.append(schedule.editSpecialsTable());
-    //editor.append(schedule.editBlocks);
+    editor.append(schedule.editBlocks())
+          .append("<hr class = 'black'>")
+          .append(schedule.editGradesTable())
+          .append("<hr class = 'black'>")
+          .append(schedule.editSpecialsTable());
 
     schedule.editGradeLevelTables();
     $("#right").showPanel(editor);

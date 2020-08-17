@@ -115,5 +115,11 @@ body{
 
 button {
     border: none;
-    padding: 0
+    padding: 0;
+    vertical-align: middle;
+}
+
+button svg {
+    vertical-align: middle;
+    line-height: 1.2rem;
 }

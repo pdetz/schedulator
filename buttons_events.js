@@ -12,6 +12,16 @@ Schedule.prototype.loadButtons = function(){
     
     $("#grade_schedules, #specials_schedules").highlightScheduleButtons(schedule);
 
+    schedule.gradeSchedules.on("click", ".block.dropdown_button", function(e){
+        e.stopImmediatePropagation();
+        let button = $(this);
+        let s = schedule.selectedClass[0];
+        s.block = button.data("block");
+        schedule.updateClasses();
+        schedule.blocksDD.slideUp();
+        schedule.resetButtons();
+    });
+
     $("#body").selectClassListener(schedule);
 }
 
