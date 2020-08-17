@@ -123,3 +123,10 @@ button svg {
     vertical-align: middle;
     line-height: 1.2rem;
 }
+
+.copyright {
+    float: right;
+    margin: 4px 0;
+    color: #555;
+    font-size: 0.875rem;
+}

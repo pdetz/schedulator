@@ -31,6 +31,8 @@ function loadMenus(schedule, schedules){
             deleteSchedule(schedule);
             let newSchedule = new Schedule(stored.json);
             load(newSchedule, schedules);
+            $("#menu").click();
+            $("#menu button.editor.menu.switch").click();
         });
     });
 
