@@ -2,7 +2,7 @@ $(document).ready(function(){
 
     let schedules = [];
     schedules.push(new Stored_Schedule("Empty Schedule", EMPTY_SCHEDULE));
-    //schedules.push(new Stored_Schedule("Sample Schedule", SAMPLE_SCHEDULE));
+    schedules.push(new Stored_Schedule("Sample Schedule", SAMPLE_SCHEDULE));
     schedules.push(new Stored_Schedule("SSES Schedule", ONLINE_SCHEDULE));
     //schedules.push(new Stored_Schedule("Original Schedule", ORIGINAL_SCHEDULE));
 

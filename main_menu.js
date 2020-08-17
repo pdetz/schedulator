@@ -17,7 +17,7 @@ function loadMenus(schedule, schedules){
             else {
                 schedule.editGradeLevelTables();
                 $("#right").showPanel(schedule.editor);
-                $("button.editor.menu.switch").html(PENCIL).append(" View/Edit Schedule");
+                $("#menu button.editor.menu.switch").html(PENCIL).append(" View/Edit Schedule");
             }
         })
         .addMenuButton(PRINT, " Print", "print menu", window.print)
@@ -68,6 +68,7 @@ function loadMenus(schedule, schedules){
             let newSchedule = new Schedule(JSON.parse(reader.result));
             deleteSchedule(schedule);
             load(newSchedule, schedules);
+            $("#menu button.editor.menu.switch").click();
         };
         reader.readAsText(file);
     });
