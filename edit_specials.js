@@ -2,90 +2,53 @@
 Schedule.prototype.editSpecialsTable = function(){
     let schedule = this;
     let n = schedule.specials.length;
-    let table = $(document.createElement("table"));
-    table.attr("class", "edit schedule");
-
-    table.append("<tbody><tr><td>Special Name</td><td>Specialist</td><td>Abbr</td><td>Color</td></tr></tbody>");
+    let table = schedule.specialsEditor;
+    
+    table.append("<tbody><tr><td></td><td>Special Name</td><td>Specialist</td><td>Abbr</td><td>Color</td><td></td><td></td></tr></tbody>");
 
     let tbody = table.find("tbody");
 
-    schedule.newSpecial = new Special("", "", "", [4,0], n, schedule.palette);
-    let newSpecial = schedule.newSpecial;
-
-    for (let i = 1; i <= n; i++){
-        if (i == n){
-            tbody.append("<tr id='new_special'><td colspan='4'><hr class = 'black'></td></tr>");
-            tbody.append(newSpecial.editSpecialRow(schedule));
-        }
-        else {
-            tbody.append(schedule.specials[i].editSpecialRow(schedule));
-        }
+    for (let i = 1; i < n; i++){
+        tbody.append(schedule.specials[i].editSpecialRow(schedule));
     }
     
-    let addSpecialButton = $(document.createElement("button")).append("Add").attr("class", "add grade topbar_button");
-    tbody.append(   $(document.createElement("tr"))
-                    .append(    $(document.createElement("td"))
+    let addSpecialButton = make("button", "#add_special", "add").append(PLUS, " Add Special");
+    tbody.append(   make("tr")
+                    .append(    make("td").attr("colspan", "5")
                                 .append(addSpecialButton)));
 
-    tbody.on("keyup", "input", function(){
-        $(this).data("update").call($(this), schedule);
-    });
-
-    tbody.on("click", ".open_palette", function(e){
-        e.stopImmediatePropagation();
-        schedule.openPalette($(this), "special");
-    });
- 
-
-
-    tbody.on("mouseenter", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        $(this).closest("tr").children().addClass("delete");
-    });
-    tbody.on("mouseleave", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        $(this).closest("tr").children().removeClass("delete");
-    });
-    tbody.on("click", ".delete", function(e){
-        e.stopImmediatePropagation();
-        let special = $(this).closest("tr").data("special");
-        schedule.deleteSpecial(special);
-    });
-
-    addSpecialButton.on("click", function(e){
-        e.stopImmediatePropagation();
-        schedule.addSpecial();
-    });
+    editSpecialsHandlers(schedule);
     return table;
 }
 
-// Opens/toggles the palette in the correct area in the editing space
-Schedule.prototype.openPalette = function(button, objType){
+Special.prototype.editSpecialRow = function(schedule){
+    let special = this;
+    special.editRow = make('tr').data("special", special);
+    let tr = special.editRow;
 
-    let schedule = this;
-    schedule.paletteDD.data(objType, button.data(objType));
-    let tr = button.closest("tr");
+    tr.append(make("td").append(selectButton(special, "special", schedule)));
 
-    if (tr.has(schedule.paletteDD).length){
-        schedule.paletteDD.slideUp(200, function(){schedule.paletteDD.detach()});
+    let name = make("input", "edit").val(special.name)
+                .data({"special": special, "update": $.fn.changeSpecialName});
+    tr.append(make("td").append(name));
+    
+    let specialist = make("input","edit").val(special.specialist)
+            .data({"special": special, "update": $.fn.changeSpecialist});
+    tr.append(make("td").append(specialist));
+
+    let abbr = make("input", "abbr edit").val(special.abbr)
+                .data({"gOrS": special, "update": $.fn.changeAbbr});
+    tr.append(make("td").append(abbr));
+    
+    let color = make("button")
+                .attr("class", "topbar_button open_palette specials " + special.colorClass)
+                .data({"special": special});
+    tr.append(make("td").append(color)).append(make("td"));
+
+    if (special.n < schedule.specials.length){
+        tr.append(make("td").append(deleteButton()));
     }
-    else {
-        schedule.paletteDD.hide();
-        button.parent().next().append(schedule.paletteDD);
-        schedule.paletteDD.slideDown(200);
-    }
-
-    schedule.paletteDD.off("click");
-        
-    schedule.paletteDD.on("click", ".palette", function(e){
-        e.stopImmediatePropagation();
-        let button = $(this);
-
-        let gOrS = schedule.paletteDD.data(objType);
-        gOrS.color[0] = button.data("color");
-        writeCSSRules(gOrS, schedule.palette);
-    });
-    button.blur();
+    return tr;
 }
 
 // Updates the name of the Special throughout the schedule
@@ -94,7 +57,7 @@ $.fn.changeSpecialName = function(schedule) {
     let input = this;
     let special = input.data("special");
     special.name = input.val();
-    $(".schedule." + special.colorClass).each(function(){
+    schedule.gradeSchedules.find(".schedule." + special.colorClass).each(function(){
         $(this).gradeDisplay();
     });
     special.dropdownButton.html(special.name);
@@ -111,20 +74,21 @@ $.fn.changeSpecialist = function() {
 // Updates the abbreviation used in the toggle button up top
 $.fn.changeAbbr = function() {
     let input = this;
-    let special = input.data("special");
-    special.abbr = input.val();
-    special.button.html(special.abbr);
+    let gOrS = input.data("gOrS");
+    gOrS.abbr = input.val();
+    gOrS.button.html(gOrS.abbr);
 }
 
-// Adds a special to the schedule document
+// Adds a special to the schedule document  
 Schedule.prototype.addSpecial = function(){
 
     // Adds it to the list of specials
     let schedule = this;
-    schedule.specials.push(schedule.newSpecial);
-    let n = schedule.specials.length;
 
-    let addedSpecial = schedule.specials[n - 1];
+    let addedSpecial = new Special("Special", "", "", [4,0], schedule.specials.length, schedule.palette);
+
+    schedule.specials.push(addedSpecial);
+    let n = schedule.specials.length;
     
     // Adds the topbar toggle button
     addedSpecial.button.html(addedSpecial.abbr);
@@ -141,17 +105,5 @@ Schedule.prototype.addSpecial = function(){
     addedSpecial.table.find("td:empty").addEmptyClass(schedule);
     
     // Adds the edit special row for the new special to the editor
-    $("#new_special").before(addedSpecial.editSpecialRow(schedule));
-    
-    // Creates a new "newSpecial" for the user
-    schedule.newSpecial = new Special("", "", "", [4,0], n, schedule.palette);
-    newSpecial = schedule.newSpecial;
-
-    // Slides up the palette box
-    // Gets rid of the old newSpecial row and puts in a new one
-    schedule.paletteDD.slideUp(200, function(){
-        schedule.paletteDD.detach();
-        $("#new_special").next().remove();
-        $("#new_special").after(newSpecial.editSpecialRow(schedule));
-    });
+    $("#add_special").closest("tr").before(addedSpecial.editSpecialRow(schedule));
 }

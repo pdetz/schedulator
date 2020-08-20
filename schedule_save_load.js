@@ -9,13 +9,21 @@ function Schedule(file) {
 
     this.selectedClass = [];
     
-    this.specialsDD = $(document.createElement("DIV"));
-    this.blocksDD = $(document.createElement("DIV"));
-    this.paletteDD = $(document.createElement("DIV"));
-    this.gradeSchedules = $(document.createElement("DIV")).attr("id", "grade_schedules");
-    this.specialSchedules = $(document.createElement("DIV")).attr("id", "specials_schedules");
-    this.editor = $(document.createElement("DIV"));
-    this.menu = $(document.createElement("div"));
+    this.specialsDD = make("div", "#specialsDD", "dropdown");
+    this.blocksDD = make("div", "#blocksDD", "dropdown");
+    this.paletteDD = make("div", "#paletteDD", "palette");
+
+    this.gradeSchedules = make("div", "#grade_schedules");
+    this.specialSchedules = make("div", "#specials_schedules");
+
+    this.editor = make("div", "#editor");
+    this.specialsEditor = make("table", "#specials_editor", "edit_gs schedule");
+    this.gradesEditor = make("table", "grades_editor", "edit_gs schedule");
+    this.blocksEditor = make("table", "#blocks_editor", "edit_blocks schedule");
+
+    this.menu = make("div", "#menu", "dropdown");
+
+    this.selected = {"block": "", "special": "", "grade": "", "teacher": ""};
 
     // Copy blocks from file to Schedule
     let alt = false;
@@ -24,11 +32,11 @@ function Schedule(file) {
             alt = true;
         }
         else if (alt) {
-            let newBlock = new Block(block.start,block.end,block.n);
+            let newBlock = new Block(block.start,block.end,block.n, i - this.blocks.length - 1);
             this.altBlocks.push(newBlock);
         }
         else {
-            let newBlock = new Block(block.start,block.end,block.n);
+            let newBlock = new Block(block.start,block.end,block.n, -1);
             this.blocks.push(newBlock);
         }
     }, this);
@@ -65,17 +73,6 @@ function Schedule(file) {
         let newClass = new Class(block, c[1], this.grades[c[2]].teachers[c[3]], this.specials[c[4]]);
         this.classes.push(newClass);
     }, this);
-}
-
-function deleteSchedule(schedule){
-    schedule.specialsDD.remove();
-    schedule.blocksDD.remove();
-    schedule.paletteDD.remove();
-    schedule.gradeSchedules.remove();
-    schedule.specialSchedules.remove();
-    schedule.menu.remove();
-    $(".topbar_button").remove();
-    $("*").off("click");
 }
 
 Schedule.prototype.formatFile = function(){

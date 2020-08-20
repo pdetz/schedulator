@@ -50,21 +50,3 @@ div.palette{
 button.block:hover {
     background: #8cf;
 }
-
-button.arrow {
-    font-size: 1em;
-    padding: 2px;
-    border-radius: 0.3rem;
-    width: 100%;
-}
-
-button.arrow svg {
-    display: inline-block;
-    float: right;
-    height: 1em;
-    margin-right: .4rem;
-}
-
-button.arrow div {
-    display: inline-block;
-}

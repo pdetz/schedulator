@@ -3,7 +3,7 @@
     color:#ddd;
 }
 
-.schedule th, td {
+.schedule th, .schedule td {
     position: relative;
     font-size: 0.875rem;
     border: 1.5px solid transparent;
@@ -23,7 +23,7 @@
     width: 9rem;
 }
 
-.specials.schedule td {
+.special.schedule td {
     text-align: center;
     width:8.5rem;
     padding: 0;
@@ -40,6 +40,7 @@ button.schedule {
     border: none;
     border-radius: .2em;
     transition: filter .4s;
+    font-size: 1em;
 }
 
 .selected button {

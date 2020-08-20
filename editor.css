@@ -1,6 +1,9 @@
+#editor td, #editor input{
+    font-size: 1rem;
+}
+
 .edit td {
     text-align:left;
-    font-size: 1.2rem;
 }
 
 .edit tr {
@@ -34,26 +37,26 @@
 }
 
 .edit input {
-    font-size: 1.2rem;
+    
     width: 100%;
     margin: 10px 2px;
 }
 
 .edit td:nth-child(3) input {
-    font-size: 1.2rem;
+    
     width: 96%;
     text-align: center;
 }
 
 .edit input {
-    font-size: 1.2rem;
+    
     width: 96%;
 }
 
 button.inv{
     display: inline;
     background: none;
-    line-height: 1.2rem;
+    line-height: 1.0em;
 }
 
 .delete svg {
@@ -86,7 +89,7 @@ td.delete {
   }
 
 .grade.schedule td.edit_grade{
-      width: 1.2rem;
+      width: 1.0em;
  }
 
   button.schedule.delete {
@@ -108,7 +111,7 @@ td.delete {
 }   
 
   button.edit_grade {
-      font-size: 1.2rem;
+      
   }
 
   hr.black {
@@ -117,7 +120,7 @@ td.delete {
 
 .blocks td {
     text-align:left;
-    font-size: 1.2rem;
+    
     text-align: center;
 }
 
@@ -161,7 +164,7 @@ div.blocks button {
 
 input.blocks {
     width: 3.7rem;
-    font-size: 1.2rem;
+    
 }
 
 div.blocks.delete {
@@ -169,7 +172,7 @@ div.blocks.delete {
 }
 
 button.add.altBlock {
-    font-size: 1.2rem;
+    
 }
 
 .edit.grade.schedule td:nth-child(1) {

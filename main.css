@@ -117,6 +117,16 @@ button {
     border: none;
     padding: 0;
     vertical-align: middle;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.button:hover {
+    cursor: pointer;
+}
+
+input {
+    font-size: 1em;
 }
 
 button svg {
@@ -124,7 +134,7 @@ button svg {
     line-height: 1.2rem;
 }
 
-.copyright {
+#copyright {
     float: right;
     margin: 4px 0;
     color: #555;

@@ -1,48 +1,34 @@
-Schedule.prototype.editBlocks = function(){
+Schedule.prototype.editBlocksTable = function(){
     let schedule = this;
-    let table = $(document.createElement("table"));
-    table.attr("class", "blocks schedule");
-    let tbody = $(document.createElement("tbody"));
+    let table = schedule.blocksEditor;
 
-    table.append(
-        tbody.append("<tr><td>Row</td><td>Default Block Time</td><td colspan=2>Alternate Block Times</td></tr>")
-    );
+    table.append("<tbody><tr><td></td><td>Default Block Time</td><td colspan=5>Alternate Block Times</td><td></td></tr></tbody>");
+
+    let tbody = table.find("tbody");
+
     schedule.blocks.forEach(block => {
-        tbody.append(block.blockRow(schedule.altBlocks));
+        tbody.append(block.blockRow(schedule));
     });
 
-    tbody.on("mouseenter", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        $(this).parent().addClass("delete");
-    });
-    tbody.on("mouseleave", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        $(this).parent().removeClass("delete");
-    });
-    tbody.on("mouseenter", "button.add", function(e){
-        e.stopImmediatePropagation();
-        $(this).closest("tr").children().addClass("add");
-    });
-    tbody.on("mouseleave", "button.add", function(e){
-        e.stopImmediatePropagation();
-        $(this).closest("tr").children().removeClass("add");
-    });
-    tbody.on("click", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        let altBlock = $(this).parent().data("block");
-        altBlock.deleteAltBlock(schedule);
-    });
-
-    tbody.on("keyup", "input", function(){
-        $(this).data("update").call($(this), schedule);
-    });
-
-    tbody.on("click", "button.add", function(e){
-        e.stopImmediatePropagation();
-        $(this).data("block").addAltBlock(schedule);
-    });
+    let addRow = make("tr");
+    addRow.append(make("td").attr("colspan", "3")
+            .append( make("button", "#add_block", "add")
+                    .append(PLUS, " Add Time Block")));
+    tbody.append(addRow);
+    
+    editBlocksHandlers(schedule);
 
     return table;
+}
+
+Schedule.prototype.addDefaultBlock = function(){
+    let schedule = this;
+
+    let newBlock = new Block("", "", schedule.blocks.length, -1);    
+    schedule.blocks.push(newBlock);
+    
+    schedule.blocks[schedule.blocks.length - 2].ddButton.after(newBlock.ddButton);
+    $("#add_block").blur().closest("tr").before(newBlock.blockRow(schedule));
 }
 
 Block.prototype.deleteAltBlock = function(schedule) {
@@ -58,25 +44,30 @@ Block.prototype.deleteAltBlock = function(schedule) {
     altBlock.ddButton.remove();
     altBlock.altBlockButton.remove();
 
-    schedule.altBlocks.splice(schedule.altBlocks.indexOf(altBlock),1);
+    let index = schedule.altBlocks.indexOf(altBlock);
+    schedule.altBlocks.splice(index,1);
+    for (let i = index; i < schedule.altBlocks.length; i++){
+        let block = schedule.altBlocks[i];
+        block.renumber(block.n, i, schedule);
+    }
 }
 
-Block.prototype.blockRow = function(altBlocks) {
+Block.prototype.blockRow = function(schedule) {
     let block = this;
-    let tr = $(document.createElement("tr"));
+    let tr = make("tr");
 
-    tr.append("<td>" + (block.n + 1).toString() + "</td>")
-      .append( $(document.createElement("td"))
+    tr.append(make("td").append(selectButton(block, "block", schedule)))
+      .append( make("td")
                .appendBlockInputs(block));
-    let altTD = $(document.createElement("td")).attr("class", "alts");
-    altBlocks.forEach(alt => {
+    let altTD = make("td").attr("colspan", "4").attr("class", "alts");
+    schedule.altBlocks.forEach(alt => {
         if (alt.n == block.n) {
             altTD.append(alt.altBlockButton());
         }
     });
     tr.append(altTD);
-    tr.append($(document.createElement("td"))
-        .append($(document.createElement("button"))
+    tr.append().append(make("td")
+        .append(make("button")
                     .attr("class", "add inv")
                     .data("block", block)
                     .append(PLUS)
@@ -88,20 +79,24 @@ Block.prototype.blockRow = function(altBlocks) {
 
 Block.prototype.addAltBlock = function(schedule){
     let block = this;
-    let newAltBlock = new Block(block.start, block.end, block.n);
+    let newAltBlock = new Block(block.start, block.end, block.n, schedule.altBlocks.length);
     schedule.altBlocks.push(newAltBlock);
-    schedule.altBlocks.sort(function(a, b){return a.n - b.n});
-
-    block.editRow.find(".alts").append(newAltBlock.altBlockButton());
     schedule.blocksDD.append(newAltBlock.ddButton);
+    schedule.altBlocks.sort(function(a, b){return a.n - b.n});
+    schedule.altBlocks.forEach(function(block, i){
+        block.renumber(block.n, i, schedule);
+        schedule.blocksDD.append(block.ddButton);
+    });
+
+    console.log(schedule.altBlocks);
+    
+    block.editRow.find(".alts").append(newAltBlock.altBlockButton());
 }
 
 $.fn.appendBlockInputs = function(block){
-    let start = $(document.createElement("input")).val(block.start)
-                .attr("class", "blocks")
+    let start = make("input", "edit_blocks").val(block.start)
                 .data({"block": block, "prop": "start", "update": $.fn.changeBlockName});
-    let end = $(document.createElement("input")).val(block.end)
-                .attr("class", "blocks")
+    let end = make("input", "edit_blocks").val(block.end)
                 .data({"block": block, "prop": "end", "update": $.fn.changeBlockName});
     $(this).append(start, "–", end);
     return $(this);
@@ -114,19 +109,16 @@ $.fn.changeBlockName = function(schedule) {
     let block = input.data("block");
     block[input.data("prop")] = input.val();
     
-    schedule.gradeSchedules.find("div.b" + block.n).replaceWith(block.name);
-    schedule.specialSchedules.find("div.b" + block.n).replaceWith(block.name);
-    schedule.blocksDD.find("div.b" + block.n).replaceWith(block.name);
+    schedule.gradeSchedules.find("div." + block.divClass).replaceWith(block.name);
+    schedule.specialSchedules.find("div." + block.divClass).replaceWith(block.name);
+    schedule.blocksDD.find("div." + block.divClass).replaceWith(block.name);
     //block.dropdownButton.html(block.name);
-
 }
 
 Block.prototype.altBlockButton = function(){
     let block = this;
-    let button = $(document.createElement("div"))
+    let button = make("div", "#altBlock" + block.n, "alt_block")
                     .data("block", block)
-                    .attr("class", "blocks")
-                    .attr("id", "altBlock" + block.n)
                     .appendBlockInputs(block)
                     .append(deleteButton());
     block.altBlockButton = button;
@@ -134,7 +126,7 @@ Block.prototype.altBlockButton = function(){
 }
 
 function deleteButton(){
-    let button = $(document.createElement("button")).attr("class", "inv delete")
+    let button = make("button", "inv delete")
                 .append(DELETE_ICON);
     return button;
 }

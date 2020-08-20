@@ -20,11 +20,11 @@ function Special(name, abbr, specialist, color, n, palette) {
 
 // Returns an $() object that shows a table of each specialist's schedule
 Special.prototype.scheduleTable = function(blocks) {
-    let table = $(document.createElement("div"));
+    let table = make("div");
     table.append("<span class = 'specialist'>" + this.specialist + "</span>");
     table.append("<span id='s" + this.n + "count' class = 'count'> (0)</span>");
     table.append(document.createElement("TABLE"));
-    table.find("table").attr("class", "specials schedule")
+    table.find("table").attr("class", "special schedule")
          .append(
          `<tbody><tr><td>${DAYS[0]}</td><td>${DAYS[1]}</td><td>${DAYS[2]}</td><td>${DAYS[3]}</td><td>${DAYS[4]}</td></tr></tbody>`
     );
@@ -45,37 +45,6 @@ Special.prototype.specialistClassCount = function(schedule){
     }, this);
 
     $("#s" + this.n + "count").html(" (" + count + ")");
-}
-
-Special.prototype.editSpecialRow = function(schedule){
-    let special = this;
-    special.editRow = $(document.createElement('tr')).data("special", special);
-    let tr = special.editRow;
-
-    let name = $(document.createElement("input")).val(special.name)
-                .attr("class", "edit")
-                .data({"special": special, "update": $.fn.changeSpecialName});
-    tr.append($(document.createElement("td")).append(name));
-    
-    let specialist = $(document.createElement("input")).val(special.specialist)
-            .attr("class", "edit")
-            .data({"special": special, "update": $.fn.changeSpecialist});
-    tr.append($(document.createElement("td")).append(specialist));
-
-    let abbr = $(document.createElement("input")).val(special.abbr)
-                .attr("class", "edit")
-                .data({"special": special, "update": $.fn.changeAbbr});
-    tr.append($(document.createElement("td")).append(abbr));
-    
-    let color = $(document.createElement("button"))
-                .attr("class", "topbar_button open_palette specials " + special.colorClass)
-                .data({"special": special});
-    tr.append($(document.createElement("td")).append(color)).append($(document.createElement("td")));
-
-    if (special.n < schedule.specials.length){
-        tr.append($(document.createElement("td")).append(deleteButton()));
-    }
-    return tr;
 }
 
 // Removes a SPECIAL object and associated DOM elements
@@ -101,7 +70,6 @@ Schedule.prototype.deleteSpecial = function(special){
         schedule.specials[i].renumber(i, schedule);
         schedule.specials[i].table.renumberTable("s", i+1, i);
     }
-    schedule.newSpecial.renumber(schedule.specials.length, schedule);
 }
 
 // Renumber the Special and all associated buttons to keep it consistent with its index in the array

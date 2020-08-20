@@ -1,5 +1,5 @@
 $(document).ready(function(){
-
+    console.log("yeah buddy");
     let schedules = [];
     schedules.push(new Stored_Schedule("Empty Schedule", EMPTY_SCHEDULE));
     schedules.push(new Stored_Schedule("Sample Schedule", SAMPLE_SCHEDULE));
@@ -9,14 +9,6 @@ $(document).ready(function(){
     // Load data into Schedule object
     let schedule = new Schedule(schedules[0].json);
     load(schedule, schedules);
-
-    $("#body").keyup(function(e){
-        if (e.which == 27){
-            $("input").blur();
-            schedule.resetButtons();
-            $("#menu").removeClass("vis").hide();
-        }
-    });
 });
 
 function Stored_Schedule(name, json){
@@ -32,4 +24,13 @@ function load(schedule, schedules){
     schedule.loadPaletteDD();
     schedule.loadScheduleEditor();
     loadMenus(schedule, schedules);
+
+    $("#body").keyup(function(e){
+        if (e.which == 27){
+            $("input").blur();
+            schedule.resetButtons();
+            $("#menu").removeClass("vis").hide();
+        }
+    });
+    
 }

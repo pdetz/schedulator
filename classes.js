@@ -31,7 +31,7 @@ $.fn.updateButton = function(){
 Class.prototype.createScheduleButton = function(displayFunctions){
     let buttons = $();
     for (let i = 0; i < arguments.length; i++){
-        let button = $(document.createElement("BUTTON"));
+        let button = make("BUTTON");
         button.data({"c": this,
                      "display": arguments[i]});
         arguments[i].call(button);
