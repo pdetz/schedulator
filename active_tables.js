@@ -15,9 +15,6 @@ Schedule.prototype.loadTables = function() {
 
     $("#left").showPanel(schedule.gradeSchedules);
     $("#right").showPanel(schedule.specialSchedules);
-    
-    topbarToggleHandlers(schedule);
-    gradeTeacherNameHandler(schedule);
 };
 
 Schedule.prototype.loadButtons = function(){
@@ -31,8 +28,6 @@ Schedule.prototype.loadButtons = function(){
     });
     
     $("td:empty").addEmptyClass(schedule);
-    
-    viewScheduleHandlers(schedule);
 }
 
 Schedule.prototype.updateClasses = function(){

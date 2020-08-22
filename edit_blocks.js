@@ -15,8 +15,6 @@ Schedule.prototype.editBlocksTable = function(){
             .append( make("button", "#add_block", "add")
                     .append(PLUS, " Add Time Block")));
     tbody.append(addRow);
-    
-    editBlocksHandlers(schedule);
 
     return table;
 }
@@ -56,7 +54,7 @@ Block.prototype.blockRow = function(schedule) {
     let block = this;
     let tr = make("tr");
 
-    tr.append(make("td").append(selectButton(block, "block", schedule)))
+    tr.append(make("td"))
       .append( make("td")
                .appendBlockInputs(block));
     let altTD = make("td").attr("colspan", "4").attr("class", "alts");

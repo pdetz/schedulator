@@ -6,15 +6,21 @@ function loadMenus(schedule, schedules){
     let menu = schedule.menu.hide()
         .addMenuButton(PENCIL, " View/Edit Schedule", "menu_edit", "editor menu", function(){
             if (schedule.editor.is(":visible")){
+
+                $("*").off(".editor");
+                console.log("editor listeners removed");
+
                 $("#right").showPanel(schedule.specialSchedules);
                 $(".grades_to_remove").remove();
-                $("*").off(".edit_grade");
-                $("#grade_schedules").off(".block_grade");
+                attachActiveScheduleListeners(schedule);
                 $("#menu_edit").html(BUILD).append(" Build Schedule");
             }
             else {
+                $("*").off(".active");
+                console.log("active listeners removed");
                 schedule.editGradeLevelTables();
                 $("#right").showPanel(schedule.editor);
+                attachEditorListeners(schedule);
                 $("#menu_edit").html(PENCIL).append(" View/Edit Schedule");
             }
         })
@@ -27,7 +33,7 @@ function loadMenus(schedule, schedules){
     schedules.forEach(function(stored, s){
         menu.addMenuButton(FILE, " " + stored.name, "file" + s.toString(), "file menu", function(){
             deleteSchedule(schedule);
-            let newSchedule = new Schedule(stored.json);
+            let newSchedule = new Schedule(stored);
             load(newSchedule, schedules);
             $("#menu").click();
             $("#menu_edit").click();
@@ -47,16 +53,12 @@ function loadMenus(schedule, schedules){
         };
         reader.readAsText(file);
     });
-
-    mainMenuClick(schedule);
-
+    attachMenuListeners(schedule);
 }
 
 $.fn.addMenuButton = function(svg, label, id, cssClass, clickHandler){
-    let button = make("button");
-    button.attr("class", cssClass)
-          .attr("id", id)
-          .append(svg, label)
+    let button = make("button", "#" + id, cssClass);
+    button.append(svg, label)
           .data("onclick", clickHandler);
     $(this).append(button);
     return $(this);
@@ -68,12 +70,10 @@ function deleteSchedule(schedule){
     schedule.paletteDD.remove();
     schedule.gradeSchedules.remove();
     schedule.specialSchedules.remove();
+    schedule.editor.remove();
     schedule.menu.remove();
-    $("#menu").removeClass("vis").hide();
     $(".topbar_button").remove();
-    $("*").off("click");
-    $("*").off("keyup");
-    $("*").off("contextmenu");
+    $("*").off();
 }
 
 Schedule.prototype.loadScheduleEditor = function(){

@@ -7,7 +7,7 @@ $(document).ready(function(){
     //schedules.push(new Stored_Schedule("Original Schedule", ORIGINAL_SCHEDULE));
 
     // Load data into Schedule object
-    let schedule = new Schedule(schedules[0].json);
+    let schedule = new Schedule(schedules[0]);
     load(schedule, schedules);
 });
 
@@ -23,14 +23,17 @@ function load(schedule, schedules){
     schedule.loadBlocksDD();
     schedule.loadPaletteDD();
     schedule.loadScheduleEditor();
+    
+    attachPermanentListeners(schedule);
+    attachEditorListeners(schedule);
+
     loadMenus(schedule, schedules);
 
     $("#body").keyup(function(e){
         if (e.which == 27){
             $("input").blur();
             schedule.resetButtons();
-            $("#menu").removeClass("vis").hide();
+            $("#menu").hide();
         }
     });
-    
 }

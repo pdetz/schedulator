@@ -1,16 +1,18 @@
 button.inv{
+    width: min-content;
     display: inline;
     background: none;
     line-height: 1.0em;
+    border-radius: 0.3rem;
 }
 
-button.delete svg {
+button.inv svg{
     fill: #999;
-    width: 24px;
+    width: 1.5rem;
 }
 
-button.delete:hover svg {
-    fill: #f00;
+button.inv.delete:hover svg {
+    fill: #f44;
 }
 
 td.delete {
@@ -27,28 +29,23 @@ button.schedule.delete {
       width: 24px;
 }
 
-td.add {
-      background: #8cf;
-      border-color: #8cf;
-}
-
-button.add.inv {
-    width: min-content;
-}
-
-button.add {
+button.ctrl {
     width: 100%;
     border-radius: .3em;
 }
 
 button.add:hover{
-    background: #28f;
+    background: #48f;
     color: #fff;
 }
 
 button.add:hover svg{
     fill: #fff;
-}   
+}
+
+button.inv.sel:hover svg {
+    fill: #000;
+}
 
 hr.black {
     border:1px solid #000;
@@ -66,6 +63,9 @@ div.alt_block {
     background: #eee;
 }
 
+div.alt_block.add {
+    background: #8cf;
+}
 div.alt_block button {
     display: inline;
     margin-bottom: .1rem;

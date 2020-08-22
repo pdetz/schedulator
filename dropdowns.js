@@ -8,7 +8,6 @@ Schedule.prototype.loadSpecialsDD = function(){
         specialsDD.append(special.dropdownButton);
     }
 
-    specialsDDClickHandler(schedule);
 }
 
 Schedule.prototype.loadBlocksDD = function(){
@@ -26,7 +25,6 @@ Schedule.prototype.loadBlocksDD = function(){
         //block.ddButton = dropdownButton(block, "block");
         blocksDD.append(block.ddButton);
     }
-    blocksDDRightClickHandler(schedule);
 }
 
 Schedule.prototype.loadPaletteDD = function(){
@@ -39,31 +37,34 @@ Schedule.prototype.loadPaletteDD = function(){
     for (let c = 4; c < palette.length; c++){
         let color = palette[c];
 
-        let button = make("button", "specials palette")
+        let button = make("button", "palette")
                         .data("color", c)
                         .css("background-color", color);
         
         paletteDD.append(button);
+        if (c == 12) {paletteDD.append("<br>")};
     }
 }
 
 // Opens/toggles the palette in the correct area in the editing space
-Schedule.prototype.openPalette = function(button, objType){
+Schedule.prototype.openPalette = function(button){
 
     let schedule = this;
+    let objType = button.closest("table").data("objType");
     schedule.paletteDD.data(objType, button.data(objType));
     let tr = button.closest("tr");
 
     if (tr.has(schedule.paletteDD).length){
         schedule.paletteDD.slideUp(200, function(){schedule.paletteDD.detach()});
+        schedule.paletteDD.off("click");
     }
     else {
         schedule.paletteDD.hide();
         button.parent().next().append(schedule.paletteDD);
         schedule.paletteDD.slideDown(200);
+        paletteDDClickHandler(schedule, objType);
     }
     button.blur();
-    paletteDDClickHandler(schedule, objType);
 }
 
 $.fn.dropdownMenu = function(menu){

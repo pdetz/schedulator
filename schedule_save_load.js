@@ -1,5 +1,7 @@
 // Constructor function for SCHEDULE object
-function Schedule(file) {
+function Schedule(storedFile) {
+    let file = storedFile.json;
+    this.name = storedFile.name;
     this.blocks = []; // an array of Block objects
     this.altBlocks = [];
     this.grades = []; // an array of Grade objects
@@ -15,6 +17,7 @@ function Schedule(file) {
 
     this.gradeSchedules = make("div", "#grade_schedules");
     this.specialSchedules = make("div", "#specials_schedules");
+    this.bothSchedules = this.gradeSchedules.add(this.specialSchedules);
 
     this.editor = make("div", "#editor");
     this.specialsEditor = make("table", "#specials_editor", "edit_gs schedule");
@@ -23,7 +26,7 @@ function Schedule(file) {
 
     this.menu = make("div", "#menu", "dropdown");
 
-    this.selected = {"block": "", "special": "", "grade": "", "teacher": ""};
+    this.selectedSpecial = "";
 
     // Copy blocks from file to Schedule
     let alt = false;

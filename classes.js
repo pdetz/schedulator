@@ -19,6 +19,37 @@ Schedule.prototype.deleteClass = function(c){
     schedule.specialSchedules.find("td:empty").addEmptyClass(schedule);
 }
 
+Class.prototype.changeSpecial = function(special, schedule) {
+    let s = this;
+    console.log("change: ", s);
+    if (special == schedule.specials[0]){
+        let tds = s.buttons.parent();
+        schedule.deleteClass(s);
+        tds.each(function(){
+            let td = $(this);
+            let list = td.children(".schedule");
+            if (list.length == 0){
+                td.addEmptyClass(schedule);
+            }
+        });
+        schedule.selectedClass = [];
+    }
+    else{
+        // If we are changing an empty block to a specials block
+        // Delete the button, and create new buttons for specials and grade level schedules
+        if (!s.hasSpecial()){
+            s.buttons.remove();
+            s.special = special;
+            s.buttons = s.createScheduleButton($.fn.gradeDisplay, $.fn.specialsDisplay);
+        }
+        else {
+            s.special = special;
+        }
+        schedule.updateClasses();
+    }
+    schedule.resetButtons();
+}
+
 $.fn.updateButton = function(){
     $(this).each( function(){
         $(this).data("display").call($(this))

@@ -10,8 +10,7 @@ Schedule.prototype.editGradesTable = function(){
     for (let i = 1; i < n; i++){
         tbody.append(schedule.grades[i].editGradeRow(schedule));
     }
-
-    editGradesHandlers(schedule)
+    table.data({"objType": "grade"});
     return table;
 }
 
@@ -56,11 +55,8 @@ Grade.prototype.editGradeRow = function(schedule){
     grade.editRow = $(document.createElement('tr')).data("grade", grade);
     let tr = grade.editRow;
     
-    tr.append(make("td").append(selectButton(grade, "grade", schedule)));
-      //.append(make("td").append(grade.name))
-      //.append(make("td").append(grade.defaultBlockButton()))
-     // .append(make("td").append(grade.abbr));
-
+    tr.append(make("td"));
+    
     let name = make("input", "edit").val(grade.name)
                 .data({"grade": grade, "update": $.fn.changeGradeName});
     tr.append(make("td").append(name));

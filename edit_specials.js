@@ -17,7 +17,7 @@ Schedule.prototype.editSpecialsTable = function(){
                     .append(    make("td").attr("colspan", "5")
                                 .append(addSpecialButton)));
 
-    editSpecialsHandlers(schedule);
+    table.data({"objType": "special"});
     return table;
 }
 
@@ -26,7 +26,8 @@ Special.prototype.editSpecialRow = function(schedule){
     special.editRow = make('tr').data("special", special);
     let tr = special.editRow;
 
-    tr.append(make("td").append(selectButton(special, "special", schedule)));
+    tr.append( make("td")
+                .append(special.selectButton()));
 
     let name = make("input", "edit").val(special.name)
                 .data({"special": special, "update": $.fn.changeSpecialName});
@@ -106,4 +107,13 @@ Schedule.prototype.addSpecial = function(){
     
     // Adds the edit special row for the new special to the editor
     $("#add_special").closest("tr").before(addedSpecial.editSpecialRow(schedule));
+}
+
+Special.prototype.selectButton = function() {
+    let special = this;
+    let button = make("button", "inv sel " + special.colorClass)
+                    .data("special", special)
+                    .append(PAINT);
+    special.superpaintButton = button;
+    return button;
 }

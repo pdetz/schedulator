@@ -1,8 +1,7 @@
-// Called from      Schedule.prototype.loadTables       active_tables.js
-//                  load(schedule, schedules)           schedulator
-
-function topbarToggleHandlers(schedule){
-    $("#leftbar, #rightbar").on("click", "button.topbar_button:not(.menu)", function(){
+function attachPermanentListeners(schedule){
+// Topbar button toggle handler
+    console.log("permanent listeners attached", schedule.name);
+    $("#body").on("click", "button.topbar_button", function(){
         let button = $(this);
         let gOrS = button.c();
         if (gOrS.isVisible) {
@@ -15,10 +14,7 @@ function topbarToggleHandlers(schedule){
         gOrS.isVisible = !gOrS.isVisible;
         button.blur();
     });
-}
-
-function gradeTeacherNameHandler(schedule){
-    // Keyup event listener to update Teachers' names
+// Keyup event listener to update Teachers' names
     $("#left").on("keyup", "input.teacher_name", function(e){
         let input = $(this);
         let teacher = input.data("teacher");
@@ -33,82 +29,93 @@ function gradeTeacherNameHandler(schedule){
             input.blur();
         }
     });
-}
-//////////////////////////////////////////////////////////////////////////////////////////
-
-// Called from  Schedule.prototype.loadButtons      active_tables
-//              load(schedule, schedules)           schedulator
-function viewScheduleHandlers(schedule) {
-    $("#grade_schedules, #specials_schedules").highlightScheduleButtons();
-
-    schedule.gradeSchedules.on("click.schedule", ".block.dropdown_button", function(e){
+// Block drop down right-click listener
+    $("#body").on("contextmenu", "button.schedule", function(e){
+        e.preventDefault();
+        let clicked = $(this);
+        let c = clicked.c();
+        if (clicked.siblings("#blocksDD").length == 0){
+            schedule.resetButtons();
+            clicked.after(schedule.blocksDD);
+            schedule.blocksDD.slideDown(200);
+        }
+        else {
+            schedule.blocksDD.slideUp(200, function(){
+                schedule.blocksDD.detach();
+            });
+        }
+        clicked.blur();
+    });
+// Block dropdown listeners
+    $("#body").on("click", ".block.dropdown_button", function(e){
         e.stopImmediatePropagation();
         let button = $(this);
-        let s = schedule.selectedClass[0];
+        let s = schedule.blocksDD.prev().c();
+        schedule.selectedClass.push(s);
+
         s.block = button.data("block");
         schedule.updateClasses();
         schedule.blocksDD.slideUp();
         schedule.resetButtons();
     });
-    
-    $("#body").selectClassListener(schedule);
 }
-
-$.fn.highlightScheduleButtons = function(){
-    $(this).on("mouseenter", "button.schedule", function(e){
-        let c = $(this).c();
-        c.buttons.addClass("hvr");
-    });
-    $(this).on("mouseleave", "button.schedule", function(e){
-        let c = $(this).c();
-        c.buttons.removeClass("hvr");
-    });    
+///////////////          Active Schedule Listeners        ///////////////
+function attachActiveScheduleListeners(schedule) {
+    console.log("active listeners attached", schedule.name);
+    $("#body").selectClassListener(schedule);
+    $("#body").highlightScheduleButtons();
+    
+    // Click handler for each Specials button in the dropdown menu
+    schedule.specialsDD.on("click.active", ".dropdown_button", (function(e){
+        e.stopImmediatePropagation();
+        let special = $(this).data("special");
+        let s = schedule.selectedClass[0];
+        s.changeSpecial(special, schedule);
+    }));
 }
 
 $.fn.selectClassListener = function(schedule){
-    $(this).on("click.scheduleActive", "button.schedule", function(e){
+    console.log("select class listeners attached", schedule.name);
+    $(this).on("click.active", "button.schedule", function(e){
         e.stopImmediatePropagation();
         schedule.blocksDD.detach();
+
+        console.log("select class clidked");
 
         let clicked = $(this);
         let c = clicked.c();
         schedule.selectedClass.push(c);
-    
-        // set the selected class
-
+    // set the selected class
         c.buttons.addClass("selected");
-    
         if (c.hasGrade()){
             clicked.after(schedule.specialsDD);
             schedule.specialsDD.slideDown(200);
             c.buttons.dropdownMenu(schedule.specialsDD);
         }
         clicked.blur();
-    
-        // Adds logically consistent swapping algorithms to the buttons
-        // taking into account empty classes
+    // Adds logically consistent swapping algorithms to the buttons
+    // taking into account empty classes
         let switchInGrade = ["teacher", "block", "day"];
         let switchInSpecial = ["special", "block", "day"];
         if (!c.hasGrade()){
-            $("#grade_schedules, #specials_schedules").swapClassesListener(schedule, switchInSpecial);
+            schedule.bothSchedules.swapClassesListener(schedule, switchInSpecial);
         }
         else if (!c.hasSpecial()){
-            $("#grade_schedules, #specials_schedules").swapClassesListener(schedule, switchInGrade);
+            schedule.bothSchedules.swapClassesListener(schedule, switchInGrade);
         }
         else {
-            $("#grade_schedules").swapClassesListener(schedule, switchInGrade);
-            $("#specials_schedules").swapClassesListener(schedule, switchInSpecial);
+            schedule.gradeSchedules.swapClassesListener(schedule, switchInGrade);
+            schedule.specialSchedules.swapClassesListener(schedule, switchInSpecial);
         }
     });
 }
 
 $.fn.swapClassesListener = function(schedule, swapProps) {
-    $(this).on("click.scheduleActive", "button.schedule", function(e){
+    console.log("swap class listeners attached", schedule.name);
+    $(this).on("click.active.swap", "button.schedule", function(e){
         e.stopImmediatePropagation();
-
         let c = $(this).c();
         let s = schedule.selectedClass[0];
-
         if (c != s){
             schedule.selectedClass.push(c);
             if (c.hasGrade() && c.hasSpecial() || s.hasGrade() && s.hasSpecial()){
@@ -124,65 +131,20 @@ $.fn.swapClassesListener = function(schedule, swapProps) {
     });
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Called from Schedule.prototype.loadSpecialsDD()
-function specialsDDClickHandler(schedule){
-        // Click handler for each Specials button in the dropdown menu
-        schedule.specialsDD.on("click", ".dropdown_button", (function(e){
-            let button = $(this);
-            let s = schedule.selectedClass[0];
-    
-            // Deletes buttons and removes a class from the array if the user clicks "No Special"
-            if (button.data("special") == schedule.specials[0]){
-                let tds = s.buttons.parent();
-                schedule.deleteClass(s);
-                tds.each(function(){
-                    let td = $(this);
-                    let list = td.children(".schedule");
-                    if (list.length == 0){
-                        td.addEmptyClass(schedule);
-                    }
-                });
-                schedule.selectedClass = [];
-            }
-            else{
-                // If we are changing an empty block to a specials block
-                // Delete the button, and create new buttons for specials and grade level schedules
-                if (!s.hasSpecial()){
-                    s.buttons.remove();
-                    s.special = button.data("special");
-                    s.buttons = s.createScheduleButton($.fn.gradeDisplay, $.fn.specialsDisplay);
-                }
-                else {
-                    s.special = button.data("special");
-                }
-                schedule.updateClasses();
-            }
-            schedule.resetButtons();
-      }));
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Called from Schedule.prototype.loadBlocksDD()
-function blocksDDRightClickHandler(schedule){
-    schedule.gradeSchedules.on("contextmenu", "button.schedule", function(e){
-        e.preventDefault();
-        let clicked = $(this);
-        let c = clicked.c();
-        schedule.resetButtons();
-        schedule.selectedClass.push(c);
-        clicked.after(schedule.blocksDD);
-        schedule.blocksDD.slideDown(200);
-        
-        clicked.blur();
+$.fn.highlightScheduleButtons = function(){
+    $(this).on("mouseenter.active", "button.schedule", function(e){
+        let c = $(this).c();
+        c.buttons.addClass("hvr");
     });
+    $(this).on("mouseleave.active", "button.schedule", function(e){
+        let c = $(this).c();
+        c.buttons.removeClass("hvr");
+    });    
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called from Schedule.prototype.loadPaletteDD()
 function paletteDDClickHandler(schedule, objType){
-    schedule.paletteDD.off("click");
-        
     schedule.paletteDD.on("click", ".palette", function(e){
         e.stopImmediatePropagation();
         let button = $(this);
@@ -197,71 +159,111 @@ function paletteDDClickHandler(schedule, objType){
 // Called from Schedule.prototype.loadScheduleEditor()
 
 // From         Schedule.prototype.editBlocks()
-function editBlocksHandlers(schedule){
+function attachEditorListeners(schedule){
+    console.log("editor listeners attached", schedule.name);
     let blocksEditor = schedule.blocksEditor;
+    let gradesEditor  = schedule.gradesEditor;
+    let specialsEditor = schedule.specialsEditor;
+    let gradeSchedules = schedule.gradeSchedules;
 
+    let phantomBlock = make("div", "alt_block add")
+                            .append(make("input", "edit_blocks"))
+                            .append("–")
+                            .append(make("input", "edit_blocks"))
+                            .append(deleteButton());
+    blocksEditor.on("mouseenter", "button.add.inv", function(e){
+        e.stopImmediatePropagation();
+        $(this).parent().prev().append(phantomBlock);
+    });
+    blocksEditor.on("mouseleave", "button.add.inv", function(e){
+        e.stopImmediatePropagation();
+        phantomBlock.remove();
+    });
+    blocksEditor.on("click", "button.add", function(e){
+        e.stopImmediatePropagation();
+        $(this).blur().data("block").addAltBlock(schedule);
+    });
     blocksEditor.find("#add_block").click(function(e){
         e.stopImmediatePropagation();
         schedule.addDefaultBlock();
     })
+    // Puts event handler on the Add Teacher button
+    gradeSchedules.on("click", ".add", function(e){
+        e.stopImmediatePropagation();
+        $(this).blur();
+        $(this).data("grade").addTeacher(schedule);
+    });
+    specialsEditor.find("#add_special").on("click", function(e){
+        e.stopImmediatePropagation();
+        console.log("add special");
+        schedule.addSpecial();
+    });
+
 
     blocksEditor.on("mouseenter", "button.delete", function(e){
         e.stopImmediatePropagation();
         $(this).parent().addClass("delete");
     });
+    gradeSchedules.on("mouseenter", "button.delete", function(e){
+        e.stopImmediatePropagation();
+        $(this).closest("tr").children().addClass("delete");
+        $(this).closest("tr").find("button.schedule").addClass("delete");
+    });
+    gradesEditor.on("mouseenter", "button.delete", function(e){
+        e.stopImmediatePropagation();
+        $(this).closest("tr").children().addClass("delete");
+    });
+    specialsEditor.on("mouseenter", "button.delete", function(e){
+        e.stopImmediatePropagation();
+        $(this).closest("tr").children().addClass("delete");
+    });
+
     blocksEditor.on("mouseleave", "button.delete", function(e){
         e.stopImmediatePropagation();
         $(this).parent().removeClass("delete");
     });
-    blocksEditor.on("mouseenter", "button.add.inv", function(e){
+    gradesEditor.on("mouseleave", "button.delete", function(e){
         e.stopImmediatePropagation();
-        $(this).closest("tr").children().addClass("add");
+        $(this).closest("tr").children().removeClass("delete");
     });
-    blocksEditor.on("mouseleave", "button.add.inv", function(e){
+    gradeSchedules.on("mouseleave", "button.delete", function(e){
         e.stopImmediatePropagation();
-        $(this).closest("tr").children().removeClass("add");
+        $(this).closest("tr").children().removeClass("delete");
+        $(this).closest("tr").find("button.schedule").removeClass("delete");
     });
+    specialsEditor.on("mouseleave", "button.delete", function(e){
+        e.stopImmediatePropagation();
+        $(this).closest("tr").children().removeClass("delete");
+    });
+
     blocksEditor.on("click", "button.delete", function(e){
         e.stopImmediatePropagation();
         let altBlock = $(this).parent().data("block");
         altBlock.deleteAltBlock(schedule);
     });
 
-    blocksEditor.on("keyup", "input", function(){
-        $(this).data("update").call($(this), schedule);
-    });
-
-    blocksEditor.on("click", "button.add", function(e){
-        e.stopImmediatePropagation();
-        $(this).blur().data("block").addAltBlock(schedule);
-    });
-}
-
-// From         Schedule.prototype.editGradesTable()
-function editGradesHandlers(schedule){
-    let gradesEditor  = schedule.gradesEditor;
-
-    gradesEditor.on("keyup", "input", function(){
-        $(this).data("update").call($(this), schedule);
-    });
-
-    gradesEditor.on("click", ".open_palette", function(e){
-        e.stopImmediatePropagation();
-        schedule.openPalette($(this), "grade");
-    });
- 
-    gradesEditor.on("mouseenter", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        $(this).closest("tr").children().addClass("delete");
-    });
-    gradesEditor.on("mouseleave", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        $(this).closest("tr").children().removeClass("delete");
-    });
     gradesEditor.on("click", ".delete", function(e){
+        e.stopImmediatePropagation();
+        let grade = $(this).closest("tr").data("grade");
+        schedule.deleteGrade(grade);
+    });
+    gradeSchedules.on("click", ".delete", function(e){
+        e.stopImmediatePropagation();
+        let teacher = $(this).closest("tr").find("input").data("teacher");
+        schedule.deleteTeacher(teacher);
+    });
+    specialsEditor.on("click", ".delete", function(e){
         e.stopImmediatePropagation();
         let special = $(this).closest("tr").data("special");
         schedule.deleteSpecial(special);
+    });
+
+    schedule.editor.on("keyup", "input", function(){
+        $(this).data("update").call($(this), schedule);
+    });
+    schedule.editor.on("click", ".open_palette", function(e){
+        e.stopImmediatePropagation();
+        schedule.openPalette($(this));
     });
 
     let selectedGrade = "";
@@ -294,99 +296,81 @@ function editGradesHandlers(schedule){
         schedule.resetButtons();
     });
 
-    // Block class switching functionality
-    $("#grade_schedules").on("click.edit_grade", ".schedule", function(e){e.stopImmediatePropagation(); $(this).blur()});
-    
-    // Puts event handler on the Add Teacher button
-    $("#grade_schedules").on("click", ".add", function(e){
-        e.stopImmediatePropagation();
-        $(this).blur();
-        $(this).data("grade").addTeacher(schedule);
-    });
-
-    $("#grade_schedules").on("mouseenter", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        $(this).closest("tr").children().addClass("delete");
-        $(this).closest("tr").find("button.schedule").addClass("delete");
-    });
-    $("#grade_schedules").on("mouseleave", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        $(this).closest("tr").children().removeClass("delete");
-        $(this).closest("tr").find("button.schedule").removeClass("delete");
-    });
-    $("#grade_schedules").on("click", ".delete", function(e){
-        e.stopImmediatePropagation();
-        let teacher = $(this).closest("tr").find("input").data("teacher");
-
-        schedule.deleteTeacher(teacher);
-    });
-}
-
-
-// From         Schedule.prototype.editSpecialsTable()
-function editSpecialsHandlers(schedule){
-    let specialsEditor = schedule.specialsEditor;
-
-    specialsEditor.on("keyup", "input", function(){
-        $(this).data("update").call($(this), schedule);
-    });
-
-    specialsEditor.on("click", ".open_palette", function(e){
-        e.stopImmediatePropagation();
-        schedule.openPalette($(this), "special");
-    });
- 
-    specialsEditor.on("mouseenter", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        $(this).closest("tr").children().addClass("delete");
-    });
-    specialsEditor.on("mouseleave", "button.delete", function(e){
-        e.stopImmediatePropagation();
-        $(this).closest("tr").children().removeClass("delete");
-    });
-    specialsEditor.on("click", ".delete", function(e){
-        e.stopImmediatePropagation();
-        let special = $(this).closest("tr").data("special");
-        schedule.deleteSpecial(special);
-    });
-
-    specialsEditor.on("click", ".sel", function(e){
+//////////////  Loads the super paint
+    specialsEditor.on("click.editor", "button.inv.sel", function(e){
         e.stopImmediatePropagation;
-        $(this).data("onclick").call();
-        console.log("called");
-    });
+        let button = $(this);
+        let special = button.data("special");
 
-    specialsEditor.find("#add_special").on("click", function(e){
+        $("button.inv.sel").removeAttr("style");
+        $("button.inv.sel").find("svg").removeAttr("style");
+
+        if (schedule.selectedSpecial != special){
+
+            schedule.selectedSpecial = special;
+            button.css("background", schedule.palette[schedule.selectedSpecial.color[0]]);
+            button.find("svg").css("fill", "#000");
+
+            schedule.gradeSchedules.on("mouseenter.editor.superpaint", "button.schedule", function(e){
+                e.stopImmediatePropagation();
+                $(this).css("background", schedule.palette[schedule.selectedSpecial.color[0]]);
+            });
+            schedule.gradeSchedules.on("mouseleave.editor.superpaint", "button.schedule", function(e){
+                e.stopImmediatePropagation();
+                $(this).removeAttr("style");
+            });
+            schedule.gradeSchedules.on("contextmenu.editor.superpaint", "button.schedule", function(e){
+                e.stopImmediatePropagation();
+                e.preventDefault();
+                let s = $(this).c();
+                schedule.selectedClass.push(s);
+                s.changeSpecial(schedule.specials[0], schedule);
+            });
+        }
+        else {
+            schedule.gradeSchedules.off(".superpaint");
+            schedule.selectedSpecial = "";
+        }
+        button.blur();
+    });
+// Blocks specialsDD / Super Paints
+    gradeSchedules.on("click.editor", "button.schedule", function(e){
         e.stopImmediatePropagation();
-        console.log("add special");
-        schedule.addSpecial();
+        this.blur();
+        if (schedule.selectedSpecial != "") {
+            let s = $(this).c();
+            schedule.selectedClass.push(s);
+            s.changeSpecial(schedule.selectedSpecial, schedule);
+        }
     });
+    
+    if (schedule.selectedSpecial != "") {
+        schedule.selectedSpecial.superpaintButton.click().click();
+    }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////
  // Called from function loadMenus(schedule, schedules)      main_menu
 //                      load(schedule, schedules)           schedulator
-function mainMenuClick(schedule){
+function attachMenuListeners(schedule){
     let menu = $("#menu");
 
     // On the 3 dots
     // Opens the main menu, calls schedule.resetbuttons()
     $("#open_menu").click( function(){
         console.log(menu);
-        if (menu.hasClass("vis")) {
+        if (menu.is(":visible")) {
             menu.slideUp();
-            $("#grade_schedules").off(".block_grade");
+            schedule.gradeSchedules.off(".block_grade");
         }
         else {
             menu.slideDown();
             // Block class switching functionality
-            $("#grade_schedules").on("click.block_grade", ".schedule", function(e){
+            schedule.gradeSchedules.on("click.block_grade", ".schedule", function(e){
                 e.stopImmediatePropagation();
                 $(this).blur()
             });
         }
-        menu.toggleClass("vis");
         schedule.resetButtons();
         this.blur();
     });
@@ -396,21 +380,17 @@ function mainMenuClick(schedule){
     menu.on("click", ".menu", function(e){
         e.stopImmediatePropagation();
         menu.slideUp();
-        menu.toggleClass("vis");
+        schedule.gradeSchedules.off(".block_grade");
         $(this).data("onclick").call();
     });
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// mainMenuClick(schedule)                  on $("#open_menu").click
-// $.fn.swapClassesListener                 on $(this).on("click.scheduleActive", "button.schedule"
-// function viewScheduleHandlers(schedule)  schedule.gradeSchedules.on("click", ".block.dropdown_button"
-
 Schedule.prototype.resetButtons = function(){
     if (this.selectedClass.length == 1) {
+        console.log(this.selectedClass);
         this.selectedClass.pop().buttons.updateButton();
     }
-    $("#grade_schedules, #specials_schedules").off(".scheduleActive");
+    this.bothSchedules.off(".swap");
     this.specialsDD.off("mouseenter").off("mouseleave").hide();
     this.blocksDD.off("mouseenter").off("mouseleave").hide();
     this.specialsDD.detach();
