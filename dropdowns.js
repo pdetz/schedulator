@@ -53,10 +53,10 @@ Schedule.prototype.openPalette = function(button){
     let objType = button.closest("table").data("objType");
     schedule.paletteDD.data(objType, button.data(objType));
     let tr = button.closest("tr");
+    schedule.paletteDD.off();
 
     if (tr.has(schedule.paletteDD).length){
         schedule.paletteDD.slideUp(200, function(){schedule.paletteDD.detach()});
-        schedule.paletteDD.off("click");
     }
     else {
         schedule.paletteDD.hide();

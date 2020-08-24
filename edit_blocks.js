@@ -2,25 +2,25 @@ Schedule.prototype.editBlocksTable = function(){
     let schedule = this;
     let table = schedule.blocksEditor;
 
-    table.append("<tbody><tr><td></td><td>Default Block Time</td><td colspan=5>Alternate Block Times</td><td></td></tr></tbody>");
+    table.append("<tbody><tr><td></td><td>Grade Name</td><td>Default Block</td><td>Abbr</td><td>Color</td><td></td><td></td></tr></tbody>");
 
     let tbody = table.find("tbody");
+    tbody.append("<tr><td></td><td>Default Times</td><td colspan=4>Alternate Block Times</td><td></td></tr>");
 
     schedule.blocks.forEach(block => {
         tbody.append(block.blockRow(schedule));
     });
-
-    let addRow = make("tr");
-    addRow.append(make("td").attr("colspan", "3")
-            .append( make("button", "#add_block", "add")
-                    .append(PLUS, " Add Time Block")));
-    tbody.append(addRow);
+    
+    let controlRow = ctrlRow("Time Block", 4,1, schedule.addDefaultBlock, schedule);
+    
+    tbody.append(controlRow.prepend(make("td")));
 
     return table;
 }
 
 Schedule.prototype.addDefaultBlock = function(){
     let schedule = this;
+    console.log(schedule);
 
     let newBlock = new Block("", "", schedule.blocks.length, -1);    
     schedule.blocks.push(newBlock);
@@ -57,19 +57,19 @@ Block.prototype.blockRow = function(schedule) {
     tr.append(make("td"))
       .append( make("td")
                .appendBlockInputs(block));
-    let altTD = make("td").attr("colspan", "4").attr("class", "alts");
+    let altTD = make("td").attr("colspan", "4")
+                    .append(make("div", "alts"))
+                    .append(make("div", "alts_button")
+                    .append(make("button", "add inv")
+                    .data("block", block)
+                    .append(PLUS)));
     schedule.altBlocks.forEach(alt => {
         if (alt.n == block.n) {
-            altTD.append(alt.altBlockButton());
+            altTD.find("div.alts").append(alt.altBlockButton());
         }
     });
     tr.append(altTD);
-    tr.append().append(make("td")
-        .append(make("button")
-                    .attr("class", "add inv")
-                    .data("block", block)
-                    .append(PLUS)
-    ));
+    tr.append(make("td").append(make("div", "ctrl")));
 
     block.editRow = tr;
     return tr;
@@ -86,9 +86,7 @@ Block.prototype.addAltBlock = function(schedule){
         schedule.blocksDD.append(block.ddButton);
     });
 
-    console.log(schedule.altBlocks);
-    
-    block.editRow.find(".alts").append(newAltBlock.altBlockButton());
+    block.editRow.find("div.alts").append(newAltBlock.altBlockButton());
 }
 
 $.fn.appendBlockInputs = function(block){
@@ -96,7 +94,7 @@ $.fn.appendBlockInputs = function(block){
                 .data({"block": block, "prop": "start", "update": $.fn.changeBlockName});
     let end = make("input", "edit_blocks").val(block.end)
                 .data({"block": block, "prop": "end", "update": $.fn.changeBlockName});
-    $(this).append(start, "–", end);
+    $(this).append(start, " – ", end);
     return $(this);
 }
 
@@ -120,11 +118,5 @@ Block.prototype.altBlockButton = function(){
                     .appendBlockInputs(block)
                     .append(deleteButton());
     block.altBlockButton = button;
-    return button;
-}
-
-function deleteButton(){
-    let button = make("button", "inv delete")
-                .append(DELETE_ICON);
     return button;
 }

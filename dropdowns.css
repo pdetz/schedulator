@@ -30,9 +30,9 @@ transition: .2s
 
 button.palette {
     border:2px solid transparent;
-    min-height: calc(1.1rem - 2px);
-    width: calc(1.1rem - 2px);
-    border-radius: .2rem;
+    min-height: calc(1.3rem - 2px);
+    width: calc(1.3rem - 2px);
+    border-radius: .3rem;
     margin: 1px;
     padding: 0;
 }

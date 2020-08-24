@@ -15,7 +15,7 @@ Schedule.prototype.deleteClass = function(c){
     this.classes.splice(index,1);
     special.specialistClassCount(schedule);
     
-    schedule.gradeSchedules.find("td:empty").addEmptyClass(schedule);
+    schedule.gradeSchedules.find("td:empty").not(".grades_to_remove").addEmptyClass(schedule);
     schedule.specialSchedules.find("td:empty").addEmptyClass(schedule);
 }
 

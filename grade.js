@@ -65,7 +65,7 @@ Grade.prototype.removeTeacher = function(n){
 
 // Returns an $() object that shows a table of that grade level's Specials schedule
 Grade.prototype.scheduleTable = function() {
-    let table = make("div");
+    let table = make("div", "grade_schedule");
     table.append(make("table", "grade schedule"));
     table.data("grade", this);
     table.children().append(

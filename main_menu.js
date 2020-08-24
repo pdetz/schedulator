@@ -8,12 +8,11 @@ function loadMenus(schedule, schedules){
             if (schedule.editor.is(":visible")){
 
                 $("*").off(".editor");
-                console.log("editor listeners removed");
+                $(".grades_to_remove").remove();
 
                 $("#right").showPanel(schedule.specialSchedules);
-                $(".grades_to_remove").remove();
                 attachActiveScheduleListeners(schedule);
-                $("#menu_edit").html(BUILD).append(" Build Schedule");
+                $("#menu_edit").html(BUILD).append(" Build Mode");
             }
             else {
                 $("*").off(".active");
@@ -21,7 +20,7 @@ function loadMenus(schedule, schedules){
                 schedule.editGradeLevelTables();
                 $("#right").showPanel(schedule.editor);
                 attachEditorListeners(schedule);
-                $("#menu_edit").html(PENCIL).append(" View/Edit Schedule");
+                $("#menu_edit").html(PENCIL).append(" Schedule Mode");
             }
         })
         .addMenuButton(PRINT, " Print", "menu_print", "print menu", window.print)
@@ -46,9 +45,11 @@ function loadMenus(schedule, schedules){
         let file = fileInput.get(0).files[0];
         let reader = new FileReader();
         reader.onload = function(){
-            let newSchedule = new Schedule(JSON.parse(reader.result));
+            let uploadedFile = new Stored_Schedule("uploaded", JSON.parse(reader.result));
+            let newSchedule = new Schedule(uploadedFile);
             deleteSchedule(schedule);
             load(newSchedule, schedules);
+            $("#menu").click();
             $("#menu_edit").click();
         };
         reader.readAsText(file);

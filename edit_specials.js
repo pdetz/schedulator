@@ -12,10 +12,9 @@ Schedule.prototype.editSpecialsTable = function(){
         tbody.append(schedule.specials[i].editSpecialRow(schedule));
     }
     
-    let addSpecialButton = make("button", "#add_special", "add").append(PLUS, " Add Special");
-    tbody.append(   make("tr")
-                    .append(    make("td").attr("colspan", "5")
-                                .append(addSpecialButton)));
+    let controlRow = ctrlRow("Special", 4, 1, "special");
+
+    tbody.append(controlRow.prepend(make("td")));
 
     table.data({"objType": "special"});
     return table;
@@ -44,11 +43,9 @@ Special.prototype.editSpecialRow = function(schedule){
     let color = make("button")
                 .attr("class", "topbar_button open_palette specials " + special.colorClass)
                 .data({"special": special});
-    tr.append(make("td").append(color)).append(make("td"));
-
-    if (special.n < schedule.specials.length){
-        tr.append(make("td").append(deleteButton()));
-    }
+//    tr.append(make("td").append(color)).append(make("td"))
+    
+    tr.append(make("td").append(color)).append(make("td")).append(make("td").append(make("div", "ctrl")));
     return tr;
 }
 

@@ -10,32 +10,37 @@ Schedule.prototype.editGradesTable = function(){
     for (let i = 1; i < n; i++){
         tbody.append(schedule.grades[i].editGradeRow(schedule));
     }
+
+    let controlRow = ctrlRow("Grade", 4, 1, "grade");
+
+    tbody.append(controlRow.prepend(make("td")));
     table.data({"objType": "grade"});
     return table;
+}
+
+Schedule.prototype.addGrade = function(){
+    console.log("add Grade");
 }
 
 Schedule.prototype.editGradeLevelTables = function(){
     let schedule = this;
 
     // Add edit controls to all grade schedule tables
-    $("#grade_schedules div").each(function(){
+    $("#grade_schedules div.grade_schedule").each(function(){
         let grade = $(this).data("grade");
         let tbody = $(this).find("tbody");
-        let tr = $(document.createElement("tr"));
-        let addTeacher = $(document.createElement("button"))
-                            .append(PLUS, "Add Teacher")
-                            .attr("class", "grades_to_remove add")
-                            .data("grade", grade);
-        tr.append(addTeacher);
-        tbody.append(tr);
+        //tbody.append(ctrlRow("Teacher", 4, 2, "teacher", grade.addTeacher).addClass("grades_to_remove"));
 
         tbody.find("[id^='trt']").each(function(){
             //let tr = $(this);
             //tr.(":first-child").prepend(selectButton())
-            $(this).append( make("td", "grades_to_remove")
-                                .append(deleteButton()));
+            $(this).append( make("td", "ctrl grades_to_remove").css("width", "2.5rem"));
         });
-    });    
+
+        let controlRow = ctrlRow(grade.name + " Teacher", 4, 2, "teacher");
+
+        tbody.append(controlRow);
+    });
 }
 
 Grade.prototype.addTeacher = function(schedule){
@@ -43,10 +48,8 @@ Grade.prototype.addTeacher = function(schedule){
     let newTeacher = new Teacher("Teacher " + String.fromCharCode("A".charCodeAt(0) + grade.teachers.length), grade);
     grade.teachers.push(newTeacher);
     let newRow = newTeacher.teacherRow();
-    newRow.append( $(document.createElement("td"))
-            .attr("class", "grades_to_remove")
-            .append(deleteButton()));
-    grade.table.find("tr").last().before(newRow);
+    newRow.append( make("td", "ctrl grades_to_remove").css("width", "2.5rem"));
+    grade.table.find("tr.ctrl_row").before(newRow);
     newRow.find("td:empty").addEmptyClass(schedule);
 }
 
@@ -56,7 +59,7 @@ Grade.prototype.editGradeRow = function(schedule){
     let tr = grade.editRow;
     
     tr.append(make("td"));
-    
+
     let name = make("input", "edit").val(grade.name)
                 .data({"grade": grade, "update": $.fn.changeGradeName});
     tr.append(make("td").append(name));
@@ -69,7 +72,7 @@ Grade.prototype.editGradeRow = function(schedule){
 
     let color = make("button", "topbar_button open_palette specials " + grade.colorClass)
                 .data({"grade": grade});
-    tr.append(make("td").append(color)).append(make("td"));
+    tr.append(make("td").append(color)).append(make("td")).append(make("td").append(make("div", "ctrl")));
 
     return tr;
 }

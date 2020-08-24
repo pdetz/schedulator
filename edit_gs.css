@@ -1,8 +1,9 @@
 #editor table.schedule {
-    width: 100%;
+    
 }
 #editor .schedule th, #editor .schedule td{
     font-size: 1rem;
+    vertical-align: middle;
 }
 
 #editor input {
@@ -25,25 +26,31 @@
     background: none;
 }
 #editor table.schedule td:nth-child(2) {
-    width: 10em;
+    width: 9em;
 }
 #editor table.schedule td:nth-child(3) {
     width: 9em;
 }
 #editor table.schedule td:nth-child(4) {
-    width: 3em;
+    width: 4em;
 }
 #editor table.schedule td:nth-child(5) {
     width: 4em;
 }
 #editor table.schedule td:nth-child(6) {
-
+    min-width: 12.5em;
 }
-#editor table.schedule td:nth-child(7) {
-    width: 3em;
+#editor table.schedule td:last-child {
+    width: 2.5em;
+    background:none;
 }
-#editor table.schedule.edit_blocks td:nth-child(3) {
-    width: 12em;
+#editor table.schedule.edit_blocks tr:first-child td {
+    opacity: 0;
+}
+#editor table.schedule.edit_blocks tr:nth-child(2) td:nth-child(n+2):nth-child(-n+3) {
+    background:#000;
+    color:#ddd;
+    border: 1.5px solid transparent;
 }
 
 button.arrow {
