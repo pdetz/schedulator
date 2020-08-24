@@ -83,12 +83,10 @@ Teacher.prototype.teacherRow = function(){
     let input = $(document.createElement("input"))
                     .attr("type", "text")
                     .attr("class", "teacher_name")
-                    .val(teacher.name)
-                    .data("teacher", teacher);
-    let tr = $(document.createElement("tr"))
-                .attr("id", "trt" + teacher.n().toString() + "g" + grade.n.toString())
-                .append( $(document.createElement("td"))
-                        .append(input));
+                    .val(teacher.name);
+    let tr = make("tr", "#trt" + teacher.n().toString() + "g" + grade.n.toString())
+                .data("obj", teacher)
+                .append( make("td").append(input));
     DAYS.forEach (function(day, d){
         tr.append( $(document.createElement("td"))
                     .attr("id", "g" + grade.n + "d" + d + "t" + teacher.n()));
@@ -97,29 +95,29 @@ Teacher.prototype.teacherRow = function(){
     return tr;
 }
 
-Schedule.prototype.deleteTeacher = function(teacher){
-    let schedule = this;
-    let teachers = teacher.grade.teachers;
-    teacher.tr.find("button.schedule").each(function(){
-        schedule.deleteClass($(this).c());
-    });
-    schedule.resetButtons();
-
-    teacher.tr.remove();
-
-    let index = teacher.n();
-    teachers.splice(index, 1);
-    for (let i = index; i < teachers.length; i++){
-        teachers[i].tr.parent().renumberTable("t", i+1, i);
-    }
-}
-
 Grade.prototype.defaultBlockButton = function(){
     let grade = this;
-    let button = $(document.createElement("button"))
-                    .attr("class", "arrow block")
-                    .append(grade.defaultBlock.name).append(DOWN)
-                    .data("grade", grade);
+    let button = make("button", "arrow block")
+                    .append(grade.defaultBlock.name).append(DOWN);
     grade.defaultBlockButton = button;
     return button;
+}
+
+// Renumber the Special and all associated buttons to keep it consistent with its index in the array
+Grade.prototype.renumber = function(n, schedule){
+    let grade = this;
+    // find all the buttons associated with the special and remove the old colorClass from them
+    let updateButtons = schedule.specialSchedules.find("." + grade.colorClass).add($("." + grade.colorClass));
+    updateButtons.removeClass(grade.colorClass);
+
+    // Update n, update the colorClass, and update the css stylesheet associated with the special
+    grade.n = n;
+    grade.colorClass = "grade" + n.toString();
+    grade.stylesheet.id = grade.colorClass;
+    writeCSSRules(grade, schedule.palette);
+    
+    // Update all associated buttons with the new colorClass name
+    updateButtons.addClass(grade.colorClass);
+    schedule.grades[n].table.renumberTable("g", n+1, n);
+    
 }

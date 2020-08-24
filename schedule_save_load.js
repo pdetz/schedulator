@@ -2,7 +2,6 @@
 function Schedule(storedFile) {
     let file = storedFile.json;
     this.name = storedFile.name;
-    console.log(storedFile);
     this.blocks = []; // an array of Block objects
     this.altBlocks = [];
     this.grades = []; // an array of Grade objects

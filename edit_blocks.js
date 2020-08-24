@@ -20,13 +20,20 @@ Schedule.prototype.editBlocksTable = function(){
 
 Schedule.prototype.addDefaultBlock = function(){
     let schedule = this;
-    console.log(schedule);
 
     let newBlock = new Block("", "", schedule.blocks.length, -1);    
     schedule.blocks.push(newBlock);
     
     schedule.blocks[schedule.blocks.length - 2].ddButton.after(newBlock.ddButton);
-    $("#add_block").blur().closest("tr").before(newBlock.blockRow(schedule));
+    schedule.blocksEditor.find("tr.ctrl_row").before(newBlock.blockRow(schedule));
+    schedule.blocksEditor.find("button.ctrl.on").click().click();
+
+    for (let i = 1; i < schedule.specials.length; i++){
+        let special = schedule.specials[i];
+        let newRow = special.scheduleTableRow(newBlock);
+        $(special.table).find("tbody").append(newRow);
+        newRow.children().addEmptyClass(schedule);
+    };
 }
 
 Block.prototype.deleteAltBlock = function(schedule) {
@@ -52,17 +59,16 @@ Block.prototype.deleteAltBlock = function(schedule) {
 
 Block.prototype.blockRow = function(schedule) {
     let block = this;
-    let tr = make("tr");
+    let tr = make("tr").data("obj", block);
 
     tr.append(make("td"))
       .append( make("td")
                .appendBlockInputs(block));
     let altTD = make("td").attr("colspan", "4")
-                    .append(make("div", "alts"))
                     .append(make("div", "alts_button")
-                    .append(make("button", "add inv")
-                    .data("block", block)
-                    .append(PLUS)));
+                        .append(make("button", "add inv")
+                        .append(PLUS)))
+                        .append(make("div", "alts"));
     schedule.altBlocks.forEach(alt => {
         if (alt.n == block.n) {
             altTD.find("div.alts").append(alt.altBlockButton());
@@ -116,7 +122,7 @@ Block.prototype.altBlockButton = function(){
     let button = make("div", "#altBlock" + block.n, "alt_block")
                     .data("block", block)
                     .appendBlockInputs(block)
-                    .append(deleteButton());
+                    .append(deleteButton().addClass("alt"));
     block.altBlockButton = button;
     return button;
 }

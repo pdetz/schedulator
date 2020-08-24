@@ -29,13 +29,18 @@ Special.prototype.scheduleTable = function(blocks) {
          `<tbody><tr><td>${DAYS[0]}</td><td>${DAYS[1]}</td><td>${DAYS[2]}</td><td>${DAYS[3]}</td><td>${DAYS[4]}</td></tr></tbody>`
     );
     blocks.forEach( function(block) {
-        table.find("tbody").append("<tr>");
-        DAYS.forEach (function(day, d){
-            table.find("tr:last").append("<td id='" + "s" + this.n + "d" + d + "b" + block.n + "'></td>");
-        }, this);
+        table.find("tbody").append(this.scheduleTableRow(block));
     }, this);
     return table;
 };
+
+Special.prototype.scheduleTableRow = function(block){
+    let tr = make("tr");
+    DAYS.forEach (function(day, d){
+        tr.append("<td id='" + "s" + this.n + "d" + d + "b" + block.n + "'></td>");
+    }, this);
+    return tr;
+}
 
 // Counts the number of classes associated with a given Specialist
 Special.prototype.specialistClassCount = function(schedule){
@@ -47,36 +52,11 @@ Special.prototype.specialistClassCount = function(schedule){
     $("#s" + this.n + "count").html(" (" + count + ")");
 }
 
-// Removes a SPECIAL object and associated DOM elements
-Schedule.prototype.deleteSpecial = function(special){
-    let schedule = this;
-    schedule.classes.forEach(c => {
-        if (c.special == special) {
-            schedule.deleteClass(c);
-        }
-    });
-    schedule.resetButtons();
-
-    special.table.remove();
-    special.button.remove();
-    special.dropdownButton.remove();
-    special.editRow.remove();
-    special.stylesheet.remove();
-
-    //let index = schedule.specials.indexOf(special);
-    let index = special.n;
-    schedule.specials.splice(index,1);
-    for (let i = index; i < schedule.specials.length; i++){
-        schedule.specials[i].renumber(i, schedule);
-        schedule.specials[i].table.renumberTable("s", i+1, i);
-    }
-}
-
 // Renumber the Special and all associated buttons to keep it consistent with its index in the array
 Special.prototype.renumber = function(n, schedule){
     let special = this;
     // find all the buttons associated with the special and remove the old colorClass from them
-    let updateButtons = $("." + special.colorClass).add(special.button).add(special.dropdownButton);
+    let updateButtons = $("." + special.colorClass).add(special.dropdownButton);
     updateButtons.removeClass(special.colorClass);
 
     // Update n, update the colorClass, and update the css stylesheet associated with the special
@@ -87,19 +67,20 @@ Special.prototype.renumber = function(n, schedule){
     
     // Update all associated buttons with the new colorClass name
     updateButtons.addClass(special.colorClass);
+    schedule.specials[n].table.renumberTable("s", n+1, n);
     
 }
 
 // Renumbers the table elements from n0 to n
-$.fn.renumberTable = function(gst, n0, n){
-    $(this).find('[id*="' + gst + '"]').changeID(gst, n0, n);
+$.fn.renumberTable = function(gstb, n0, n){
+    $(this).find('[id*="' + gstb + '"]').changeID(gstb, n0, n);
 }
 
 // Changes ID's from n0 to n
-$.fn.changeID = function(gst, n0, n) {
+$.fn.changeID = function(gstb, n0, n) {
     this.each(function(){
         let id = $(this).attr("id");
-        $(this).attr("id", id.replace(gst + n0.toString(), gst + n.toString()));
+        $(this).attr("id", id.replace(gstb + n0.toString(), gstb + n.toString()));
     });
     return this;
 }

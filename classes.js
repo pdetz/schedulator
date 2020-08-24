@@ -19,9 +19,9 @@ Schedule.prototype.deleteClass = function(c){
     schedule.specialSchedules.find("td:empty").addEmptyClass(schedule);
 }
 
+// Changes the special of a class and updates the buttons
 Class.prototype.changeSpecial = function(special, schedule) {
     let s = this;
-    console.log("change: ", s);
     if (special == schedule.specials[0]){
         let tds = s.buttons.parent();
         schedule.deleteClass(s);
@@ -45,6 +45,7 @@ Class.prototype.changeSpecial = function(special, schedule) {
         else {
             s.special = special;
         }
+        console.log(s.special.name);
         schedule.updateClasses();
     }
     schedule.resetButtons();

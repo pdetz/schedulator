@@ -32,16 +32,16 @@
     width: 9em;
 }
 #editor table.schedule td:nth-child(4) {
-    width: 4em;
+    width: 3.75em;
 }
 #editor table.schedule td:nth-child(5) {
-    width: 4em;
+    width: 3.75em;
 }
 #editor table.schedule td:nth-child(6) {
     min-width: 12.5em;
 }
 #editor table.schedule td:last-child {
-    width: 2.5em;
+    width: 3em;
     background:none;
 }
 #editor table.schedule.edit_blocks tr:first-child td {

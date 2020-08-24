@@ -63,13 +63,20 @@ button.ctrl.add:hover svg{ fill: #8cf;}
 button.ctrl.reorder {width:calc(50% - 2px);}
 button.ctrl.reorder:hover{background: #ff4; color: #000;}
 button.ctrl.reorder:hover svg{ fill: #000;}
+button.ctrl.reorder.on{background: #ff4; color: #000;}
+button.ctrl.reorder.on svg{ fill: #000;}
 
 button.ctrl.delete {width:calc(50% - 2px);}
 button.ctrl.delete:hover{background: #f44; color: #fff;}
 button.ctrl.delete:hover svg{ fill: #fcc;}
+button.ctrl.delete.on{background: #f44; color: #fff;}
+button.ctrl.delete.on svg{ fill: #fcc;}
 
 #editor div.ctrl {
     height: 3em;
+    width: 3em;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 hr.black {
@@ -113,6 +120,10 @@ td.delete {
 
 button.schedule.delete {
       background: #fcc;
+}
+
+.grade.schedule td.grades_to_remove {
+    width: 3em;
 }
 
 /* The Modal (background) */

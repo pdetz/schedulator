@@ -50,8 +50,6 @@ Schedule.prototype.loadPaletteDD = function(){
 Schedule.prototype.openPalette = function(button){
 
     let schedule = this;
-    let objType = button.closest("table").data("objType");
-    schedule.paletteDD.data(objType, button.data(objType));
     let tr = button.closest("tr");
     schedule.paletteDD.off();
 
@@ -62,7 +60,7 @@ Schedule.prototype.openPalette = function(button){
         schedule.paletteDD.hide();
         button.parent().next().append(schedule.paletteDD);
         schedule.paletteDD.slideDown(200);
-        paletteDDClickHandler(schedule, objType);
+        paletteDDClickHandler(schedule);
     }
     button.blur();
 }

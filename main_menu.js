@@ -6,9 +6,9 @@ function loadMenus(schedule, schedules){
     let menu = schedule.menu.hide()
         .addMenuButton(PENCIL, " View/Edit Schedule", "menu_edit", "editor menu", function(){
             if (schedule.editor.is(":visible")){
-
+                $("button.ctrl.on").click();
                 $("*").off(".editor");
-                $(".grades_to_remove").remove();
+                schedule.gradeSchedules.find(".grades_to_remove").remove();
 
                 $("#right").showPanel(schedule.specialSchedules);
                 attachActiveScheduleListeners(schedule);
@@ -16,8 +16,9 @@ function loadMenus(schedule, schedules){
             }
             else {
                 $("*").off(".active");
-                console.log("active listeners removed");
-                schedule.editGradeLevelTables();
+                for (i = 1; i < schedule.grades.length; i++){
+                    schedule.grades[i].addGradeEditControls(schedule);
+                }
                 $("#right").showPanel(schedule.editor);
                 attachEditorListeners(schedule);
                 $("#menu_edit").html(PENCIL).append(" Schedule Mode");
@@ -81,7 +82,9 @@ Schedule.prototype.loadScheduleEditor = function(){
     let editor = this.editor;
     let schedule = this;
 
-    schedule.editGradeLevelTables();
+    for (i = 1; i < schedule.grades.length; i++){
+        schedule.grades[i].addGradeEditControls(schedule);
+    }
     editor.append(schedule.editBlocksTable())
           .append("<hr class = 'black'>")
           .append(schedule.editGradesTable())

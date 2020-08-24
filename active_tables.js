@@ -26,8 +26,9 @@ Schedule.prototype.loadButtons = function(){
     schedule.specials.forEach(function(special){
         special.specialistClassCount(schedule);
     });
-    
+    console.log("before empties", schedule.classes.length);
     $("td:empty").addEmptyClass(schedule);
+    console.log("after empties", schedule.classes.length);
 }
 
 Schedule.prototype.updateClasses = function(){
@@ -85,7 +86,7 @@ $.fn.addEmptyClass = function(schedule){
             let grade = schedule.grades[parseInt(data[0])];
             c.block = grade.defaultBlock;
             c.teacher = grade.teachers[parseInt(data[2])];
-            c.createScheduleButton($.fn.gradeDisplay); 
+            c.createScheduleButton($.fn.gradeDisplay);
         }
         c.buttons.updateButton();
         schedule.classes.push(c);

@@ -18,7 +18,7 @@ function attachPermanentListeners(schedule){
 // Keyup event listener to update Teachers' names
     $("#left").on("keyup", "input.teacher_name", function(e){
         let input = $(this);
-        let teacher = input.data("teacher");
+        let teacher = input.obj();
         teacher.name = input.val();
         input.closest("tr").find("button.schedule").each(function(){
             let c = $(this).c();
@@ -62,7 +62,6 @@ body.on("click", ".block.dropdown_button", function(e){
 }
 ///////////////          Active Schedule Listeners        ///////////////
 function attachActiveScheduleListeners(schedule) {
-    console.log("active listeners attached", schedule.name);
     $("#body").selectClassListener(schedule);
     $("#body").highlightScheduleButtons();
     
@@ -76,12 +75,9 @@ function attachActiveScheduleListeners(schedule) {
 }
 
 $.fn.selectClassListener = function(schedule){
-    console.log("select class listeners attached", schedule.name);
     $(this).on("click.active", "button.schedule", function(e){
         e.stopImmediatePropagation();
         schedule.blocksDD.detach();
-
-        console.log("select class clidked");
 
         let clicked = $(this);
         let c = clicked.c();
@@ -112,7 +108,6 @@ $.fn.selectClassListener = function(schedule){
 }
 
 $.fn.swapClassesListener = function(schedule, swapProps) {
-    console.log("swap class listeners attached", schedule.name);
     $(this).on("click.active.swap", "button.schedule", function(e){
         e.stopImmediatePropagation();
         let c = $(this).c();
@@ -145,12 +140,12 @@ $.fn.highlightScheduleButtons = function(){
 
 ////////////////////////////////////////////////////////////////////////////////
 // Called from Schedule.prototype.loadPaletteDD()
-function paletteDDClickHandler(schedule, objType){
+function paletteDDClickHandler(schedule){
     schedule.paletteDD.on("click.editor", ".palette", function(e){
         e.stopImmediatePropagation();
         let button = $(this);
 
-        let gOrS = schedule.paletteDD.data(objType);
+        let gOrS = schedule.paletteDD.obj();
         gOrS.color[0] = button.data("color");
         writeCSSRules(gOrS, schedule.palette);
     });
@@ -167,25 +162,28 @@ function attachEditorListeners(schedule){
 /////////// Add a new Alternate Time Block
     blocksEditor.on("mouseenter.editor", "button.add.inv", function(e){
         e.stopImmediatePropagation();
-        $(this).parent().prev().addClass("add");
+        $(this).parent().next().addClass("add");
     });
-    blocksEditor.on("mouseleave.editor", "button.add.inv", function(e){
-        e.stopImmediatePropagation();
-        $(this).parent().prev().removeClass("add");
-    });
-    blocksEditor.on("click.editor", "button.add.inv", function(e){
-        e.stopImmediatePropagation();
-        $(this).blur().data("block").addAltBlock(schedule);
-    });
-    blocksEditor.on("mouseenter.editor", "button.delete", function(e){
+    blocksEditor.on("mouseenter.editor", "button.delete.inv.alt", function(e){
         e.stopImmediatePropagation();
         $(this).parent().addClass("delete");
     });
-    blocksEditor.on("mouseleave.editor", "button.delete", function(e){
+
+
+    blocksEditor.on("mouseleave.editor", "button.add.inv", function(e){
+        e.stopImmediatePropagation();
+        $(this).parent().next().removeClass("add");
+    });
+    blocksEditor.on("mouseleave.editor", "button.delete.inv.alt", function(e){
         e.stopImmediatePropagation();
         $(this).parent().removeClass("delete");
     });
-    blocksEditor.on("click.editor", "button.delete", function(e){
+    
+    blocksEditor.on("click.editor", "button.add.inv", function(e){
+        e.stopImmediatePropagation();
+        $(this).blur().obj().addAltBlock(schedule);
+    });
+    blocksEditor.on("click.editor", "button.delete.inv.alt", function(e){
         e.stopImmediatePropagation();
         let altBlock = $(this).parent().data("block");
         altBlock.deleteAltBlock(schedule);
@@ -197,13 +195,21 @@ function attachEditorListeners(schedule){
         e.stopImmediatePropagation();
         let button = $(this);
         button.blur();
-        button.data("onclick").call(button.data("callFrom"));
+        button.data("onclick").call(button.data("callFrom"), button.data("args"));
     });
+
+    body.on("click.editor", "button.inv.delete", function(e){
+        e.stopImmediatePropagation();
+        let button = $(this);
+        button.blur();
+        button.data("onclick").call(button, schedule);
+    })
 
 
 ////////////// Inputs trigger renaming, palette opening buttons
     schedule.editor.on("keyup.editor", "input", function(){
         $(this).data("update").call($(this), schedule);
+        console.log(this);
     });
     schedule.editor.on("click.editor", ".open_palette", function(e){
         e.stopImmediatePropagation();
@@ -217,7 +223,7 @@ function attachEditorListeners(schedule){
         schedule.blocksDD.hide();
         $(this).parent().append(schedule.blocksDD);
         schedule.blocksDD.slideDown();
-        selectedGrade = $(this).data("grade");
+        selectedGrade = $(this).obj();
     });
 
     gradesEditor.on("click.editor", ".block.dropdown_button", function(e){
@@ -244,7 +250,7 @@ function attachEditorListeners(schedule){
     specialsEditor.on("click.editor", "button.inv.sel", function(e){
         e.stopImmediatePropagation;
         let button = $(this);
-        let special = button.data("special");
+        let special = button.obj();
 
         $("button.inv.sel").removeAttr("style");
         $("button.inv.sel").find("svg").removeAttr("style");
@@ -330,7 +336,6 @@ function attachMenuListeners(schedule){
 
 Schedule.prototype.resetButtons = function(){
     if (this.selectedClass.length == 1) {
-        console.log(this.selectedClass);
         this.selectedClass.pop().buttons.updateButton();
     }
     this.bothSchedules.off(".swap");
