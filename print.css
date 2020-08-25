@@ -44,7 +44,7 @@
     .schedule th, td {
         position: relative;
         font-size: 0.875rem;
-        border: 1.5px solid #fff;
+        border: 1px solid #fff;
         width:8.5rem;
         text-align:center;
         padding: 0;
@@ -52,10 +52,10 @@
 
     .schedule button{
         padding: 2px 0;
-        line-height: 1.3em;
+        line-height: 1.2em;
     }
 
-    div {
+    div.grade_schedule, div.special_schedule {
         page-break-inside: avoid;
         margin-bottom: 1em;
     }
@@ -72,4 +72,7 @@
         background: #fff;
     }
 
+    #copyright {
+        display:none;
+    }
 }

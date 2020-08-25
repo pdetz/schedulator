@@ -58,28 +58,66 @@ Block.prototype.deleteAltBlock = function(schedule) {
 }
 
 Block.prototype.deleteBlock = function(schedule) {
+if (schedule.blocks.length > 1) {
+
     let block = this;
 
-    // First: delete all altBlocks
-
-    schedule.classes.forEach(c => {
-        if (c.block.n == block.n) {
-            // Change to available block
-            c.block = defaultBlock;
-            c.buttons.updateButton();
+// First: delete all associated altBlocks
+    for (let i = 0; i < schedule.altBlocks.length; i++) {
+        if (schedule.altBlocks[i].n == block.n) {
+            schedule.altBlocks[i].deleteAltBlock(schedule);
+            i--;
         }
-    });
+    }
+// Search through all classes, change to an available time block
+    for (let i = 0; i < schedule.classes.length; i++){
+        let c = schedule.classes[i];
+        if (c.block.n == block.n && c.hasGrade()){
+            // Change to available block
+            if (block.n == schedule.blocks.length - 1) {
+                console.log(schedule.blocks[schedule.blocks.length - 1]);
+                c.block = schedule.blocks[schedule.blocks.length - 2];
+            }
+            else {
+                c.block = schedule.blocks[block.n + 1];
+            }
+            schedule.selectedClass.push(c);
+            schedule.updateClasses();
+            //c.buttons.updateButton();
+        }
+    };
+// Remove the dropdown button and the edit Row in the editor
     block.ddButton.remove();
     block.editRow.remove();
 
+// Delete classes and rows from the specials schedules
+
+console.log("length before: ", schedule.classes.length);
+    let classesToDelete = [];
+    let specialRows = schedule.specialSchedules.find("[id*=b" + block.n.toString()).parent();
+    specialRows.find("button").each(function(){
+        classesToDelete.push($(this).c());
+    });
+    classesToDelete.forEach(c =>{
+        schedule.classes.splice(schedule.classes.indexOf(c), 1);
+    });
+    
+    console.log("length after: ", schedule.classes.length);
+    specialRows.remove();
+
+// Splice the schedule.blocks array and renumber all affected blocks
     let index = schedule.blocks.indexOf(block);
     schedule.blocks.splice(index,1);
-    for (let i = index; i < schedule.altBlocks.length; i++){
+    for (let i = index; i < schedule.blocks.length; i++){
         let block = schedule.blocks[i];
+        schedule.altBlocks.forEach( altBlock =>{
+            if (altBlock.n == block.n) {
+                altBlock.renumber(i, altBlock.n, schedule);
+            }
+        });
         block.renumber(i, -1, schedule);
-        // Renumber all associated altBlocks
-        // Renumber all schedule.specialSchedules.find("td")'s
     }
+}
 }
 
 Block.prototype.blockRow = function(schedule) {
@@ -113,7 +151,9 @@ Block.prototype.addAltBlock = function(schedule){
     schedule.blocksDD.append(newAltBlock.ddButton);
     schedule.altBlocks.sort(function(a, b){return a.n - b.n});
     schedule.altBlocks.forEach(function(block, i){
+        console.log("before: ", block.a);
         block.renumber(block.n, i, schedule);
+        console.log("after: ", block.a);
         schedule.blocksDD.append(block.ddButton);
     });
 

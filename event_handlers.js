@@ -209,7 +209,6 @@ function attachEditorListeners(schedule){
 ////////////// Inputs trigger renaming, palette opening buttons
     schedule.editor.on("keyup.editor", "input", function(){
         $(this).data("update").call($(this), schedule);
-        console.log(this);
     });
     schedule.editor.on("click.editor", ".open_palette", function(e){
         e.stopImmediatePropagation();
@@ -240,14 +239,15 @@ function attachEditorListeners(schedule){
         let block = button.data("block");
 
         selectedGrade.defaultBlock = block;
-        selectedGrade.defaultBlockButton.html(block.name).append(DOWN);
+        selectedGrade.defaultBlockButton.html(block.name).append(ARROW_DOWN);
         selectedGrade.teachers.forEach(teacher => {
             teacher.tr.find("button.schedule")
                 .each(function(){
                     let button = $(this);
                     let c = button.c();
                     c.block = block;
-                    c.buttons.updateButton();
+                    schedule.selectedClass.push(c);
+                    schedule.updateClasses();
                 });
         });
         schedule.blocksDD.slideUp();

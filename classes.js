@@ -10,11 +10,12 @@ Schedule.prototype.deleteClass = function(c){
     let special = c.special;
     let schedule = this;
 
+
     c.buttons.remove();
-    let index = this.classes.indexOf(c);
-    this.classes.splice(index,1);
+    let index = schedule.classes.indexOf(c);
+    schedule.classes.splice(index,1);
     special.specialistClassCount(schedule);
-    
+
     schedule.gradeSchedules.find("td:empty").not(".grades_to_remove").addEmptyClass(schedule);
     schedule.specialSchedules.find("td:empty").addEmptyClass(schedule);
 }

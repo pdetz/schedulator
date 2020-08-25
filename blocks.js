@@ -33,10 +33,11 @@ Block.prototype.renumber = function(n, a, schedule){
                     .add(schedule.editor.find("div." + block.divClass));
     block.divClass = blockDivClass(n, a);
     if (a == -1 && n != block.n) {
-        console.log("default block");
+        schedule.specialSchedules.renumberTable("b", block.n, n);
     }
     block.n = n;
     block.a = a;
     console.log(block.a, ". ", block.start, " - ", block.end);
     instances.attr("class", block.divClass);
+    instances.html(block.name);
 }

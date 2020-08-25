@@ -20,7 +20,7 @@ function Special(name, abbr, specialist, color, n, palette) {
 
 // Returns an $() object that shows a table of each specialist's schedule
 Special.prototype.scheduleTable = function(blocks) {
-    let table = make("div");
+    let table = make("div", "special_schedule");
     table.append("<span class = 'specialist'>" + this.specialist + "</span>");
     table.append("<span id='s" + this.n + "count' class = 'count'> (0)</span>");
     table.append(document.createElement("TABLE"));

@@ -81,7 +81,7 @@ Grade.prototype.editGradeRow = function(schedule){
     let name = make("input", "edit").val(grade.name)
                 .data("update", $.fn.changeGradeName);
     tr.append(make("td").append(name));
-    
+
     tr.append(make("td").append(grade.defaultBlockButton()));
 
     let abbr = make("input", "abbr edit").val(grade.abbr)

@@ -83,7 +83,7 @@ Special.prototype.deleteObj = function(schedule){
 }
 Block.prototype.deleteObj = function(schedule){
     let block = this;
-    console.log("delete ", block);
+    block.deleteBlock(schedule);
 }
 
 Teacher.prototype.deleteObj = function(schedule){

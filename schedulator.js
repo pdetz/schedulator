@@ -9,6 +9,8 @@ $(document).ready(function(){
     // Load data into Schedule object
     let schedule = new Schedule(schedules[0]);
     load(schedule, schedules);
+
+    //schedule.menu.find("#menu_edit").click();
 });
 
 function Stored_Schedule(name, json){
