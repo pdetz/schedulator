@@ -50,6 +50,13 @@
         padding: 0;
     }
 
+    .schedule tr:first-child th {
+        color:#fff;
+    }
+    .schedule tr:first-child td {
+        color:#fff;
+    }
+
     .schedule button{
         padding: 2px 0;
         line-height: 1.2em;
