@@ -26,10 +26,17 @@ Block.prototype = {get name(){
 
 Block.prototype.renumber = function(n, a, schedule){
     let block = this;
+    console.log(block.a, ". ", block.start, " - ", block.end);
     let instances = schedule.gradeSchedules.find("div." + block.divClass)
                     .add(schedule.specialSchedules.find("div." + block.divClass))
                     .add(schedule.blocksDD.find("div." + block.divClass))
                     .add(schedule.editor.find("div." + block.divClass));
     block.divClass = blockDivClass(n, a);
+    if (a == -1 && n != block.n) {
+        console.log("default block");
+    }
+    block.n = n;
+    block.a = a;
+    console.log(block.a, ". ", block.start, " - ", block.end);
     instances.attr("class", block.divClass);
 }

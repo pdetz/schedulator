@@ -60,13 +60,13 @@ button.ctrl.add svg {fill:#000;}
 button.ctrl.add:hover{background: #48f; color: #fff;}
 button.ctrl.add:hover svg{ fill: #8cf;}
 
-button.ctrl.reorder {width:calc(50% - 2px);}
+button.ctrl.reorder {width:calc(50% - 2px); display:none}
 button.ctrl.reorder:hover{background: #ff4; color: #000;}
 button.ctrl.reorder:hover svg{ fill: #000;}
 button.ctrl.reorder.on{background: #ff4; color: #000;}
 button.ctrl.reorder.on svg{ fill: #000;}
 
-button.ctrl.delete {width:calc(50% - 2px);}
+button.ctrl.delete {width:calc(100% - 2px);}
 button.ctrl.delete:hover{background: #f44; color: #fff;}
 button.ctrl.delete:hover svg{ fill: #fcc;}
 button.ctrl.delete.on{background: #f44; color: #fff;}

@@ -178,7 +178,7 @@ function attachEditorListeners(schedule){
         e.stopImmediatePropagation();
         $(this).parent().removeClass("delete");
     });
-    
+
     blocksEditor.on("click.editor", "button.add.inv", function(e){
         e.stopImmediatePropagation();
         $(this).blur().obj().addAltBlock(schedule);
@@ -220,10 +220,18 @@ function attachEditorListeners(schedule){
     let selectedGrade = "";
     gradesEditor.on("click.editor", "button.arrow", function(e){
         e.stopImmediatePropagation();
-        schedule.blocksDD.hide();
-        $(this).parent().append(schedule.blocksDD);
-        schedule.blocksDD.slideDown();
-        selectedGrade = $(this).obj();
+        let button = $(this).blur();
+        if (button.siblings().length == 1) {
+            schedule.blocksDD.slideUp(400, function(){
+                schedule.blocksDD.detach();
+            });
+        }
+        else {
+            schedule.blocksDD.hide();
+            button.parent().append(schedule.blocksDD);
+            schedule.blocksDD.slideDown();
+            selectedGrade = button.obj();
+        }
     });
 
     gradesEditor.on("click.editor", ".block.dropdown_button", function(e){

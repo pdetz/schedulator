@@ -57,6 +57,31 @@ Block.prototype.deleteAltBlock = function(schedule) {
     }
 }
 
+Block.prototype.deleteBlock = function(schedule) {
+    let block = this;
+
+    // First: delete all altBlocks
+
+    schedule.classes.forEach(c => {
+        if (c.block.n == block.n) {
+            // Change to available block
+            c.block = defaultBlock;
+            c.buttons.updateButton();
+        }
+    });
+    block.ddButton.remove();
+    block.editRow.remove();
+
+    let index = schedule.blocks.indexOf(block);
+    schedule.blocks.splice(index,1);
+    for (let i = index; i < schedule.altBlocks.length; i++){
+        let block = schedule.blocks[i];
+        block.renumber(i, -1, schedule);
+        // Renumber all associated altBlocks
+        // Renumber all schedule.specialSchedules.find("td")'s
+    }
+}
+
 Block.prototype.blockRow = function(schedule) {
     let block = this;
     let tr = make("tr").data("obj", block);

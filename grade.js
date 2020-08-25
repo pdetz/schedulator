@@ -98,7 +98,7 @@ Teacher.prototype.teacherRow = function(){
 Grade.prototype.defaultBlockButton = function(){
     let grade = this;
     let button = make("button", "arrow block")
-                    .append(grade.defaultBlock.name).append(DOWN);
+                    .append(grade.defaultBlock.name).append(ARROW_DOWN);
     grade.defaultBlockButton = button;
     return button;
 }

@@ -3,7 +3,7 @@ function ctrlRow(str, n1, n2, addFunction, callFrom, args){
     tr.append( make("td").attr("colspan", n1)
       .append(addCtrl(str, addFunction, callFrom, args)))
       .append( make("td").attr("colspan", n2)
-      .append(populateCtrlButton("reorder ctrl", UP, " Reorder", reorderButton))
+      .append(populateCtrlButton("reorder ctrl", REORDER, " Reorder", reorderButton))
       .append(populateCtrlButton("delete ctrl", X, " Delete", deleteButton)));
     return tr;
 }
@@ -15,11 +15,20 @@ function addButton() {
 }
 
 function reorderButton(){
-    let button = make("button", "inv up")
+    let button = make("div");
+    let upButton = make("button", "inv up")
+                .css("border", "1px solid black")
                 .append(UP)
                 .data("onclick", function(){
-                    console.log("reorder");
+                    console.log("up ", $(this).obj());
                 });
+    let downButton = make("button", "inv down")
+    .css("border", "1px solid black")
+                .append(DOWN)
+                .data("onclick", function(){
+                    console.log("down ", $(this).obj());
+                });
+    button.append(upButton, "<br>", downButton);
     return button;
 }
 
