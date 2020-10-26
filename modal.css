@@ -1,0 +1,45 @@
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    text-align: center;
+}
+
+.blur {
+    filter: blur(4px) grayscale(50%);
+}
+
+.modal_box {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    padding: 1em;
+    z-index: 20;
+    width: 800px;
+    background-color: #000;
+    border: 2px solid #fff;
+    color: #eee;
+}
+
+button.close {
+    position:absolute;
+    top: 2px;
+    right: 2px;
+}
+
+.close svg {
+    fill:#fff;
+}
+
+a {
+    color: #ff0
+}

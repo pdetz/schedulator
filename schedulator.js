@@ -36,6 +36,15 @@ function load(schedule, schedules){
             $("input").blur();
             schedule.resetButtons();
             $("#menu").hide();
+            $("#modal").hide();
+            $("#modal_content").children().remove();
+            $(".blur").removeClass("blur");
         }
+    });
+
+    $("#close_modal").click(function(e){
+        $("#modal").hide();
+        $("#modal_content").children().remove();
+        $(".blur").removeClass("blur");
     });
 }
