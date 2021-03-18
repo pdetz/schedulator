@@ -63,6 +63,10 @@ button.menu:hover {
     fill: #a6f;
 }
 
+.about svg {
+    fill: #ff0;
+}
+
 button.menu:hover svg {
     fill: #000;
 }

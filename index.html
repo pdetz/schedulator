@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="edit_controls.css">
     <link rel="stylesheet" href="edit_gs.css">
     <link rel="stylesheet" href="menu.css">
+    <link rel="stylesheet" href="modal.css">
     <script src="jquery3.min.js"></script>
     <script src="misc.js"></script>
     <script src="schedule_save_load.js"></script>
@@ -55,6 +56,12 @@
             <div id="right" class="frame">
             </div>
             <div id = "copyright">© 2020 Patrick Detzner</div>
+        </div>
+    </div>
+    <div class="modal" id="modal">
+        <div class="modal_box" id="modal_box">
+            <button id="close_modal" class="inv close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+            <div id="modal_content"></div>
         </div>
     </div>
 </body>

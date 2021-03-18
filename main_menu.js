@@ -27,6 +27,19 @@ function loadMenus(schedule, schedules){
         .addMenuButton(PRINT, " Print", "menu_print", "print menu", window.print)
         .addMenuButton(DOWNLOAD, " Download", "menu_download", "download menu", function(){saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );})
         .addMenuButton(UPLOAD, " Upload", "menu_upload", "upload menu", function(){$("#upload").click();})
+        .addMenuButton(ABOUT, " About / Contact Me", "menu_about", "about menu", function(){
+            console.log("about");
+            $("#modal").show();
+            let about = $("#modal_content");
+            about.html(
+                "Schedulator is an app designed to make it quick, easy, and fun to make your school's specials schedule. "+
+                "Check out the video for a tutorial on how to use it:<br>"+
+                '<iframe width="560" height="315" src="https://www.youtube.com/embed/d3yqK3GWJ8A" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>' +
+                "<br><br>If you have any feedback, suggestions, or requests for features to be added, please do not hesitate to contact me at "+
+                "<a href='mailto:patrick.detzner+schedulator@gmail.com?subject=Schedulator Feedback' target='_blank'>patrick.detzner+schedulator@gmail.com</a>"
+            );
+            $(".column").addClass("blur");
+        })
         .append(fileInput)
         .append('<hr class = "menu">');
 
