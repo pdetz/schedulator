@@ -27,6 +27,11 @@ function loadMenus(schedule, schedules){
         .addMenuButton(PRINT, " Print", "menu_print", "print menu", window.print)
         .addMenuButton(DOWNLOAD, " Download", "menu_download", "download menu", function(){saveText( JSON.stringify(schedule.formatFile()), "schedule.json" );})
         .addMenuButton(UPLOAD, " Upload", "menu_upload", "upload menu", function(){$("#upload").click();})
+        .addMenuButton(SHEETS, " Google Sheets", "menu_sheets", "upload menu", function(){
+            $("#modal").show();
+            let about = $("#modal_content");
+            about.html("Google Sheeeeets");
+        })
         .addMenuButton(ABOUT, " About / Contact Me", "menu_about", "about menu", function(){
             console.log("about");
             $("#modal").show();

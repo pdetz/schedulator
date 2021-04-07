@@ -2,7 +2,7 @@ $(document).ready(function(){
     console.log("yeah buddy");
     let schedules = [];
     schedules.push(new Stored_Schedule("Empty Schedule", EMPTY_SCHEDULE));
-    schedules.push(new Stored_Schedule("Sample Schedule", SAMPLE_SCHEDULE));
+    schedules.push(new Stored_Schedule("SSES Original", ORIGINAL_SCHEDULE));
     schedules.push(new Stored_Schedule("SSES Return", RETURN_SCHEDULE));
     //schedules.push(new Stored_Schedule("Original Schedule", ORIGINAL_SCHEDULE));
 
