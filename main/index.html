@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedulator - Main</title>
+
+    <link rel="stylesheet" href="../coreui/simplebar.css">
+    <link href="../coreui/style.css" rel="stylesheet">
+    <link href="../coreui/examples.css" rel="stylesheet">
+    <script type="text/javascript" src="../vendor/parse.min.js"></script>
+    <script type="text/javascript" src="../parseController.js"></script>
+    <script type="text/javascript" src="../vendor/jquery3.min.js"></script>
+</head>
+
+<body class="dark-theme">
+    <header class="header header-sticky mb-4">
+        <div class="container-fluid">
+            <button  id="newschedule" class="btn btn-dark" type="button">New Schedule</button>
+            <ul class="header-nav me-4">
+                <li class="nav-item dropdown d-flex align-items-center"><a id="logout" class="nav-link py-0"
+                        data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <div class="avatar avatar-md"><img class="avatar-img" src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                                alt="user@email.com"></div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <h3 id="wellcome"></h3>
+    <script>
+        const user = getCurrentUser();
+        function backToLogin() {
+            window.location.href = "../";
+        }
+        if (!user) {
+            backToLogin();
+        }
+        $("#wellcome").text(`Wellcome, ${user.get("name")}`);
+        $("#logout").click(() => {
+            logOut(() => {
+                backToLogin();
+            }, (e) => {
+                alert(e.message);
+            });
+        });
+        $("#newschedule").click(() => {
+            window.location.href = "../scheduler";
+        });
+    </script>
+</body>
+
+</html>

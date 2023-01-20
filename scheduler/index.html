@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head id="head">
+    <meta charset="UTF-8">
+    <title>Schedulator 2020</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/tablesandbuttons.css">
+    <link rel="stylesheet" href="../css/dropdowns.css">
+    <link rel="stylesheet" href="../css/print.css">
+    <link rel="stylesheet" href="../css/edit_controls.css">
+    <link rel="stylesheet" href="../css/edit_gs.css">
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/modal.css">
+    <script src="../vendor/jquery3.min.js"></script>
+    <script src="misc.js"></script>
+    <script src="schedule_save_load.js"></script>
+    <script src="specials.js"></script>
+    <script src="grade.js"></script>
+    <script src="classes.js"></script>
+    <script src="blocks.js"></script>
+    <script src="edit_specials.js"></script>
+    <script src="edit_blocks.js"></script>
+    <script src="edit_grades.js"></script>
+    <script src="active_tables.js"></script>
+    <script src="controls.js"></script>
+    <script src="dropdowns.js"></script>
+    <script src="main_menu.js"></script>
+    <script src="event_handlers.js"></script>
+    <script src="schedulator.js"></script>
+</head>
+
+<body id="body">
+    <div class="left column">
+        <div class="displayArea">
+            <div id="leftbar" class="topbar">
+            </div>
+            <div id="left" class="frame">
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="displayArea">
+            <div id="rightbar" class="topbar">
+                <div id = "empty_square" class = "square l"></div>
+                <div id = "menu_bar" class = "c"></div>
+                <div id = "menu_holder" class = "square r">
+                    <button id = "open_menu">
+                        <svg viewBox="1 1 128 128">
+                            <circle cx= "75" cy="64" r="14" fill="#ff4"></circle>
+                            <circle cx= "75" cy="16" r="14" fill="#f44"></circle>
+                            <circle cx="75" cy="112" r="14" fill="#48f"></circle>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div id="right" class="frame">
+            </div>
+            <div id = "copyright">© 2020 Patrick Detzner</div>
+        </div>
+    </div>
+    <div class="modal" id="modal">
+        <div class="modal_box" id="modal_box">
+            <button id="close_modal" class="inv close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+            <div id="modal_content"></div>
+        </div>
+    </div>
+</body>
+</html>

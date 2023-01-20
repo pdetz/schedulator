@@ -1,68 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head id="head">
-    <meta charset="UTF-8">
-    <title>Schedulator 2020</title>
-    <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="tablesandbuttons.css">
-    <link rel="stylesheet" href="dropdowns.css">
-    <link rel="stylesheet" href="print.css">
-    <link rel="stylesheet" href="edit_controls.css">
-    <link rel="stylesheet" href="edit_gs.css">
-    <link rel="stylesheet" href="menu.css">
-    <link rel="stylesheet" href="modal.css">
-    <script src="jquery3.min.js"></script>
-    <script src="misc.js"></script>
-    <script src="schedule_save_load.js"></script>
-    <script src="specials.js"></script>
-    <script src="grade.js"></script>
-    <script src="classes.js"></script>
-    <script src="blocks.js"></script>
-    <script src="edit_specials.js"></script>
-    <script src="edit_blocks.js"></script>
-    <script src="edit_grades.js"></script>
-    <script src="active_tables.js"></script>
-    <script src="controls.js"></script>
-    <script src="dropdowns.js"></script>
-    <script src="main_menu.js"></script>
-    <script src="event_handlers.js"></script>
-    <script src="schedulator.js"></script>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Scheduler</title>
+
+    <link rel="stylesheet" href="coreui/simplebar.css">
+    <link href="coreui/style.css" rel="stylesheet">
+    <link href="coreui/examples.css" rel="stylesheet">
+    <script type="text/javascript" src="vendor/parse.min.js"></script>
+    <script type="text/javascript" src="parseController.js"></script>
+    <script type="text/javascript" src="vendor/jquery3.min.js"></script>
 </head>
 
-<body id="body">
-    <div class="left column">
-        <div class="displayArea">
-            <div id="leftbar" class="topbar">
-            </div>
-            <div id="left" class="frame">
-            </div>
-        </div>
-    </div>
-    <div class="column">
-        <div class="displayArea">
-            <div id="rightbar" class="topbar">
-                <div id = "empty_square" class = "square l"></div>
-                <div id = "menu_bar" class = "c"></div>
-                <div id = "menu_holder" class = "square r">
-                    <button id = "open_menu">
-                        <svg viewBox="1 1 128 128">
-                            <circle cx= "75" cy="64" r="14" fill="#ff4"></circle>
-                            <circle cx= "75" cy="16" r="14" fill="#f44"></circle>
-                            <circle cx="75" cy="112" r="14" fill="#48f"></circle>
-                        </svg>
-                    </button>
+<body class="dark-theme">
+    <div class="bg-light min-vh-100 d-flex flex-row align-items-center dark:bg-transparent">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card-group d-block d-md-flex row">
+                        <div class="card col-md-7 p-4 mb-0">
+                            <form class="card-body" id="login">
+                                <h1>Login</h1>
+                                <p class="text-medium-emphasis">Sign In to your account</p>
+                                <div class="input-group mb-3"><span class="input-group-text">
+                                        <svg class="icon">
+
+                                        </svg></span>
+                                    <input id="username" class="form-control" type="text" placeholder="Email address" required>
+                                </div>
+                                <div class="input-group mb-4"><span class="input-group-text">
+                                        <svg class="icon">
+
+                                        </svg></span>
+                                    <input id="password" class="form-control" type="password" placeholder="Password" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button class="btn btn-primary px-4" type="submit">Login</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card col-md-5 text-white bg-primary py-5">
+                            <div class="card-body text-center">
+                                <div>
+                                    <h2>Sign up</h2>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                        incididunt ut labore et dolore magna aliqua.</p>
+                                    <a href="signup"><button class="btn btn-lg btn-outline-light mt-3" type="button">Register
+                                        Now!</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div id="right" class="frame">
-            </div>
-            <div id = "copyright">© 2020 Patrick Detzner</div>
         </div>
     </div>
-    <div class="modal" id="modal">
-        <div class="modal_box" id="modal_box">
-            <button id="close_modal" class="inv close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-            <div id="modal_content"></div>
-        </div>
-    </div>
+    <script>
+        function openMain() {
+            window.location.href = "main";
+        }
+        $("#login").submit((f) => {
+            f.preventDefault();
+            let username = $("#username").val();
+            let password = $("#password").val();
+            logIn({ username, password }, () => {
+                openMain();
+            }, (e) => {
+                alert(e.message);
+            });
+        });
+        if (isLoggedIn()) {
+            openMain();
+        }
+    </script>
 </body>
+
 </html>
