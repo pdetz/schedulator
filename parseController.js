@@ -34,4 +34,40 @@ function isLoggedIn() {
 function getCurrentUser() {
     return Parse.User.current();
 }
+function getSchedule(id,success,fail) {
+    const query = new Parse.Query("Schedule");
+    query.get(id).then((schedule) => {
+        success(schedule)
+    }).catch((e)=> {
+        fail(e)
+    })
+}
+function getSchedules(success,fail) {
+    const query = new Parse.Query("Schedule");
+    query.find().then((data) => {
+        success(data);
+    }).catch((e)=> {
+        fail(e);
+    })
+}
+function saveNewSchedule(title,description,data,success,fail){
+    const Schedule = Parse.Object.extend("Schedule");
+    const schedule = new Schedule();
+    schedule.setACL(new Parse.ACL(getCurrentUser()));
+    saveSchedule(title,description,data,schedule,success,fail)
+
+}
+function saveSchedule(title,description,data,schedule,success,fail) {
+    schedule.set("title",title);
+    schedule.set("description",description);
+    schedule.set("data",data.formatFile());
+    schedule.save().then((obj)=> {
+        success(obj.id);
+    }).catch((e)=> {
+        fail(e);
+    });
+}
+function editSchedule(title,description,data,schedule,success,fail){
+    saveSchedule(title,description,data,schedule,success,fail)
+}
 connect();

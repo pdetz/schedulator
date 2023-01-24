@@ -42,13 +42,20 @@
 
     <script>
         const user = getCurrentUser();
-        const schedules = [1,2,3,4,5]
+        
         function backToLogin() {
             window.location.href = "../";
         }
         if (!user) {
             backToLogin();
         }
+        $(document).ready(function () {
+            getSchedules((data) => {
+                loadSchedules(data);
+            }, (e) => {
+                alert(e.message);
+            })
+        });
         $("#name").text(`${user.get("name")}`);
         $("#logout").click(() => {
             logOut(() => {
@@ -60,21 +67,21 @@
         $("#newschedule").click(() => {
             window.location.href = "../scheduler";
         });
-        const cards = [];
-        schedules.forEach((schedule) => {
-            cards.push(
-                `
+        const loadSchedules = (schedules) => {
+            const cards = [];
+            schedules.forEach((schedule) => {
+                cards.push(
+                    `
                 <div class="col-lg-4 col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Card title ${schedule}</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up
-                            the
-                            bulk of the card's content.</p>
+                        <h5 class="card-title">${schedule.get("title")}</h5>
+                        <p class="card-text">
+                            ${schedule.get("description")}</p>
                         <div class="btn-toolbar justify-content-between" role="toolbar"
                             aria-label="Toolbar with button groups">
                             <div class="btn-group" role="group" aria-label="First group">
-                                <button class="btn btn-primary" type="button">Open</button>
+                                <a href="../scheduler/?id=${schedule.id}"><button class="btn btn-primary" type="button">Open</button></a>
                             </div>
                             <div class="input-group">
                                 <button class="btn btn-danger" type="button">Remove</button>
@@ -83,9 +90,11 @@
                     </div>
                 </div>
                 </div>`
-            )
-        });
-        $("#schedules").append(cards)
+                )
+            });
+            $("#schedules").append(cards)
+        }
+
     </script>
 </body>
 
