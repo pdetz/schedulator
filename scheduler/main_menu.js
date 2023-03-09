@@ -50,11 +50,14 @@ function loadMenus(schedule, schedules){
 
     schedules.forEach(function(stored, s){
         menu.addMenuButton(FILE, " " + stored.name, "file" + s.toString(), "file menu", function(){
-            deleteSchedule(schedule);
-            let newSchedule = new Schedule(stored);
-            load(newSchedule, schedules);
+            removeSchedule(schedule);
+            //let newSchedule = new Schedule(stored);
+            console.log(stored);
+            let loadedSchedule = new Schedule(stored);
+            console.log(stored, loadedSchedule);
+            load(loadedSchedule, schedules);
             $("#menu").click();
-            $("#menu_edit").click();
+            //$("#menu_edit").click();
         });
     });
 
@@ -66,7 +69,7 @@ function loadMenus(schedule, schedules){
         reader.onload = function(){
             let uploadedFile = new Stored_Schedule("uploaded", JSON.parse(reader.result));
             let newSchedule = new Schedule(uploadedFile);
-            deleteSchedule(schedule);
+            removeSchedule(schedule);
             load(newSchedule, schedules);
             $("#menu").click();
             $("#menu_edit").click();
@@ -77,14 +80,14 @@ function loadMenus(schedule, schedules){
 }
 
 $.fn.addMenuButton = function(svg, label, id, cssClass, clickHandler){
-    let button = make("button", "#" + id, cssClass);
+    let button = make("button", "#" + id, cssClass + " dropdown_button");
     button.append(svg, label)
           .data("onclick", clickHandler);
     $(this).append(button);
     return $(this);
 }
 
-function deleteSchedule(schedule){
+function removeSchedule(schedule){
     schedule.specialsDD.remove();
     schedule.blocksDD.remove();
     schedule.paletteDD.remove();
@@ -100,14 +103,31 @@ Schedule.prototype.loadScheduleEditor = function(){
     let editor = this.editor;
     let schedule = this;
 
-    for (i = 1; i < schedule.grades.length; i++){
-        schedule.grades[i].addGradeEditControls(schedule);
-    }
     editor.append(schedule.editBlocksTable())
           .append("<hr class = 'black'>")
           .append(schedule.editGradesTable())
           .append("<hr class = 'black'>")
           .append(schedule.editSpecialsTable());
 
-    $("#right").showPanel(editor);
 };
+
+Schedule.prototype.showScheduleEditor = function(){
+    let schedule = this;
+    schedule.resetButtons();
+    $("*").off(".active");
+    for (i = 1; i < schedule.grades.length; i++){
+        schedule.grades[i].addGradeEditControls(schedule);
+    }
+    $("#right").showPanel(schedule.editor);
+    attachEditorListeners(schedule);
+}
+
+Schedule.prototype.showScheduleViewer = function(){
+    let schedule = this;
+    $("button.ctrl.on").click();
+    $("*").off(".editor");
+    schedule.gradeSchedules.find(".grades_to_remove").remove();
+
+    $("#right").showPanel(schedule.specialSchedules);
+    attachActiveScheduleListeners(schedule);
+}

@@ -44,6 +44,7 @@ Schedule.prototype.addGrade = function(){
 }
 
 Grade.prototype.addGradeEditControls = function(schedule){
+    console.log("called here");
     let grade = this;
     let tbody = grade.table.find("tbody");
 
@@ -56,6 +57,7 @@ Grade.prototype.addGradeEditControls = function(schedule){
 }
 
 Grade.prototype.addTeacher = function(schedule){
+    console.log("called here");
     let grade = this;
     let newTeacher = new Teacher("Teacher " + String.fromCharCode("A".charCodeAt(0) + grade.teachers.length), grade);
     grade.teachers.push(newTeacher);

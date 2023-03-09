@@ -2,7 +2,7 @@ function attachPermanentListeners(schedule){
 // Topbar button toggle handler
     let body = $("#body");
 
-    body.on("click", "button.topbar_button", function(){
+    body.on("click", ".topbar button.topbar_button", function(){
         let button = $(this);
         let gOrS = button.c();
         if (gOrS.isVisible) {
@@ -311,16 +311,23 @@ function attachEditorListeners(schedule){
  // Called from function loadMenus(schedule, schedules)      main_menu
 //                      load(schedule, schedules)           schedulator
 function attachMenuListeners(schedule){
-    let menu = $("#menu");
+    let menu = $(schedule.menu);
+    $("#open_menu").after(menu);
+    //menu.slideDown();
+    console.log(menu);
 
     // On the 3 dots
     // Opens the main menu, calls schedule.resetbuttons()
     $("#open_menu").click( function(){
+        console.log("its working");
         if (menu.is(":visible")) {
+            console.log("its visible");
             menu.slideUp();
             schedule.gradeSchedules.off(".block_grade");
         }
         else {
+            console.log("its invisible");
+            console.log(menu);
             menu.slideDown();
             // Block class switching functionality
             schedule.gradeSchedules.on("click.block_grade", ".schedule", function(e){

@@ -1,5 +1,5 @@
 function connect() {
-    Parse.initialize("02VtfIZsimZQoxjFPzm9i5cC2jcdELpHjZ8vIu2E", "vDYQ8TCvJ6akQbyJvbBApJJgRESJsqsrG7ibCF0X");
+    Parse.initialize("gz9fm5hy73iFv55j6DUSHMAd2kDqyg4BG8rPcELX", "ASG4ZC2OSC65IK7BfN2MaQJzyRxvvmcPhkUH8fq1");
     Parse.serverURL = "https://parseapi.back4app.com/";
 }
 function signUp(data, success, fail) {
@@ -39,7 +39,7 @@ function getSchedule(id,success,fail) {
     query.get(id).then((schedule) => {
         success(schedule)
     }).catch((e)=> {
-        fail(e)
+        if (fail) fail(e)
     })
 }
 function getSchedules(success,fail) {
@@ -55,19 +55,45 @@ function saveNewSchedule(title,description,data,success,fail){
     const schedule = new Schedule();
     schedule.setACL(new Parse.ACL(getCurrentUser()));
     saveSchedule(title,description,data,schedule,success,fail)
-
 }
+
 function saveSchedule(title,description,data,schedule,success,fail) {
     schedule.set("title",title);
     schedule.set("description",description);
-    schedule.set("data",data.formatFile());
+    schedule.set("data",data); //.formatFile());
     schedule.save().then((obj)=> {
+        console.log("saved");
         success(obj.id);
     }).catch((e)=> {
+        console.log("not saved");
         fail(e);
     });
 }
+
+function duplicateSchedule(schedule, success, fail) {
+    let data = schedule.get("data");
+    let desc = schedule.get("description");
+    let title = "Copy of " + schedule.get("title");
+    saveNewSchedule(title, desc, data, success, fail);
+}
+
 function editSchedule(title,description,data,schedule,success,fail){
     saveSchedule(title,description,data,schedule,success,fail)
 }
+
+function deleteSchedule(id, success, fail) {
+    getSchedule(id, (schedule) => {
+        schedule.destroy().then(
+            (result) => {
+                console.log(id + " deleted successfully");
+                if (success) success(result);
+            },
+            (error) => {
+                if (fail) fail(error);
+            }
+        );
+    });
+}
+
+
 connect();

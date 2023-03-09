@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schedulator 2020</title>
+    <title>Schedulator 2023</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/tablesandbuttons.css">
     <link rel="stylesheet" href="../css/dropdowns.css">
@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../css/edit_gs.css">
     <link rel="stylesheet" href="../css/menu.css">
     <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../css/user_controls.css">
     <script src="../vendor/jquery3.min.js"></script>
     <script src="misc.js"></script>
     <script src="schedule_save_load.js"></script>
@@ -30,41 +31,34 @@
     <script src="main_menu.js"></script>
     <script src="event_handlers.js"></script>
     <script src="schedulator.js"></script>
-
-    <link rel="stylesheet" href="../coreui/simplebar.css">
+<!--
+<link rel="stylesheet" href="../coreui/simplebar.css">
     <link href="../coreui/style.css" rel="stylesheet">
     <link href="../coreui/examples.css" rel="stylesheet">
+-->
     <script type="text/javascript" src="../vendor/parse.min.js"></script>
     <script type="text/javascript" src="../parseController.js"></script>
 </head>
 
 <body id="body" class="dark-theme">
     <header class="header header-sticky mb-4">
-        <div class="container-fluid">
-            <button id="back" class="btn btn-dark" type="button">Back</button>
-            <ul class="header-nav me-4">
-                <li class="nav-item d-flex align-items-center">
-                    <button id="viewEdit" class="btn btn-warning" type="button">View/Edit Schedule</button>
-                    <button id="save" class="btn btn-success" type="button">Save</button>
-                    <button id="print" class="btn btn-info" type="button">Print</button>
-                    <button id="clear" class="btn btn-light" type="button">Clear</button>
-                </li>
-            </ul>
-        </div>
+                    
+        <span id = "menu-holder">
+            
+        </span>
+
+        <label class="form-label" for="title">Title</label>
+        <input class="form-control" id="title" type="text" placeholder="Title">
+
+<!--                <div class="col-9">
+                    <label class="form-label" for="description">Description</label>
+                    <input class="form-control" id="description" type="text" placeholder="Description">
+                </div>
+-->
+        <span id = "user-controls">
+            
+        </span>
     </header>
-    <div class="container">
-        <div class="pb-3 row" style="width: 100%;">
-            <div class="col-3">
-                <label class="form-label" for="title">Title</label>
-                <input class="form-control" id="title" type="text" placeholder="Title">
-            </div>
-            <div class="col-9">
-                <label class="form-label" for="description">Description</label>
-                <input class="form-control" id="description" type="text" placeholder="Description">
-            </div>
-        </div>
-    </div>
-    
     <div class="left column">
         <div class="displayArea">
             <div id="leftbar" class="topbar">
@@ -78,15 +72,6 @@
             <div id="rightbar" class="topbar">
                 <div id="empty_square" class="square l"></div>
                 <div id="menu_bar" class="c"></div>
-                <div id="menu_holder" class="square r">
-                    <button id="open_menu">
-                        <svg viewBox="1 1 128 128">
-                            <circle cx="75" cy="64" r="14" fill="#ff4"></circle>
-                            <circle cx="75" cy="16" r="14" fill="#f44"></circle>
-                            <circle cx="75" cy="112" r="14" fill="#48f"></circle>
-                        </svg>
-                    </button>
-                </div>
             </div>
             <div id="right" class="frame">
             </div>

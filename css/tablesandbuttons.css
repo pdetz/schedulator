@@ -1,6 +1,6 @@
 .schedule tr:first-child td, th {
     background:#000;
-    color:#ddd;
+    color:#fff;
     border: 1.5px solid transparent;
 }
 
@@ -51,8 +51,8 @@ button.schedule {
 .topbar_button {
     font-size: 1.2em;
     min-height: 1.2em;
-    padding: 0;
-    margin: 1px;
+    margin: 1px 2px;
+    padding: 0 4px;
     border: none;
     border-radius: .3em;
     transition: .4s;

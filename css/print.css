@@ -1,10 +1,10 @@
 @media print {
 
-    :root {
+    :root, .schedule.specials0, .schedule.grade0 {
         background:none;
     }
 
-    .topbar {
+    .topbar, .header.header-sticky, .column::-webkit-scrollbar, .column::-webkit-scrollbar-thumb, #copyright {
         display:none;
     }
 
@@ -24,42 +24,26 @@
         display: block;
         padding: 0;
         margin: 0;
-        background: #fff;
-        color: #000;
+        background: none;
         width: 100%;
     }
 
-    .column::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .column::-webkit-scrollbar-thumb {
-        display: none;
-    }
-
-    .schedule tr:first-child {
-        color:#fff;
-    }
-    
     .schedule th, td {
         position: relative;
-        font-size: 0.875rem;
-        border: 1px solid #fff;
+        border: 1.5px solid #fff;
         width:8.5rem;
         text-align:center;
         padding: 0;
     }
 
-    .schedule tr:first-child th {
-        color:#fff;
+    .schedule tr:first-child td, th {
+        background: #ddd;
+        color: #000;
     }
-    .schedule tr:first-child td {
-        color:#fff;
-    }
-
     .schedule button{
         padding: 2px 0;
         line-height: 1.2em;
+        font-size: 0.875rem;
     }
 
     div.grade_schedule, div.special_schedule {
@@ -67,19 +51,4 @@
         margin-bottom: 1em;
     }
 
-    .schedule tr:first-child {
-        color:#fff;
-    }
-
-    .schedule.specials0 {
-        background: #fff;
-    }
-
-    .schedule.grade0 {
-        background: #fff;
-    }
-
-    #copyright {
-        display:none;
-    }
 }

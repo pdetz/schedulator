@@ -1,0 +1,119 @@
+.header.header-sticky{
+    position:-webkit-sticky;
+    position:sticky;
+    top:0;
+    padding: 0.8em;
+    z-index:1029;
+    background-color: #334;
+}
+
+#confirm_modal {
+    display: none;
+}
+
+.form-control {
+    background-color: #000;
+    color: #fff;
+    height: 1.5em;
+    padding: 2px 0.5em;
+    font-size: 1.2em;
+    border: 1px solid #999;
+    border-radius: .3em;
+    display: inline;
+    vertical-align: middle;
+}
+
+.card {
+    margin: 1em;
+    padding: 1em;
+    background-color: #334;
+    border: 0px solid black;
+    border-radius: 0.3em;
+    max-width: 600px;
+}
+
+.card-header {
+    padding: 0.5em;
+}
+
+.card-body {
+    width:100%;
+}
+
+.schedule_row {
+    margin: 0.5em;
+    padding: 1em;
+    background-color: #000;
+    border-radius: 0.3em;
+    display: flex;
+    flex-direction: row;
+}
+
+.schedule_row:hover {
+    background-color: #567;
+}
+
+.user_control_bar {
+    display: flex;
+    justify-content: flex-end;
+}
+
+a.topbar_button {
+    vertical-align: middle;
+    font-size: 1em;
+    cursor: pointer;
+}
+    
+a.topbar_button:hover {
+        cursor: pointer;
+}
+
+.topbar_button.user_control {
+    padding: 4px 1em;
+    margin: 2px 0;
+    font-size: 1em;
+    position: inline;
+    vertical-align: middle;
+}
+
+.topbar_button.user_control:hover {
+    filter: brightness(70%);
+}
+
+.col-3 {
+    flex-grow: 3;
+    display: inline-block;
+}
+.col-1 {
+    flex-grow: 1;
+    display: inline-block;
+    text-align: right;
+}
+
+.red {
+    background-color: #f66;
+}
+
+.blue {
+    background-color: #4ad;
+}
+
+.purple {
+    background-color: #a8e;
+}
+
+.green {
+    background-color: #6d9;
+}
+
+.gray {
+    background-color: #567;
+    color: #fff
+}
+
+#name {
+    line-height: 1.2em;
+    vertical-align: middle;
+    color: #fff;
+    background: none;
+}

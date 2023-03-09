@@ -1,52 +1,80 @@
 let savedSchedule;
+
+const params = new URLSearchParams(window.location.search);
+const emptySchedule = new Stored_Schedule("New Schedule", EMPTY_SCHEDULE);
+
 $(document).ready(function () {
-    console.log("yeah buddy");
+    const user = getCurrentUser();
     let schedules = [];
-    schedules.push(new Stored_Schedule("Empty Schedule", EMPTY_SCHEDULE));
+
+    getSchedules((savedSchedules) => {
+        savedSchedules.forEach(s => {
+            let sched = { name: s.get("title"), id: s.get("objectId") }
+            //console.log(sched);
+            schedules.push(sched);
+        })
+    }, (e) => {
+        alert(e.message);        
+    });
+    
+
+    /*
     schedules.push(new Stored_Schedule("SSES Original", ORIGINAL_SCHEDULE));
     schedules.push(new Stored_Schedule("SSES Return", RETURN_SCHEDULE));
     //schedules.push(new Stored_Schedule("Original Schedule", ORIGINAL_SCHEDULE));
-
-    const params = new URLSearchParams(window.location.search);
+*/
 
     if (params.has("id") && !savedSchedule) {
         getSchedule(params.get("id"), (schedule) => {
             savedSchedule = schedule;
             $("#title").val(schedule.get("title"))
-            $("#description").val(schedule.get("description"))
+            //$("#description").val(schedule.get("description"))
             let loadedSchedule = new Schedule({ name: schedule.get("title"), json: schedule.get("data") });
             load(loadedSchedule, schedules);
-            configButtons(loadedSchedule, schedules);
         }, (e) => {
             alert(e.message);
         });
     } else {
         // Load data into Schedule object
-        let schedule = new Schedule(schedules[0]);
-        load(schedule, schedules);
-        configButtons(schedule, schedules);
+        let loadedSchedule = new Schedule(emptySchedule);
+        load(loadedSchedule, schedules, true);
     }
+
+    $(document).title = loadedSchedule.name + " - Schedulator";
 
     //schedule.menu.find("#menu_edit").click();
 });
 
-function Stored_Schedule(name, json) {
+function Stored_Schedule(name, id) {
     this.name = name;
-    this.json = json;
+    this.id = id;
 }
 
-function load(schedule, schedules) {
+function load(schedule, schedules, edit = false) {
     schedule.loadTables();
     schedule.loadButtons();
+    schedule.loadScheduleEditor();
     schedule.loadSpecialsDD();
     schedule.loadBlocksDD();
     schedule.loadPaletteDD();
-    schedule.loadScheduleEditor();
+
 
     attachPermanentListeners(schedule);
-    attachEditorListeners(schedule);
 
+    if (edit) {
+        schedule.showScheduleEditor();
+    } else {
+        attachActiveScheduleListeners(schedule);
+    }
+
+
+    configButtons(schedule, schedules);
     loadMenus(schedule, schedules);
+
+    
+    
+    //$("#right").showPanel(editor);
+    //$("#right").showPanel(schedule.specialSchedules);
 
 
     $("#body").keyup(function (e) {
@@ -69,28 +97,25 @@ function load(schedule, schedules) {
 
 //New buttons
 function configButtons(schedule, schedules) {
+    $("#menu-holder").append('<button id="open_menu" class="topbar_button user_control gray" type="button">Menu</button>');
+
+    $("#user-controls")
+    .append('<button id="viewEdit" class="topbar_button user_control purple" type="button">View/Edit Schedule</button>')
+    .append('<button id="save" class="topbar_button user_control green" type="button">Save</button>')
+    .append('<button id="print" class="topbar_button user_control blue" type="button">Print</button>');
 
     $("#viewEdit").click(() => {
         if (schedule.editor.is(":visible")) {
-            $("button.ctrl.on").click();
-            $("*").off(".editor");
-            schedule.gradeSchedules.find(".grades_to_remove").remove();
-
-            $("#right").showPanel(schedule.specialSchedules);
-            attachActiveScheduleListeners(schedule);
-            $("#menu_edit").html(BUILD).append(" Build Mode");
+            schedule.showScheduleViewer();
+            //$("#menu_edit").html(BUILD).append(" Build Mode");
         }
         else {
-            $("*").off(".active");
-            for (i = 1; i < schedule.grades.length; i++) {
-                schedule.grades[i].addGradeEditControls(schedule);
-            }
-            $("#right").showPanel(schedule.editor);
-            attachEditorListeners(schedule);
-            $("#menu_edit").html(PENCIL).append(" Schedule Mode");
+            schedule.showScheduleEditor();
         }
     })
-    $("#save").click(() => {
+    $("#save").click((e) => {
+        e.stopImmediatePropagation();
+        console.log("Save button clicked")
         let title = $("#title").val();
         let description = $("#description").val();
         if (!title) {
@@ -98,31 +123,25 @@ function configButtons(schedule, schedules) {
             return;
         }
         if (params.has("id")) {
-            editSchedule(title, description, schedule, savedSchedule, () => {
+            editSchedule(title, description, schedule.formatFile(), savedSchedule, () => {
                 alert("Schedule has been saved");
             }, (e) => {
                 alert(e.message);
             })
         } else {
-            saveNewSchedule(title, description, schedule, (id) => {
+            saveNewSchedule(title, description, schedule.formatFile(), (id) => {
                 alert("Schedule has been saved");
                 window.location.href = `?id=${id}`;
             }, (e) => {
                 alert(e.message);
             })
         }
-    })
+    });
     $("#print").click(() => {
-        window.print(JSON.stringify(schedule));
-    })
-    $("#clear").click(() => {
-        deleteSchedule(schedule);
-        let newSchedule = new Schedule(schedules[0]);
-        load(newSchedule, schedules);
-        configButtons(newSchedule, schedules);
-    })
+        window.print();
+    });
     $("#back").click(() => {
-        window.location.href = "../main";
+        window.location.href = "../main/index.html";
     });
 
 }

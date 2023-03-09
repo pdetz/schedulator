@@ -6,43 +6,56 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schedulator - Main</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/tablesandbuttons.css">
+    <link rel="stylesheet" href="../css/user_controls.css">
 
+<!--
     <link rel="stylesheet" href="../coreui/simplebar.css">
     <link href="../coreui/style.css" rel="stylesheet">
     <link href="../coreui/examples.css" rel="stylesheet">
+-->
+
     <script type="text/javascript" src="../vendor/parse.min.js"></script>
     <script type="text/javascript" src="../parseController.js"></script>
     <script type="text/javascript" src="../vendor/jquery3.min.js"></script>
+    <script src="../scheduler/misc.js"></script>
 </head>
 
-<body class="dark-theme">
-    <header class="header header-sticky mb-4">
-        <div class="container-fluid">
-            <button id="newschedule" class="btn btn-dark" type="button">New Schedule</button>
-            <ul class="header-nav me-4">
-                <li class="nav-item dropdown d-flex align-items-center">
-                    <span id="name"></span>
-                    <a id="logout" class="nav-link py-0" data-coreui-toggle="dropdown" role="button"
-                        aria-haspopup="true" aria-expanded="false">
-                        <div class="avatar avatar-md"><img class="avatar-img"
-                                src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="user@email.com"></div>
-                    </a>
-                </li>
-            </ul>
+<body>
+    <header class="header header-sticky">
+        <div class="user_control_bar">
+            <button id="newschedule" class="topbar_button user_control purple" type="button">New Schedule</button>
+                <button id="name"></button>
+                <a id="logout" class="topbar_button user_control gray right nav-link py-0" data-coreui-toggle="dropdown" role="button"
+                    aria-haspopup="true" aria-expanded="false">
+                    Log Out
+                </a>
         </div>
     </header>
-    <div class="body flex-grow-1 px-3 container-lg">
-        <div class="card mb-4">
-            <div class="card-header">Your Schedules</span></div>
-            <div class="card-body">
-                <div id="schedules" class="row"></div>
+    <div id="schedule_area">
+        <div id="schedule_list" class="card">
+            <div class="card-header">Your Schedules</div>
+            <div class="schedule_row">
+                <div class="col-3">Title</div> 
+                <div class="col-1">Last Modified</div> 
             </div>
+            <div id="schedules" class="card-body"></div>
+        </div>
+        <div id="confirm_modal" class="modal card">
+                <div id="modal_content">Are you sure you want to delete <span id="delete_schedule"></span>?</div>
+                <div id="delete_buttons">
+                    <button class="topbar_button user_control gray" id="close_modal">Cancel</button>
+                    <button class="topbar_button user_control red confirm delete" id="confirm-delete">Delete</button>
+                </div>
         </div>
     </div>
 
     <script>
         const user = getCurrentUser();
         
+        $("#confirm_modal").hide();
+
         function backToLogin() {
             window.location.href = "../";
         }
@@ -57,6 +70,11 @@
             })
         });
         $("#name").text(`${user.get("name")}`);
+
+        $("#close_modal").click(() => {
+            $("#confirm_modal").hide();
+        });
+        
         $("#logout").click(() => {
             logOut(() => {
                 backToLogin();
@@ -64,36 +82,84 @@
                 alert(e.message);
             });
         });
+
         $("#newschedule").click(() => {
             window.location.href = "../scheduler";
         });
+        
+        $("#schedule_area").on("click", "button.delete", function(e){
+            e.stopImmediatePropagation();
+            scheduleID = this.id.replace(/^(confirm-)?delete-/, '');
+            if ($(this).hasClass("confirm")) {
+                deleteSchedule(scheduleID,
+                    (result) => {
+                        $("#card-" + scheduleID).remove();
+                        $("#confirm_modal").hide();
+                    }, (error) => {
+                        console.log("Error deleting the schedule");
+                });
+            } else {
+                showConfirmModal(scheduleID);
+                $("#delete_buttons button.delete").attr("id", "confirm-delete-" + scheduleID);
+            }
+        });
+
+        
+        $("#schedule_area").on("click", "button.duplicate", function(e){
+            e.stopImmediatePropagation();
+            scheduleID = this.id.replace(/^duplicate-/, '');
+            getSchedule(scheduleID, (schedule) => {
+                duplicateSchedule(schedule, (result) => {
+                    console.log("success");
+                }, (error) => {
+                    console.log("fail");
+                });
+            });
+        });
+
         const loadSchedules = (schedules) => {
             const cards = [];
             schedules.forEach((schedule) => {
+                const date = new Date(schedule.get("updatedAt"));
+                let title = schedule.get("title");
+                const formattedDate = date.toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric"
+                });
                 cards.push(
                     `
-                <div class="col-lg-4 col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">${schedule.get("title")}</h5>
-                        <p class="card-text">
-                            ${schedule.get("description")}</p>
-                        <div class="btn-toolbar justify-content-between" role="toolbar"
-                            aria-label="Toolbar with button groups">
-                            <div class="btn-group" role="group" aria-label="First group">
-                                <a href="../scheduler/?id=${schedule.id}"><button class="btn btn-primary" type="button">Open</button></a>
-                            </div>
-                            <div class="input-group">
-                                <button class="btn btn-danger" type="button">Remove</button>
-                            </div>
+                    <div class="schedule_row" id="card-${schedule.id}">    
+                        <div class="col-3">
+                                ${title}
+                                <br>
+                                <a href="../scheduler/?id=${schedule.id}"><button class="topbar_button user_control blue" type="button">Open</button></a>
+                                <button id="duplicate-${schedule.id}" class="topbar_button user_control duplicate green"> Duplicate </button>
                         </div>
-                    </div>
-                </div>
+                        <div class="col-1">
+                            <span>${formattedDate}</span>
+                            <br>
+                            <button id="delete-${schedule.id}" class="topbar_button user_control red delete" type="button" >Delete</button>
+                        </div>
                 </div>`
                 )
             });
-            $("#schedules").append(cards)
+            $("#schedules").append(cards);
         }
+
+    const showConfirmModal = (scheduleId) => {
+            const modal = $("#confirm_modal");
+            getSchedule(scheduleID, (schedule) => {
+                $("#delete_schedule").html(schedule.get("title"));
+                modal.show();
+            }, (e) => {
+                alert(e.message);
+            });
+        //confirmBtn.onclick = () => {
+        // Delete the schedule from the database
+        // ...
+        // Remove the corresponding schedule row from the HTML
+    };
 
     </script>
 </body>
